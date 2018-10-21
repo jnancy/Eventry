@@ -2,8 +2,9 @@ import React from 'react';
 import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import LoginButton from '../components/LoginButton.js';
-import { onSignIn, storeUserID } from '../auth/fakeAuth.js';
+import LoginButton from '../components/LoginButton';
+import FBLoginButton from '../components/FBLoginButton'
+import { onSignIn, storeUserID } from '../auth/fakeAuth';
 
 /*import {
   ANDROID_CLIENT_ID,
@@ -11,6 +12,9 @@ import { onSignIn, storeUserID } from '../auth/fakeAuth.js';
 } from 'react-native-dotenv';*/
 
 import {Permissions, Notifications} from 'expo';
+
+const FBSDK = require('react-native-fbsdk');
+const {LoginManager} = FBSDK;
 
 let {width,height} = Dimensions.get('window');
 
@@ -67,6 +71,8 @@ export default class LoginScreen extends React.Component {
             console.log("err:", err);
           }
         };*/
+
+
 
   render() {
     if (this.state.screenLoading) {
@@ -219,17 +225,30 @@ export default class LoginScreen extends React.Component {
             }
             onPress = {
               () => {
-                onSignIn().then(() => {
-                  this.props.navigation.navigate("SignedIn");
-                  this.setState({
-                    screenLoading: false,
-                  });
-                });
+                LoginManager.logInWithReadPermissions(['public_profile']).then(
+                  function(result) {
+                    if (result.isCancelled) {
+                      alert('Login was cancelled');
+                    } else {
+                      alert('Login was successful with permissions: '
+                      + result.grantedPermissions.toString());
+                      onSignIn().then(() => {
+                        this.props.navigation.navigate("SignedIn");
+                        this.setState({
+                          screenLoading: false,
+                        });
+                      });
+                    }
+                  },
+                  function(error) {
+                    alert('Login failed with error: ' + error);
+                  }
+                );
               }
             }
             underlayColor = "#34508C" >
-            <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
-          </TouchableHighlight >
+           <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
+        </TouchableHighlight >
         </View>
       < /View >
       </ImageBackground>
