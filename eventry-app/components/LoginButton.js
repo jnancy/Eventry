@@ -10,8 +10,8 @@ class LoginButton extends Component{
 
         return (
             <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
-                <Ionicons name = {icon} size={21} color = "white" style={{marginRight: 5}} />
-                <Text style={{color: "white", fontSize:21}}>{loginText}</Text>
+                <Ionicons name = {icon} size={21} color = "white"/>
+                // <Text style={{color: "white", fontSize:21}}>{loginText}</Text>
             </View>
         );
     }
