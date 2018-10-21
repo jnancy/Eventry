@@ -7,16 +7,14 @@ import { Ionicons } from '@expo/vector-icons';
 class LoginButton extends Component{
     render() {
         const{icon, loginText} = this.props;
-
         return (
             <View style = {{flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                 <Ionicons name = {icon} size={21} color = "white"/>
-                // <Text style={{color: "white", fontSize:21}}>{loginText}</Text>
+                <Text style={{marginLeft: 10, fontWeight: "bold", color: "white", fontSize:11}}>{loginText}</Text>
             </View>
         );
     }
 }
-
 LoginButton.propTypes = {
     icon: PropTypes.string.isRequired,
     loginText: PropTypes.string.isRequired,

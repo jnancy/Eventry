@@ -81,7 +81,7 @@ export default class LoginScreen extends React.Component {
     return (
       <ImageBackground source = {require('../img/login2.jpg')} style = {{ width: '100%', height: '100%'}} >
       <View style = {{ flex: 1 }} >
-        <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 5 }} >
+        <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 7 }} >
           <Image source = {require('../img/e.jpg')} style={{width: 70, height: 70}}/>
           <Text style = {{ color: '#ffffff', fontSize: 50, /* fontWeight: '100', fontFamily: 'lucida grande'*/ }} >
             Eventry
@@ -106,6 +106,7 @@ export default class LoginScreen extends React.Component {
           <TextInput
             style={{
               height: 40,
+              marginTop: 10,
               color: 'white',
               borderColor: 'white',
               borderBottomWidth: 1,
@@ -138,21 +139,46 @@ export default class LoginScreen extends React.Component {
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> LOGIN </Text>
           < /TouchableHighlight >
+          <TouchableHighlight
+            style = {{
+              backgroundColor: "rgba(255, 255, 255, 0.51)",
+              width: width * (7 / 10),
+              padding: 10,
+              marginTop: 20,
+              borderRadius: 15,
+            }}
+            onPress = {
+              () => {
+                onSignIn().then(() => {
+                  this.props.navigation.navigate("SignedIn");
+                  this.setState({
+                    screenLoading: false,
+                  });
+                });
+              }
+            }
+            underlayColor = "rgba(115, 115, 115, 0.63)" >
+            <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> SIGNUP </Text>
+          < /TouchableHighlight >
         </View>
 
+        <Text style={{marginTop: 40, textAlign: 'center', color: '#fff', fontSize: 11, fontWeight: 'bold'}}>
+           OR CONNECT WITH
+        </Text>
 
-        <View style = {{flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: height * (1 / 5),
-        }} >
-
-
+        <View style = {{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: 15,
+        }}>
           <TouchableHighlight style = {{
-          backgroundColor: "#de1f00",
-          width: width * (8 / 10),
-          padding: 10,
-        }}
+            backgroundColor: "#719ac6",
+            width: width*0.33,
+            margin: width*0.02,
+            padding: 5,
+            borderRadius: 17,
+            }}
 /*      onPress = {
         () => {
           this.signInWithGoogleAsync().then(() => {
@@ -168,41 +194,43 @@ export default class LoginScreen extends React.Component {
           });
         }
       }*/
-      onPress = {
-        () => {
-          onSignIn().then(() => {
-            this.props.navigation.navigate("SignedIn");
-            this.setState({
-              screenLoading: false,
-            });
-          });
-        }
-      }
-      underlayColor = "#CA1D00" >
-      <LoginButton icon = {"logo-google" }/>
-      < /TouchableHighlight >
-      < TouchableHighlight style = {
-        {
-          backgroundColor: "#39579a",
-          width: width * (8 / 10),
-          padding: 10,
-          marginTop: 10,
-        }
-      }
-      onPress = {
-        () => {
-          onSignIn().then(() => {
-            this.props.navigation.navigate("SignedIn");
-            this.setState({
-              screenLoading: false,
-            });
-          });
-        }
-      }
-      underlayColor = "#34508C" >
-      <LoginButton icon = {"logo-facebook"}/>
-      < /TouchableHighlight >
-      </View>
+          onPress = {
+            () => {
+              onSignIn().then(() => {
+                this.props.navigation.navigate("SignedIn");
+                this.setState({
+                  screenLoading: false,
+                });
+              });
+            }
+          }
+          underlayColor = "#529ae4" >
+          <LoginButton icon = {"logo-google" } loginText = {'GOOGLE'}/>
+
+          </TouchableHighlight >
+          <TouchableHighlight style = {
+              {
+                backgroundColor: "#7080a4",
+                width: width * 0.33,
+                padding: 5,
+                margin: width * 0.02,
+                borderRadius: 17,
+              }
+            }
+            onPress = {
+              () => {
+                onSignIn().then(() => {
+                  this.props.navigation.navigate("SignedIn");
+                  this.setState({
+                    screenLoading: false,
+                  });
+                });
+              }
+            }
+            underlayColor = "#34508C" >
+            <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
+          </TouchableHighlight >
+        </View>
       < /View >
       </ImageBackground>
     );
