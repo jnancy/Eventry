@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
+import { Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import LoginButton from '../components/LoginButton.js';
@@ -83,7 +83,7 @@ export default class LoginScreen extends React.Component {
 
     return ( <
       ImageBackground source = {
-        require('../img/login.jpg')
+        require('../img/login2.jpg')
       }
       style = {
         {
@@ -91,42 +91,32 @@ export default class LoginScreen extends React.Component {
           height: '100%'
         }
       } >
-      <
-      View style = {
+      < View style = {
         {
           flex: 1
         }
       } >
-      <
-      View style = {
+      < View style = {
         {
           flexDirection: 'row',
           justifyContent: 'center',
-          height: 50,
+          height: 60,
           alignItems: 'center',
           marginTop: height / 5
         }
       } >
+      <Image source = {require('../img/e.jpg')} style={{width: 70, height: 70}}/>
       <
-      Ionicons name = "ios-pin"
-      size = {
-        50
-      }
-      color = "#1f5fa5"
-      style = {
-        {
-          marginRight: 5
-        }
-      }
-      /> <
       Text style = {
         {
-          color: '#1f5fa5',
+          color: '#ffffff',
           fontSize: 50,
+          fontWeight: 'light',
+          //fontFamily: 'lucida grande'
   //        fontFamily: 'Roboto',
         }
       } >
-      Naloxone <
+      Eventry <
       /Text> < /
       View > <
       View style = {
@@ -159,17 +149,20 @@ export default class LoginScreen extends React.Component {
           });
         }
       }*/
+      onPress = {
+        () => {
+          onSignIn().then(() => {
+            this.props.navigation.navigate("SignedIn");
+            this.setState({
+              screenLoading: false,
+            });
+          });
+        }
+      }
       underlayColor = "#CA1D00" >
-      <
-      LoginButton icon = {
-        "logo-google"
-      }
-      loginText = {
-        "Sign in with Google"
-      }
-      /> < /
-      TouchableHighlight > <
-      TouchableHighlight style = {
+      <LoginButton icon = {"logo-google" } loginText = {"Sign in with Google"}/>
+      < /TouchableHighlight >
+      < TouchableHighlight style = {
         {
           backgroundColor: "#39579a",
           width: width * (8 / 10),
@@ -188,18 +181,11 @@ export default class LoginScreen extends React.Component {
         }
       }
       underlayColor = "#34508C" >
-      <
-      LoginButton icon = {
-        "logo-facebook"
-      }
-      loginText = {
-        "Sign in with Facebook"
-      }
-      /> < /
-      TouchableHighlight > <
-      /View> < /
-      View > <
-      /ImageBackground>
+      <LoginButton icon = {"logo-facebook"} loginText = {"Sign in with Facebook"}/>
+      < /TouchableHighlight >
+      </View>
+      < /View >
+      </ImageBackground>
     );
   }
 }
