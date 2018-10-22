@@ -32,10 +32,12 @@ export default class LoginScreen extends React.Component {
       username:'',
       password:''
     };
+    this.signIn = this.signIn.bind(this);
   }
 
    signIn = (json) => {
-    console.log("Response from DB: " + json);
+    console.log("Response from DB: ");
+    console.log(json);
     onSignIn();
   }
 
@@ -58,15 +60,17 @@ export default class LoginScreen extends React.Component {
 
               let data = {
                 method: 'POST',
-                body: { 'access_token': accessToken, 'code': idToken},
                 headers: {
-                  'Accept':       'application/json',
+                  Accept: 'application/json',
                   'Content-Type': 'application/json',
-                }
+                },
+                body: JSON.stringify({
+                  'access_token': accessToken
+                }),
               }
 
               fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google', data).then(response => response.json())  // Promise
-              .then(json => signIn(json)).then(this.setState({successfulAuth: true}));
+              .then(json => {this.signIn(json)}).then(this.setState({successfulAuth: true}));
 
             } else {
               return { cancelled: true };
@@ -216,27 +220,7 @@ export default class LoginScreen extends React.Component {
               }
             }
             onPress = {
-              () => {
-                LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
-                  function(result) {
-                    if (result.isCancelled) {
-                      alert('Login was cancelled');
-                    } else {
-                      alert('Login was successful with permissions: '
-                      + result.grantedPermissions.toString());
-                      onSignIn().then(() => {
-                        this.props.navigation.navigate("SignedIn");
-                        this.setState({
-                          screenLoading: false,
-                        });
-                      });
-                    }
-                  },
-                  function(error) {
-                    alert('Login failed with error: ' + error);
-                  }
-                );
-              }
+              () => {  console.log("bloop");}
             }
             underlayColor = "#34508C" >
            <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
