@@ -5,97 +5,123 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  Dimensions,
+  TouchableHighlight,
   TouchableOpacity,
   View,
+  FlatList, 
+  RefreshControl,
+  ActivityIndicator,
 } from 'react-native';
-import { WebBrowser } from 'expo';
+import ImageLoad from 'react-native-image-placeholder';
 
 import { MonoText } from '../components/StyledText';
-
+let {width,height} = Dimensions.get('window');
 export default class HomeScreen extends React.Component {
+  constructor(props){
+    super(props);
+    this.state ={ isLoading: true, refreshing: false}
+  }
+  _onRefresh() {
+    this.setState({refreshing: true});
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          // HAVE TO CHANGE MOVIES
+          EventJson: responseJson,
+        }, function(){
+
+        });
+
+      }).then(() => {
+        this.setState({refreshing: false});
+      });
+    }
+
+  componentDidMount(){
+    // CHANGE THE URL TO MACH WITH OURS!!
+    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          // HAVE TO CHANGE MOVIES
+          EventJson: responseJson,
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
+  
   static navigationOptions = {
     header: null,
   };
 
   render() {
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
     return (
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
-            <Image
-              source={
-                __DEV__
-                  ? require('../assets/images/robot-dev.png')
-                  : require('../assets/images/robot-prod.png')
-              }
-              style={styles.welcomeImage}
-            />
+          <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 100 }} >
+          <Image source = {require('../assets/images/e.png')} style={{width: 70, height: 70}}/>
+          <Text style = {{ color: '#525EAE', fontSize: 50 }} >
+            Eventry
+          </Text>
           </View>
-
-          <View style={styles.getStartedContainer}>
-            {this._maybeRenderDevelopmentModeWarning()}
-
-            <Text style={styles.getStartedText}>Get started by opening</Text>
-
-            <View style={[styles.codeHighlightContainer, styles.homeScreenFilename]}>
-              <MonoText style={styles.codeHighlightText}>screens/HomeScreen.js</MonoText>
-            </View>
-
-            <Text style={styles.getStartedText}>
-              Change this text and your app will automatically reload.
-            </Text>
           </View>
-
-          <View style={styles.helpContainer}>
-            <TouchableOpacity onPress={this._handleHelpPress} style={styles.helpLink}>
-              <Text style={styles.helpLinkText}>Help, it didn’t automatically reload!</Text>
-            </TouchableOpacity>
+           <FlatList
+           refreshControl={
+            <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this._onRefresh.bind(this)}/>}
+            data={this.state.EventJson}
+          renderItem={({item}) => 
+        <TouchableHighlight
+          style = {{
+            backgroundColor: '#C6E9ED',
+            width: width - 20,
+            padding: 10,
+            marginTop: 20,
+            marginRight:10,
+            marginLeft:10,
+            borderRadius: 15,
+          }}
+          onPress = {() => {
+            }
+          }
+          underlayColor = '#A9D9DE' >
+          <View style = {{flexDirection: 'row',  height: 60, marginLeft: width / 15, marginRight: width /15 }} >
+          <ImageLoad
+              style={{marginLeft: 0, width: width / 10, height: height / 15, flex : 1.00 }}
+              loadingStyle={{ size: 'small', color: 'blue' }}
+              source={{ uri: 'https://4.bp.blogspot.com/-lYq2CzKT12k/VVR_atacIWI/AAAAAAABiwk/ZDXJa9dhUh8/s0/Convict_Lake_Autumn_View_uhd.jpg' }}/>
+          <View style= {{flex : 2}}> <Text style={{fontWeight: "bold", fontSize: 18}}> {item.event_name} </Text> </View>
+          <View style= {{flex : 3}}> <Text style={{fontSize: 16}}>{item.event_description}</Text> </View>
           </View>
+          </TouchableHighlight>
+        }
+          keyExtractor={(item, index) => index}
+          />
         </ScrollView>
 
-        <View style={styles.tabBarInfoContainer}>
-          <Text style={styles.tabBarInfoText}>This is a tab bar. You can edit it in:</Text>
-
-          <View style={[styles.codeHighlightContainer, styles.navigationFilename]}>
-            <MonoText style={styles.codeHighlightText}>navigation/MainTabNavigator.js</MonoText>
-          </View>
-        </View>
       </View>
     );
   }
-
-  _maybeRenderDevelopmentModeWarning() {
-    if (__DEV__) {
-      const learnMoreButton = (
-        <Text onPress={this._handleLearnMorePress} style={styles.helpLinkText}>
-          Learn more
-        </Text>
-      );
-
-      return (
-        <Text style={styles.developmentModeText}>
-          Development mode is enabled, your app will be slower but you can use useful development
-          tools. {learnMoreButton}
-        </Text>
-      );
-    } else {
-      return (
-        <Text style={styles.developmentModeText}>
-          You are not in development mode, your app will run at full speed.
-        </Text>
-      );
-    }
-  }
-
-  _handleLearnMorePress = () => {
-    WebBrowser.openBrowserAsync('https://docs.expo.io/versions/latest/guides/development-mode');
-  };
-
-  _handleHelpPress = () => {
-    WebBrowser.openBrowserAsync(
-      'https://docs.expo.io/versions/latest/guides/up-and-running.html#can-t-see-your-changes'
-    );
-  };
 }
 
 const styles = StyleSheet.create({
