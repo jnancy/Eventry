@@ -10,7 +10,8 @@ import {
 } from "react-navigation";
 
 import AppNav from './navigation/AppNavigator';
-import LoginScreen from "./screens/LoginScreen.js";
+import LoginScreen from './screens/LoginScreen';
+import SignUp from './screens/SignupScreen'
 
 export const SignedIn = AppNav;
 
@@ -24,10 +25,7 @@ export const createRootNavigator = (signedIn = false, handleNotificaion) => {
 
   return SwitchNavigator(
     {
-      SignedIn: {
-        screen: SignedIn
-      },
-    LoginScreen
+      SignedIn, LoginScreen, SignUp
     },
     {
       initialRouteName: _initialRouteName

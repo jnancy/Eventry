@@ -12,16 +12,14 @@ export default class SettingsScreen extends React.Component {
   };
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
-    // return <ExpoConfigView />;
     return <View>
     < TouchableHighlight style = {
       {
         backgroundColor: "#39579a",
         width: width * (8 / 10),
         padding: 10,
-        marginTop: 10,
+        marginLeft: width * (1/10),
+        marginTop: 30,
       }
     }
     onPress = {
@@ -35,7 +33,7 @@ export default class SettingsScreen extends React.Component {
       }
     }
     underlayColor = "#34508C" >
-    <LoginButton icon = {"logo-facebook"} loginText = {"Sign in with Facebook"}/>
+    <LoginButton icon = {"logo-facebook"} loginText = {"SIGN mE THE fuck Out"}/>
     < /TouchableHighlight >
     </View>
   }

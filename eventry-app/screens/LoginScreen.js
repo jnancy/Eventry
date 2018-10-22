@@ -11,6 +11,9 @@ import { onSignIn, storeUserID } from '../auth/fakeAuth';
   IOS_CLIENT_ID
 } from 'react-native-dotenv';*/
 
+const ANDROID_CLIENT_ID = '197432669439-5p52pkenhoc55j57h1p59sr664io7bd9.apps.googleusercontent.com';
+const IOS_CLIENT_ID = '197432669439-n45mkfg71nala1pu0vv0se9vrls5vst8.apps.googleusercontent.com';
+
 import {Permissions, Notifications} from 'expo';
 
 const FBSDK = require('react-native-fbsdk');
@@ -32,7 +35,7 @@ export default class LoginScreen extends React.Component {
   }
 
 
-  /*    signInWithGoogleAsync = async () => {
+  signInWithGoogleAsync = async () => {
           this.setState({
               screenLoading: true,
           })
@@ -46,38 +49,24 @@ export default class LoginScreen extends React.Component {
 
             if (result.type === "success") {
               const { idToken, accessToken } = result;
-              const credential = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
               this.setState({
                   successfulAuth: true,
               });
-              const firebaseRes = await firebase
-                .auth()
-                .signInAndRetrieveDataWithCredential(credential)
-                .catch(error => {
-                  console.log("firebase cred err:", error);
-                });
               onSignIn();
-              userid = firebaseRes.user.uid;
-              if(firebaseRes.additionalUserInfo.isNewUser) {
-                  newUserStoreData(userid);
-              }
-              console.log(userid);
-              storeUserID(userid);
-              await this.registerForPushNotificationsAsync(userid);
             } else {
               return { cancelled: true };
             }
           } catch (err) {
             console.log("err:", err);
           }
-        };*/
+        };
 
 
 
   render() {
     if (this.state.screenLoading) {
       return (
-        <View style = { styles.container } >
+        <View>
           <ActivityIndicator / >
           <StatusBar barStyle = "default" / >
         </View>
@@ -122,6 +111,7 @@ export default class LoginScreen extends React.Component {
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
             placeholder='Password'
+            secureTextEntry='true'
             placeholderTextColor='#fff'
           />
           <TouchableHighlight
@@ -156,7 +146,7 @@ export default class LoginScreen extends React.Component {
             onPress = {
               () => {
                 onSignIn().then(() => {
-                  this.props.navigation.navigate("SignedIn");
+                  this.props.navigation.navigate("SignUp");
                   this.setState({
                     screenLoading: false,
                   });
@@ -185,34 +175,21 @@ export default class LoginScreen extends React.Component {
             padding: 5,
             borderRadius: 17,
             }}
-/*      onPress = {
-        () => {
-          this.signInWithGoogleAsync().then(() => {
-            if (this.state.successfulAuth === true) {
-              console.log("auth successful");
-              this.props.navigation.navigate("SignedIn");
-            } else {
-              console.log("failed auth");
-              this.setState({
-                screenLoading: false,
-              });
-            }
-          });
-        }
-      }*/
-          onPress = {
-            () => {
-              onSignIn().then(() => {
-                this.props.navigation.navigate("SignedIn");
-                this.setState({
-                  screenLoading: false,
+            onPress = {
+              () => {
+                this.signInWithGoogleAsync().then(() => {
+                  if (this.state.successfulAuth === true) {
+                    console.log("auth successful");
+                    this.props.navigation.navigate("SignedIn");
+                  } else {
+                    console.log("failed auth");
+                    this.setState({ screenLoading: false, });
+                  }
                 });
-              });
+              }
             }
-          }
-          underlayColor = "#529ae4" >
-          <LoginButton icon = {"logo-google" } loginText = {'GOOGLE'}/>
-
+            underlayColor = "#529ae4" >
+            <LoginButton icon = {"logo-google" } loginText = {'GOOGLE'}/>
           </TouchableHighlight >
           <TouchableHighlight style = {
               {
@@ -225,7 +202,7 @@ export default class LoginScreen extends React.Component {
             }
             onPress = {
               () => {
-                LoginManager.logInWithReadPermissions(['public_profile']).then(
+                LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
                   function(result) {
                     if (result.isCancelled) {
                       alert('Login was cancelled');
