@@ -34,6 +34,11 @@ export default class LoginScreen extends React.Component {
     };
   }
 
+   signIn = (json) => {
+    console.log("Response from DB: " + json);
+    onSignIn();
+  }
+
 
   signInWithGoogleAsync = async () => {
           this.setState({
@@ -46,20 +51,30 @@ export default class LoginScreen extends React.Component {
               iosClientId:IOS_CLIENT_ID,
               scopes: ["profile", "email"]
             });
-
             if (result.type === "success") {
               const { idToken, accessToken } = result;
-              this.setState({
-                  successfulAuth: true,
-              });
-              onSignIn();
+              console.log("id: " + idToken);
+              console.log("access: " + accessToken);
+
+              let data = {
+                method: 'POST',
+                body: { 'access_token': accessToken, 'code': idToken},
+                headers: {
+                  'Accept':       'application/json',
+                  'Content-Type': 'application/json',
+                }
+              }
+
+              fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google', data).then(response => response.json())  // Promise
+              .then(json => signIn(json)).then(this.setState({successfulAuth: true}));
+
             } else {
               return { cancelled: true };
             }
           } catch (err) {
             console.log("err:", err);
           }
-        };
+        }
 
 
 
