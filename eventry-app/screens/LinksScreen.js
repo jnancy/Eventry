@@ -97,7 +97,7 @@ import { ScrollView,
                   method: 'POST',
                   body: JSON.stringify({
                     event_name: self.state.event_name,
-                    event_description: self.event_description,
+                    event_description: self.state.event_description,
                     event_location: self.state.event_loc,
                     event_price : self.state.event_price,
                     //event_start_time: self.state.event_date,
