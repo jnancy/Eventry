@@ -127,7 +127,7 @@ export default class SignupScreen extends React.Component {
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
             placeholder='Password'
-            secureTextEntry='true'
+            secureTextEntry={true}
             placeholderTextColor='#fff'
           />
           <TextInput
@@ -143,7 +143,7 @@ export default class SignupScreen extends React.Component {
             onChangeText={(password2) => this.setState({password2})}
             value={this.state.password2}
             placeholder='Re-enter Password'
-            secureTextEntry='true'
+            secureTextEntry={true}
             placeholderTextColor='#fff'
           />
           <TouchableHighlight

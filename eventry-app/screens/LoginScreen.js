@@ -111,7 +111,7 @@ export default class LoginScreen extends React.Component {
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
             placeholder='Password'
-            secureTextEntry='true'
+            secureTextEntry={true}
             placeholderTextColor='#fff'
           />
           <TouchableHighlight
