@@ -1,5 +1,5 @@
 import React from "react";
-import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from "react-native";
+import {ScrollView, TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 import LoginButton from "../components/LoginButton";
@@ -45,7 +45,7 @@ export default class SignupScreen extends React.Component {
 
     return (
       <ImageBackground source = {require("../img/login2.jpg")} style = {{ width: "100%", height: "100%"}} >
-      <View style = {{ flex: 1 }} >
+      <ScrollView style = {{ flex: 1 }} >
         <View style = {{flexDirection: "row", justifyContent: "center", height: 60, alignItems: "center", marginTop: height / 7 }} >
           <Image source = {require("../img/e.jpg")} style={{width: 70, height: 70}}/>
           <Text style = {{ color: "#ffffff", fontSize: 50, /* fontWeight: "100", fontFamily: "lucida grande"*/ }} >
@@ -168,7 +168,7 @@ export default class SignupScreen extends React.Component {
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> SIGNUP </Text>
           < /TouchableHighlight >
         </View>
-      < /View >
+      < /ScrollView >
       </ImageBackground>
     );
   }
