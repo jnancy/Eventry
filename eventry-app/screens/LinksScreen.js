@@ -130,7 +130,7 @@ import { ScrollView,
                       JSON.stringify(responseData)
                   )
                  })
-                .catch((error) =>{
+                .catch((error) => {
                   console.error(error);
                 });
                 //ADD STUFF
