@@ -42,4 +42,4 @@ class Login extends Component {
       />
     );
   }
-};
+}
