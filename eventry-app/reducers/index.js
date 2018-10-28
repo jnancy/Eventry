@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import * as actionType from '../actions/types';
+import { combineReducers } from "redux";
+import * as actionType from "../actions/types";
 
 const tokenInitialState = null;
 const token = (state = tokenInitialState, action) => {
@@ -9,7 +9,7 @@ const token = (state = tokenInitialState, action) => {
     default:
       return state;
   }
-}
+};
 
 const appReducer = combineReducers({
   token,
@@ -17,6 +17,6 @@ const appReducer = combineReducers({
 
 const rootReducer = (state, action) => {
   return appReducer(state, action);
-}
+};
 
 export default rootReducer;
