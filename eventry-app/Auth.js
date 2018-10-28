@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
   ActivityIndicator,
   StatusBar,
   StyleSheet,
   View,
   AsyncStorage,
-} from 'react-native';
-import {isSignedIn} from './auth/fakeAuth.js';
-import {createRootNavigator} from './Router.js';
+} from "react-native";
+import {isSignedIn} from "./auth/fakeAuth.js";
+import {createRootNavigator} from "./Router.js";
 
 export default class Auth extends React.Component {
   constructor(props) {
@@ -41,6 +41,6 @@ export default class Auth extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
   },
 });

@@ -9,9 +9,9 @@ import {
   SwitchNavigator
 } from "react-navigation";
 
-import AppNav from './navigation/AppNavigator';
-import LoginScreen from './screens/LoginScreen';
-import SignUp from './screens/SignupScreen'
+import AppNav from "./navigation/AppNavigator";
+import LoginScreen from "./screens/LoginScreen";
+import SignUp from "./screens/SignupScreen"
 
 export const SignedIn = AppNav;
 

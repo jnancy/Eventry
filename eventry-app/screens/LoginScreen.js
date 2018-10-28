@@ -1,25 +1,25 @@
-import React from 'react';
-import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import LoginButton from '../components/LoginButton';
-import FBLoginButton from '../components/FBLoginButton'
-import { onSignIn, storeUserID } from '../auth/fakeAuth';
+import LoginButton from "../components/LoginButton";
+import FBLoginButton from "../components/FBLoginButton"
+import { onSignIn, storeUserID } from "../auth/fakeAuth";
 
 /*import {
   ANDROID_CLIENT_ID,
   IOS_CLIENT_ID
-} from 'react-native-dotenv';*/
+} from "react-native-dotenv";*/
 
-const ANDROID_CLIENT_ID = '197432669439-5p52pkenhoc55j57h1p59sr664io7bd9.apps.googleusercontent.com';
-const IOS_CLIENT_ID = '197432669439-n45mkfg71nala1pu0vv0se9vrls5vst8.apps.googleusercontent.com';
+const ANDROID_CLIENT_ID = "197432669439-5p52pkenhoc55j57h1p59sr664io7bd9.apps.googleusercontent.com";
+const IOS_CLIENT_ID = "197432669439-n45mkfg71nala1pu0vv0se9vrls5vst8.apps.googleusercontent.com";
 
-import {Permissions, Notifications} from 'expo';
+import {Permissions, Notifications} from "expo";
 
-const FBSDK = require('react-native-fbsdk');
+const FBSDK = require("react-native-fbsdk");
 const {LoginManager} = FBSDK;
 
-let {width,height} = Dimensions.get('window');
+let {width,height} = Dimensions.get("window");
 
 export default class LoginScreen extends React.Component {
 
@@ -29,8 +29,8 @@ export default class LoginScreen extends React.Component {
     this.state = {
       successfulAuth: false,
       screenLoading: false,
-      username:'',
-      password:''
+      username:"",
+      password:""
     };
     this.signIn = this.signIn.bind(this);
   }
@@ -59,17 +59,17 @@ export default class LoginScreen extends React.Component {
               console.log("access: " + accessToken);
 
               let data = {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  'access_token': accessToken
+                  "access_token": accessToken
                 }),
               }
 
-              fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google', data).then(response => response.json())  // Promise
+              fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google/", data).then(response => response.json())  // Promise
               .then(json => {this.signIn(json)}).then(this.setState({successfulAuth: true}));
 
             } else {
@@ -93,45 +93,45 @@ export default class LoginScreen extends React.Component {
     }
 
     return (
-      <ImageBackground source = {require('../img/login2.jpg')} style = {{ width: '100%', height: '100%'}} >
+      <ImageBackground source = {require("../img/login2.jpg")} style = {{ width: "100%", height: "100%"}} >
       <View style = {{ flex: 1 }} >
-        <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 7 }} >
-          <Image source = {require('../img/e.jpg')} style={{width: 70, height: 70}}/>
-          <Text style = {{ color: '#ffffff', fontSize: 50, /* fontWeight: '100', fontFamily: 'lucida grande'*/ }} >
+        <View style = {{flexDirection: "row", justifyContent: "center", height: 60, alignItems: "center", marginTop: height / 7 }} >
+          <Image source = {require("../img/e.jpg")} style={{width: 70, height: 70}}/>
+          <Text style = {{ color: "#ffffff", fontSize: 50, /* fontWeight: "100", fontFamily: "lucida grande"*/ }} >
             Eventry
           </Text>
         </View >
 
-        <View style = {{flexDirection: 'column', alignItems: 'center', marginTop: height/20}} >
+        <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
           <TextInput
             style={{
               height: 40,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               borderBottomWidth: 1,
               width: width*7/10,
               fontSize: 15,
             }}
             onChangeText={(username) => this.setState({username})}
             value={this.state.username}
-            placeholder='Username'
-            placeholderTextColor='#fff'
+            placeholder="Username"
+            placeholderTextColor="#fff"
           />
           <TextInput
             style={{
               height: 40,
               marginTop: 10,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               borderBottomWidth: 1,
               width: width*7/10,
               fontSize: 15,
             }}
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
-            placeholder='Password'
+            placeholder="Password"
             secureTextEntry={true}
-            placeholderTextColor='#fff'
+            placeholderTextColor="#fff"
           />
           <TouchableHighlight
             style = {{
@@ -152,7 +152,7 @@ export default class LoginScreen extends React.Component {
               }
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
-            <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> LOGIN </Text>
+            <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> LOGIN </Text>
           < /TouchableHighlight >
           <TouchableHighlight
             style = {{
@@ -173,18 +173,18 @@ export default class LoginScreen extends React.Component {
               }
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
-            <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> SIGNUP </Text>
+            <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> SIGNUP </Text>
           < /TouchableHighlight >
         </View>
 
-        <Text style={{marginTop: 40, textAlign: 'center', color: '#fff', fontSize: 11, fontWeight: 'bold'}}>
+        <Text style={{marginTop: 40, textAlign: "center", color: "#fff", fontSize: 11, fontWeight: "bold"}}>
            OR CONNECT WITH
         </Text>
 
         <View style = {{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
             marginTop: 15,
         }}>
           <TouchableHighlight style = {{
@@ -208,7 +208,7 @@ export default class LoginScreen extends React.Component {
               }
             }
             underlayColor = "#529ae4" >
-            <LoginButton icon = {"logo-google" } loginText = {'GOOGLE'}/>
+            <LoginButton icon = {"logo-google" } loginText = {"GOOGLE"}/>
           </TouchableHighlight >
           <TouchableHighlight style = {
               {
@@ -223,7 +223,7 @@ export default class LoginScreen extends React.Component {
               () => {  console.log("bloop");}
             }
             underlayColor = "#34508C" >
-           <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
+           <LoginButton icon = {"logo-facebook"} loginText={"FACEBOOK"}/>
         </TouchableHighlight >
         </View>
       < /View >
