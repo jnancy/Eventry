@@ -5,4 +5,4 @@ export const setToken = (data) => {
     type: actionType.SET_TOKEN,
     data
   };
-}
+};

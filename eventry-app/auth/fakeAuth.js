@@ -1,40 +1,39 @@
 import { AsyncStorage } from "react-native";
-//import * as firebase from 'firebase';
 
 export const USER_KEY = "auth-demo-key";
-let keys = [USER_KEY, 'kitHolder', 'userID', 'latlngPath', 'expoToken', 'latlng', 'distressDistance', 'distressUserExpoToken', 'distressUserID'];
+let keys = [USER_KEY, "kitHolder", "userID", "latlngPath", "expoToken", "latlng", "distressDistance", "distressUserExpoToken", "distressUserID"];
 
 export const onSignIn = () => AsyncStorage.setItem(USER_KEY, "true");
 
 export const onSignOut = async () => {
   let latlngPath = null;
-  await AsyncStorage.getItem('latlngPath')
-  .then(res => {
+  await AsyncStorage.getItem("latlngPath")
+  .then((res) => {
     latlngPath = res;
   })
-  .catch(err => console.log("can't find latlngPath when logging out: " + err));
-  await AsyncStorage.getItem('userID')
-  .then(res => {
-    /*firebase.database().ref('latlng/'+latlngPath+'/'+res).update({
+  .catch((err) => console.log("cannot find latlngPath when logging out: " + err));
+  await AsyncStorage.getItem("userID")
+  .then((res) => {
+    /*firebase.database().ref("latlng/"+latlngPath+"/"+res).update({
       kitNoti: null,
       expoToken: null,
     });*/
   })
-  .catch(err => console.log("can't find user id when logging out: " + err));
+  .catch((err) => console.log("cannot find user id when logging out: " + err));
   AsyncStorage.multiRemove(keys);
 };
 
 export const isSignedIn = () => {
   return new Promise((resolve, reject) => {
     AsyncStorage.getItem(USER_KEY)
-      .then(res => {
+      .then((res) => {
         if (res !== null) {
           resolve(true);
         } else {
           resolve(false);
         }
       })
-      .catch(err => reject(err));
+      .catch((err) => reject(err));
   });
 };
 
@@ -50,10 +49,10 @@ export const getInternalUserInfoBool = (key) => {
       .then(res => {
         console.log("internaluser Bool: "+ res);
         if (res !== null) {
-          if(res === 'true'){
+          if(res === "true"){
             console.log("Not null, res: " + res);
             resolve(true);
-          } else if (res === 'false'){
+          } else if (res === "false"){
             console.log("Not null, res: " + res);
             resolve(false);
           }
