@@ -1,14 +1,14 @@
-import React from 'react';
-import { ExpoConfigView } from '@expo/samples';
-import { onSignOut } from '../auth/fakeAuth.js';
-import LoginButton from '../components/LoginButton.js';
-import { ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
+import React from "react";
+import { ExpoConfigView } from "@expo/samples";
+import { onSignOut } from "../auth/fakeAuth.js";
+import LoginButton from "../components/LoginButton.js";
+import { ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from "react-native";
 
-let {width,height} = Dimensions.get('window');
+let {width,height} = Dimensions.get("window");
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    title: "app.json",
   };
 
   render() {
