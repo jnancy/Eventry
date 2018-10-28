@@ -1,7 +1,7 @@
-'use strict';
-import { StyleSheet, Dimensions } from 'react-native';
+"use strict";
+import { StyleSheet, Dimensions } from "react-native";
 
-let { width, height } = Dimensions.get('window');
+let { width, height } = Dimensions.get("window");
 
 var Styles = StyleSheet.create({
 

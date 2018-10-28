@@ -28,12 +28,7 @@ export default class SignupScreen extends React.Component {
 
   render() {
     if (this.state.screenLoading) {
-      return (
-        <View >
-          <ActivityIndicator / >
-          <StatusBar barStyle = "default" / >
-        </View>
-      );
+      return ( <View >  <StatusBar barStyle = "default" / >  </View> );
     }
 
     return (
@@ -41,18 +36,16 @@ export default class SignupScreen extends React.Component {
       <ScrollView style = {{ flex: 1 }} >
         <View style = {{flexDirection: "row", justifyContent: "center", height: 60, alignItems: "center", marginTop: height / 7 }} >
           <Image source = {require("../img/e.jpg")} style={{width: 70, height: 70}}/>
-          <Text style = {{ color: "#ffffff", fontSize: 50, /* fontWeight: "100", fontFamily: "lucida grande"*/ }} >
-            Eventry
-          </Text>
+          <Text style = {{ color: "#ffffff", fontSize: 50}} >  Eventry  </Text>
         </View >
 
         <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
           <TextInput
             style={Styles.textInput}
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username}
-            placeholder="Username"
             placeholderTextColor="#fff"
+            onChangeText={(username) => this.setState({username})}
+            placeholder="Username"
+            value={this.state.username}
           />
           <TextInput
             style={style={Styles.textInput}}
@@ -79,9 +72,9 @@ export default class SignupScreen extends React.Component {
             style={Styles.textInput}
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
+            placeholderTextColor="#fff"
             placeholder="Password"
             secureTextEntry={true}
-            placeholderTextColor="#fff"
           />
           <TextInput
             style={Styles.textInput}
@@ -99,18 +92,19 @@ export default class SignupScreen extends React.Component {
               marginTop: 20,
               borderRadius: 15,
             }}
+            underlayColor = "rgba(115, 115, 115, 0.63)"
             onPress = {
               () => {
                 onSignIn().then(() => {
                   this.props.navigation.navigate("LoginScreen");
-                  this.setState({
-                    screenLoading: false,
-                  });
+                  this.setState({screenLoading: false,});
                 });
               }
             }
-            underlayColor = "rgba(115, 115, 115, 0.63)" >
-            <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> SIGNUP </Text>
+            >
+            <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}>
+              SIGNUP
+            </Text>
           < /TouchableHighlight >
         </View>
       < /ScrollView >
