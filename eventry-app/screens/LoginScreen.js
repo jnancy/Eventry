@@ -66,7 +66,7 @@ export default class LoginScreen extends React.Component {
                 },
                 body: JSON.stringify({
                   "access_token": accessToken
-                }),
+                });,
               }
 
               fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google/", data).then(response => response.json())  // Promise

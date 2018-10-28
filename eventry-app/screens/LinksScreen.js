@@ -1,18 +1,18 @@
 import React from "react";
-import { ScrollView, 
-  StyleSheet, 
-  TextInput, 
-  Dimensions, 
-  TouchableHighlight, 
-  Text, 
-  View, 
+import { ScrollView,
+  StyleSheet,
+  TextInput,
+  Dimensions,
+  TouchableHighlight,
+  Text,
+  View,
   AlertIOS,
-  ActivityIndicator, 
+  ActivityIndicator,
   StatusBar } from "react-native";
 
 
   let {width,height} = Dimensions.get("window");
-  
+
   const styles = StyleSheet.create({
     container: {
       flex: 1,
@@ -27,7 +27,7 @@ import { ScrollView,
       borderBottomWidth: 1,
       width:  width *7/10,
       fontSize: 15,
-  
+
     }
   });
 
@@ -69,7 +69,7 @@ import { ScrollView,
             placeholder="Title"
             placeholderTextColor="#A0AAAB"
           />
-          
+
           <TextInput
             style={styles.TextInput}
             onChangeText={(event_description) => this.setState({event_description})}
@@ -91,7 +91,7 @@ import { ScrollView,
             placeholder="Location"
             placeholderTextColor="#A0AAAB"
           />
-          
+
           <TextInput
             style={styles.TextInput}
             onChangeText={(event_date) => this.setState({event_date})}
@@ -99,7 +99,7 @@ import { ScrollView,
             placeholder="Date DD/MM/YYYY"
             placeholderTextColor="#A0AAAB"
           />
-          
+
           <TouchableHighlight
             style = {{
               backgroundColor: "#C6E9ED",
@@ -128,7 +128,7 @@ import { ScrollView,
                   AlertIOS.alert(
                       "POST Response",
                       JSON.stringify(responseData)
-                  )
+                  );
                  })
                 .catch((error) => {
                   console.error(error);
@@ -148,5 +148,3 @@ import { ScrollView,
     );
   }
 }
-
-

@@ -1,3 +1,6 @@
+var { FBLogin, FBLoginManager } = require("react-native-facebook-login");
+import { onSignIn, storeUserID } from "../auth/fakeAuth";
+
 LoginManager.logInWithReadPermissions(["public_profile", "email"]).then(
   function(result) {
     if (result.isCancelled) {
