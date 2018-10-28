@@ -62,8 +62,8 @@ export const getInternalUserInfoBool = (key) => {
         }
       })
       .catch(err => {
-        console.log("Rejected, err: " + err)
-        reject(err)
+        console.log("Rejected, err: " + err);
+        reject(err);
       });
   });
 };
@@ -82,8 +82,8 @@ export const getInternalUserInfo = (key) => {
         }
       })
       .catch(err => {
-        console.log("Rejected, err: " + err)
-        reject(err)
+        console.log("Rejected, err: " + err);
+        reject(err);
       });
   });
 };

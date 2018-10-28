@@ -1,9 +1,9 @@
-LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
+LoginManager.logInWithReadPermissions(["public_profile", "email"]).then(
   function(result) {
     if (result.isCancelled) {
-      alert('Login was cancelled');
+      alert("Login was cancelled");
     } else {
-      alert('Login was successful with permissions: '
+      alert("Login was successful with permissions: "
       + result.grantedPermissions.toString());
       onSignIn().then(() => {
         this.props.navigation.navigate("SignedIn");
@@ -14,6 +14,6 @@ LoginManager.logInWithReadPermissions(['public_profile', 'email']).then(
     }
   },
   function(error) {
-    alert('Login failed with error: ' + error);
+    alert("Login failed with error: " + error);
   }
 );
