@@ -1,20 +1,20 @@
-import React from 'react';
-import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import React from "react";
+import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-import LoginButton from '../components/LoginButton';
-import FBLoginButton from '../components/FBLoginButton'
-import { onSignIn, storeUserID } from '../auth/fakeAuth';
+import LoginButton from "../components/LoginButton";
+import FBLoginButton from "../components/FBLoginButton"
+import { onSignIn, storeUserID } from "../auth/fakeAuth";
 
-const ANDROID_CLIENT_ID = '';
-const IOS_CLIENT_ID = '';
+const ANDROID_CLIENT_ID = "";
+const IOS_CLIENT_ID = "";
 
-import {Permissions, Notifications} from 'expo';
+import {Permissions, Notifications} from "expo";
 
-const FBSDK = require('react-native-fbsdk');
+const FBSDK = require("react-native-fbsdk");
 const {LoginManager} = FBSDK;
 
-let {width,height} = Dimensions.get('window');
+let {width,height} = Dimensions.get("window");
 
 export default class SignupScreen extends React.Component {
 
@@ -24,12 +24,12 @@ export default class SignupScreen extends React.Component {
     this.state = {
       successfulAuth: false,
       screenLoading: false,
-      username:'',
-      firstName:'',
-      lastName:'',
-      email: '',
-      password:'',
-      password2: '',
+      username:"",
+      firstName:"",
+      lastName:"",
+      email: "",
+      password:"",
+      password2: "",
     };
   }
 
@@ -44,21 +44,21 @@ export default class SignupScreen extends React.Component {
     }
 
     return (
-      <ImageBackground source = {require('../img/login2.jpg')} style = {{ width: '100%', height: '100%'}} >
+      <ImageBackground source = {require("../img/login2.jpg")} style = {{ width: "100%", height: "100%"}} >
       <View style = {{ flex: 1 }} >
-        <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 7 }} >
-          <Image source = {require('../img/e.jpg')} style={{width: 70, height: 70}}/>
-          <Text style = {{ color: '#ffffff', fontSize: 50, /* fontWeight: '100', fontFamily: 'lucida grande'*/ }} >
+        <View style = {{flexDirection: "row", justifyContent: "center", height: 60, alignItems: "center", marginTop: height / 7 }} >
+          <Image source = {require("../img/e.jpg")} style={{width: 70, height: 70}}/>
+          <Text style = {{ color: "#ffffff", fontSize: 50, /* fontWeight: "100", fontFamily: "lucida grande"*/ }} >
             Eventry
           </Text>
         </View >
 
-        <View style = {{flexDirection: 'column', alignItems: 'center', marginTop: height/20}} >
+        <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
           <TextInput
             style={{
               height: 40,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               marginTop: 10,
               borderBottomWidth: 1,
               width: width*7/10,
@@ -66,14 +66,14 @@ export default class SignupScreen extends React.Component {
             }}
             onChangeText={(username) => this.setState({username})}
             value={this.state.username}
-            placeholder='Username'
-            placeholderTextColor='#fff'
+            placeholder="Username"
+            placeholderTextColor="#fff"
           />
           <TextInput
             style={{
               height: 40,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               marginTop: 10,
               borderBottomWidth: 1,
               width: width*7/10,
@@ -81,14 +81,14 @@ export default class SignupScreen extends React.Component {
             }}
             onChangeText={(firstName) => this.setState({firstName})}
             value={this.state.firstName}
-            placeholder='First Name'
-            placeholderTextColor='#fff'
+            placeholder="First Name"
+            placeholderTextColor="#fff"
           />
           <TextInput
             style={{
               height: 40,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               marginTop: 10,
               borderBottomWidth: 1,
               width: width*7/10,
@@ -96,14 +96,14 @@ export default class SignupScreen extends React.Component {
             }}
             onChangeText={(lastName) => this.setState({lastName})}
             value={this.state.lastName}
-            placeholder='Last Name'
-            placeholderTextColor='#fff'
+            placeholder="Last Name"
+            placeholderTextColor="#fff"
           />
           <TextInput
             style={{
               height: 40,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               marginTop: 10,
               borderBottomWidth: 1,
               width: width*7/10,
@@ -111,40 +111,40 @@ export default class SignupScreen extends React.Component {
             }}
             onChangeText={(email) => this.setState({email})}
             value={this.state.email}
-            placeholder='Email'
-            placeholderTextColor='#fff'
+            placeholder="Email"
+            placeholderTextColor="#fff"
           />
           <TextInput
             style={{
               height: 40,
               marginTop: 10,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               borderBottomWidth: 1,
               width: width*7/10,
               fontSize: 15,
             }}
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
-            placeholder='Password'
+            placeholder="Password"
             secureTextEntry={true}
-            placeholderTextColor='#fff'
+            placeholderTextColor="#fff"
           />
           <TextInput
             style={{
               height: 40,
               marginTop: 10,
-              color: 'white',
-              borderColor: 'white',
+              color: "white",
+              borderColor: "white",
               borderBottomWidth: 1,
               width: width*7/10,
               fontSize: 15,
             }}
             onChangeText={(password2) => this.setState({password2})}
             value={this.state.password2}
-            placeholder='Re-enter Password'
+            placeholder="Re-enter Password"
             secureTextEntry={true}
-            placeholderTextColor='#fff'
+            placeholderTextColor="#fff"
           />
           <TouchableHighlight
             style = {{
@@ -165,7 +165,7 @@ export default class SignupScreen extends React.Component {
               }
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
-            <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> SIGNUP </Text>
+            <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> SIGNUP </Text>
           < /TouchableHighlight >
         </View>
       < /View >
