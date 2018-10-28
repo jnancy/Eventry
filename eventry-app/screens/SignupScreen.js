@@ -3,7 +3,7 @@ import {ScrollView, TextInput, Image, ImageBackground, Dimensions, TouchableHigh
 import { Ionicons } from "@expo/vector-icons";
 
 import LoginButton from "../components/LoginButton";
-import FBLoginButton from "../components/FBLoginButton"
+import FBLoginButton from "../components/FBLoginButton";
 import { onSignIn, storeUserID } from "../auth/fakeAuth";
 
 const ANDROID_CLIENT_ID = "";
@@ -36,7 +36,7 @@ export default class SignupScreen extends React.Component {
   render() {
     if (this.state.screenLoading) {
       return (
-        <View style = { styles.container } >
+        <View >
           <ActivityIndicator / >
           <StatusBar barStyle = "default" / >
         </View>
