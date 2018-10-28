@@ -26,6 +26,6 @@ export default class FBLoginButton extends Component {
       </View>
     );
   }
-};
+}
 
 module.exports = FBLoginButton;

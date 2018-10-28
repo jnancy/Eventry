@@ -19,7 +19,7 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
+        <View>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
           <Auth/>
         </View>
