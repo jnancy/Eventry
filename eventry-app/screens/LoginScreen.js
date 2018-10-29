@@ -153,7 +153,7 @@ export default class LoginScreen extends React.Component {
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> LOGIN </Text>
-          < /TouchableHighlight >
+          </TouchableHighlight >
           <TouchableHighlight
             style = {{
               backgroundColor: "rgba(255, 255, 255, 0.51)",
@@ -174,7 +174,7 @@ export default class LoginScreen extends React.Component {
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> SIGNUP </Text>
-          < /TouchableHighlight >
+          </TouchableHighlight >
         </View>
 
         <Text style={{marginTop: 40, textAlign: "center", color: "#fff", fontSize: 11, fontWeight: "bold"}}>
@@ -226,7 +226,7 @@ export default class LoginScreen extends React.Component {
            <LoginButton icon = {"logo-facebook"} loginText={"FACEBOOK"}/>
         </TouchableHighlight >
         </View>
-      < /View >
+      </View >
       </ImageBackground>
     );
   }
