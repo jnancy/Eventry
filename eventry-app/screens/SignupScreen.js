@@ -28,7 +28,7 @@ export default class SignupScreen extends React.Component {
 
   render() {
     if (this.state.screenLoading) {
-      return ( <View >  <StatusBar barStyle = "default" / >  </View> );
+      return ( <View >  <StatusBar barStyle = "default" />  </View> );
     }
 
     return (
@@ -48,14 +48,14 @@ export default class SignupScreen extends React.Component {
             value={this.state.username}
           />
           <TextInput
-            style={style={Styles.textInput}}
+            style={Styles.textInput}
             onChangeText={(firstName) => this.setState({firstName})}
             value={this.state.firstName}
             placeholder="First Name"
             placeholderTextColor="#fff"
           />
           <TextInput
-            style={Styles.textInput}}
+            style={Styles.textInput}
             onChangeText={(lastName) => this.setState({lastName})}
             value={this.state.lastName}
             placeholder="Last Name"
@@ -105,9 +105,9 @@ export default class SignupScreen extends React.Component {
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}>
               SIGNUP
             </Text>
-          < /TouchableHighlight >
+          </TouchableHighlight>
         </View>
-      < /ScrollView >
+      </ScrollView>
       </ImageBackground>
     );
   }
