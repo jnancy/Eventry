@@ -27,7 +27,7 @@ export default class Auth extends React.Component {
     const { checkedSignIn, signedIn } = this.state;
     if (!checkedSignIn) {
       return (
-        <View style={styles.container}>
+        <View>
           <ActivityIndicator />
           <StatusBar barStyle="default" />
         </View>

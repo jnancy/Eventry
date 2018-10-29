@@ -13,7 +13,7 @@ const token = (state = tokenInitialState, action) => {
 
 const appReducer = combineReducers({
   token,
-})
+});
 
 const rootReducer = (state, action) => {
   return appReducer(state, action);

@@ -3,7 +3,7 @@ import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text,
 import { Ionicons } from "@expo/vector-icons";
 
 import LoginButton from "../components/LoginButton";
-import FBLoginButton from "../components/FBLoginButton"
+import FBLoginButton from "../components/FBLoginButton";
 import { onSignIn, storeUserID } from "../auth/fakeAuth";
 
 /*import {
@@ -45,7 +45,7 @@ export default class LoginScreen extends React.Component {
   signInWithGoogleAsync = async () => {
           this.setState({
               screenLoading: true,
-          })
+          });
           console.log("loading screen...");
           try {
             const result = await Expo.Google.logInAsync({
@@ -66,7 +66,7 @@ export default class LoginScreen extends React.Component {
                 },
                 body: JSON.stringify({
                   "access_token": accessToken
-                }),
+                });,
               }
 
               fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google/", data).then(response => response.json())  // Promise

@@ -1,5 +1,5 @@
 import React from "react";
-import Auth from "./Auth.js"
+import Auth from "./Auth.js";
 import { Platform, StatusBar, StyleSheet, View } from "react-native";
 import { AppLoading, Asset, Font, Icon } from "expo";
 
@@ -19,7 +19,7 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
+        <View>
           {Platform.OS === "ios" && <StatusBar barStyle="default" />}
           <Auth/>
         </View>

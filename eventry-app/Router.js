@@ -11,7 +11,7 @@ import {
 
 import AppNav from "./navigation/AppNavigator";
 import LoginScreen from "./screens/LoginScreen";
-import SignUp from "./screens/SignupScreen"
+import SignUp from "./screens/SignupScreen";
 
 export const SignedIn = AppNav;
 

@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-var { FBLogin, FBLoginManager } = require('react-native-facebook-login');
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+var { FBLogin, FBLoginManager } = require("react-native-facebook-login");
 
 class Login extends Component {
   render() {
     var _this = this;
     return (
       <FBLogin style={{ marginBottom: 10, }}
-        ref={(fbLogin) => { this.fbLogin = fbLogin }}
+        ref={(fbLogin) => { this.fbLogin = fbLogin; }}
         permissions={["email","user_friends"]}
         loginBehavior={FBLoginManager.LoginBehaviors.Native}
         onLogin={function(data){
@@ -42,4 +42,4 @@ class Login extends Component {
       />
     );
   }
-};
+}

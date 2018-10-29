@@ -17,7 +17,7 @@
     "eslint": "^5.7.0",
     "expo": "^30.0.1",
     "material-ui": "^0.20.2",
-    "react": "16.3.1",
+    "react": "^16.6.0",
     "react-dom": "^16.5.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-fbsdk": "^0.8.0",

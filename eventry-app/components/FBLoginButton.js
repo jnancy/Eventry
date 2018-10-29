@@ -18,7 +18,7 @@ export default class FBLoginButton extends Component {
               } else if (result.isCancelled) {
                 alert("Login was cancelled");
               } else {
-                alert("Login was successful with permissions: " + result.grantedPermissions)
+                alert("Login was successful with permissions: " + result.grantedPermissions);
               }
             }
           }
@@ -26,6 +26,6 @@ export default class FBLoginButton extends Component {
       </View>
     );
   }
-};
+}
 
 module.exports = FBLoginButton;

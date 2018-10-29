@@ -8,7 +8,7 @@ import {
   Dimensions,
   TouchableHighlight,
   View,
-  FlatList, 
+  FlatList,
   RefreshControl,
   ActivityIndicator,
 } from "react-native";
@@ -105,7 +105,7 @@ let {width,height} = Dimensions.get("window");
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ isLoading: true, refreshing: false}
+    this.state ={ isLoading: true, refreshing: false};
   }
   _onRefresh() {
     this.setState({refreshing: true});
@@ -141,11 +141,11 @@ export default class HomeScreen extends React.Component {
         });
 
       })
-      .catch((error) =>{
+      .catch((error) => {
         //console.error(error);
       });
   }
-  
+
   static navigationOptions = {
     header: null,
   };
@@ -175,7 +175,7 @@ export default class HomeScreen extends React.Component {
             refreshing={this.state.refreshing}
             onRefresh={this._onRefresh.bind(this)}/>}
             data={this.state.EventJson}
-          renderItem={({item}) => 
+          renderItem={({item}) =>
         <TouchableHighlight
           style = {{
             backgroundColor: "#C6E9ED",
@@ -208,5 +208,3 @@ export default class HomeScreen extends React.Component {
     );
   }
 }
-
-
