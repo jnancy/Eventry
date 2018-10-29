@@ -22,6 +22,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
     "react-native-fbsdk": "^0.8.0",
     "react-native-image-placeholder": "^1.0.14",
+    "react-native-modal-datetime-picker": "^6.0.0",
     "react-native-vector-icons": "^6.0.2",
     "react-navigation": "^2.16.0"
   },
