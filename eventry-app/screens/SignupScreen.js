@@ -107,7 +107,9 @@ export default class SignupScreen extends React.Component {
             </Text>
           </TouchableHighlight>
         </View>
-      </ScrollView>
+        <View style = {{flexDirection: "row", justifyContent: "center", height: 60 }} >
+        </View >
+      </ScrollView >
       </ImageBackground>
     );
   }
