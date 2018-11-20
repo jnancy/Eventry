@@ -75,8 +75,7 @@ export default class HomeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-          <View style={styles.welcomeContainer}>
+          <View style={styles.logo}>
             <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 100 }} >
               <Image source = {require('../assets/images/e.png')} style={{width: 70, height: 70}}/>
               <Text style = {{ color: '#525EAE', fontSize: 50 }}>Eventry</Text>
@@ -89,8 +88,6 @@ export default class HomeScreen extends React.Component {
                 onRefresh={this._onRefresh.bind(this)}/>}
               data={this.state.EventJson}
               renderItem={({item}) =>
-                //<Text>help</Text>
-
                  <TouchableHighlight
                      style = {styles.list}
                      onPress = {() => {
@@ -108,7 +105,6 @@ export default class HomeScreen extends React.Component {
               }
               keyExtractor={(item, index) => index}
             />
-        </ScrollView>
       </View>
     );
   }
@@ -129,7 +125,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     paddingTop: 30,
   },
-  welcomeContainer: {
+  logo: {
     alignItems: 'center',
     marginTop: 10,
     marginBottom: 20,
