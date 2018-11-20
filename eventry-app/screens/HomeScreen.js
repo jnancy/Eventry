@@ -7,11 +7,11 @@ import {
   Text,
   Dimensions,
   TouchableHighlight,
-  TouchableOpacity,
   View,
-  FlatList, 
+  ListView, 
   RefreshControl,
   ActivityIndicator,
+  FlatList
 } from 'react-native';
 import ImageLoad from 'react-native-image-placeholder';
 
@@ -33,7 +33,7 @@ export default class HomeScreen extends React.Component {
           // HAVE TO CHANGE MOVIES
           EventJson: responseJson,
         }, function(){
-
+          console.log('REFRESHIN');
         });
 
       }).then(() => {
@@ -77,48 +77,36 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
           <View style={styles.welcomeContainer}>
-          <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 100 }} >
-          <Image source = {require('../assets/images/e.png')} style={{width: 70, height: 70}}/>
-          <Text style = {{ color: '#525EAE', fontSize: 50 }} >
-            Eventry
-          </Text>
+            <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 100 }} >
+              <Image source = {require('../assets/images/e.png')} style={{width: 70, height: 70}}/>
+              <Text style = {{ color: '#525EAE', fontSize: 50 }}>Eventry</Text>
+            </View>
           </View>
-          </View>
-           <FlatList
-           refreshControl={
-            <RefreshControl
-            refreshing={this.state.refreshing}
-            onRefresh={this._onRefresh.bind(this)}/>}
-            data={this.state.EventJson}
-          renderItem={({item}) => 
-        <TouchableHighlight
-          style = {{
-            backgroundColor: '#C6E9ED',
-            width: width - 20,
-            padding: 10,
-            marginTop: 20,
-            marginRight:10,
-            marginLeft:10,
-            borderRadius: 15,
-          }}
-          onPress = {() => {
-            }
-          }
-          underlayColor = '#A9D9DE' >
-          <View style = {{flexDirection: 'row',  height: 60, marginLeft: width / 15, marginRight: width /15 }} >
-          <ImageLoad
-              style={{marginLeft: 0, width: width / 10, height: height / 15, flex : 1.00 }}
-              loadingStyle={{ size: 'small', color: 'blue' }}
-              source={{ uri: 'https://4.bp.blogspot.com/-lYq2CzKT12k/VVR_atacIWI/AAAAAAABiwk/ZDXJa9dhUh8/s0/Convict_Lake_Autumn_View_uhd.jpg' }}/>
-          <View style= {{flex : 2}}> <Text style={{fontWeight: "bold", fontSize: 18}}> {item.event_name} </Text> </View>
-          <View style= {{flex : 3}}> <Text style={{fontSize: 16}}>{item.event_description}</Text> </View>
-          </View>
-          </TouchableHighlight>
-        }
-          keyExtractor={(item, index) => index}
-          />
+          <FlatList
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}/>}
+              data={this.state.EventJson}
+              renderItem={({item}) => 
+                <TouchableHighlight
+                    style = {styles.list}
+                    onPress = {() => {
+                    }}
+                    underlayColor = '#A9D9DE' >
+                  <View style = {{flexDirection: 'row',  height: 60, marginLeft: width / 15, marginRight: width /15 }} >
+                    <ImageLoad
+                      style={{marginLeft: 0, width: width / 10, height: height / 15, flex : 1.00 }}
+                      loadingStyle={{ size: 'small', color: 'blue' }}
+                      source={{ uri: 'https://4.bp.blogspot.com/-lYq2CzKT12k/VVR_atacIWI/AAAAAAABiwk/ZDXJa9dhUh8/s0/Convict_Lake_Autumn_View_uhd.jpg' }}/>
+                    <View style= {{flex : 2}}> <Text style={{fontWeight: "bold", fontSize: 18}}> {item.event_name} </Text> </View>
+                    <View style= {{flex : 3}}> <Text style={{fontSize: 16}}>{item.event_description}</Text> </View>
+                  </View>
+                </TouchableHighlight>
+              }
+              keyExtractor={(item, index) => index}
+            />
         </ScrollView>
-
       </View>
     );
   }
@@ -211,4 +199,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
+  list: {
+    backgroundColor: '#C6E9ED',
+    width: width - 20,
+    padding: 10,
+    marginTop: 20,
+    marginRight:10,
+    marginLeft:10,
+    borderRadius: 15,
+  }
 });

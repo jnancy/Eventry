@@ -159,7 +159,10 @@ import { ScrollView,
                 })
                 .then(response => response.json())
                 .then((responseData) => {
-                  
+                  /*AlertIOS.alert(
+                      "POST Response",
+                      JSON.stringify(responseData)
+                  );*/
                  })
                 .catch((error) => {
                   console.error(error);
