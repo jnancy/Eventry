@@ -166,9 +166,9 @@ export default class SignupScreen extends React.Component {
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> SIGNUP </Text>
-          < /TouchableHighlight >
+          </TouchableHighlight >
         </View>
-      < /View >
+      </View >
       </ImageBackground>
     );
   }

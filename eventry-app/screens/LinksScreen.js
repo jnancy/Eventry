@@ -7,7 +7,7 @@ import { ScrollView,
   TouchableOpacity,
   Text, 
   View, 
-  AlertIOS,
+  //AlertIOS,
   ActivityIndicator,
   StatusBar } from "react-native";
 
@@ -103,7 +103,7 @@ import { ScrollView,
             placeholder="Location"
             placeholderTextColor="#A0AAAB"
           />
-          <TouchableOpacity style={{height: 200}}onPress={this._showDateTimePicker}>
+          <TouchableOpacity style={{height: 40}}onPress={this._showStartDateTimePicker}>
           <Text
             style={styles.DateText}
             TextColor='#A0AAAB'
@@ -119,7 +119,7 @@ import { ScrollView,
           minimumDate = {new Date()}
           />
 
-          <TouchableOpacity style={{height: 200}}onPress={this._showEndDateTimePicker}>
+          <TouchableOpacity style={{height: 40}}onPress={this._showEndDateTimePicker}>
           <Text
             style={styles.DateText}
             TextColor='#A0AAAB'
@@ -159,10 +159,7 @@ import { ScrollView,
                 })
                 .then(response => response.json())
                 .then((responseData) => {
-                  AlertIOS.alert(
-                      "POST Response",
-                      JSON.stringify(responseData)
-                  );
+                  
                  })
                 .catch((error) => {
                   console.error(error);

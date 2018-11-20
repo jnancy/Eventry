@@ -34,7 +34,7 @@ export default class SettingsScreen extends React.Component {
     }
     underlayColor = "#34508C" >
     <LoginButton icon = {"logo-facebook"} loginText = {"SIGN mE THE fuck Out"}/>
-    < /TouchableHighlight >
+    </TouchableHighlight >
     </View>
   }
 }

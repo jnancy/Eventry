@@ -86,21 +86,21 @@ export default class LoginScreen extends React.Component {
     if (this.state.screenLoading) {
       return (
         <View>
-          <ActivityIndicator / >
-          <StatusBar barStyle = "default" / >
+          <ActivityIndicator />
+          <StatusBar barStyle = "default" />
         </View>
       );
     }
 
     return (
-      <ImageBackground source = {require('../img/login2.jpg')} style = {{ width: '100%', height: '100%'}} >
+      <ImageBackground source = {require('../img/login2.jpg')} style = {{ width: '100%', height: '100%'}}>
       <View style = {{ flex: 1 }} >
         <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 7 }} >
           <Image source = {require('../img/e.jpg')} style={{width: 70, height: 70}}/>
           <Text style = {{ color: '#ffffff', fontSize: 50, /* fontWeight: '100', fontFamily: 'lucida grande'*/ }} >
             Eventry
           </Text>
-        </View >
+        </View>
 
         <View style = {{flexDirection: 'column', alignItems: 'center', marginTop: height/20}} >
           <TextInput
@@ -153,7 +153,7 @@ export default class LoginScreen extends React.Component {
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> LOGIN </Text>
-          < /TouchableHighlight >
+          </TouchableHighlight >
           <TouchableHighlight
             style = {{
               backgroundColor: "rgba(255, 255, 255, 0.51)",
@@ -174,7 +174,7 @@ export default class LoginScreen extends React.Component {
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> SIGNUP </Text>
-          < /TouchableHighlight >
+          </TouchableHighlight>
         </View>
 
         <Text style={{marginTop: 40, textAlign: 'center', color: '#fff', fontSize: 11, fontWeight: 'bold'}}>
@@ -226,7 +226,7 @@ export default class LoginScreen extends React.Component {
            <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
         </TouchableHighlight >
         </View>
-      < /View >
+      </View >
       </ImageBackground>
     );
   }
