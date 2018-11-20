@@ -8,7 +8,7 @@ import {
   Dimensions,
   TouchableHighlight,
   View,
-  ListView, 
+  ListView,
   RefreshControl,
   ActivityIndicator,
   FlatList
@@ -60,7 +60,7 @@ export default class HomeScreen extends React.Component {
         console.error(error);
       });
   }
-  
+
   static navigationOptions = {
     header: null,
   };
@@ -88,21 +88,23 @@ export default class HomeScreen extends React.Component {
                 refreshing={this.state.refreshing}
                 onRefresh={this._onRefresh.bind(this)}/>}
               data={this.state.EventJson}
-              renderItem={({item}) => 
-                <TouchableHighlight
-                    style = {styles.list}
-                    onPress = {() => {
-                    }}
-                    underlayColor = '#A9D9DE' >
-                  <View style = {{flexDirection: 'row',  height: 60, marginLeft: width / 15, marginRight: width /15 }} >
-                    <ImageLoad
+              renderItem={({item}) =>
+                //<Text>help</Text>
+
+                 <TouchableHighlight
+                     style = {styles.list}
+                     onPress = {() => {
+                     }}
+                     underlayColor = '#A9D9DE' >
+                 <View>
+                 <ImageLoad
                       style={{marginLeft: 0, width: width / 10, height: height / 15, flex : 1.00 }}
                       loadingStyle={{ size: 'small', color: 'blue' }}
-                      source={{ uri: 'https://4.bp.blogspot.com/-lYq2CzKT12k/VVR_atacIWI/AAAAAAABiwk/ZDXJa9dhUh8/s0/Convict_Lake_Autumn_View_uhd.jpg' }}/>
-                    <View style= {{flex : 2}}> <Text style={{fontWeight: "bold", fontSize: 18}}> {item.event_name} </Text> </View>
-                    <View style= {{flex : 3}}> <Text style={{fontSize: 16}}>{item.event_description}</Text> </View>
-                  </View>
-                </TouchableHighlight>
+                     source={{ uri: 'https://4.bp.blogspot.com/-lYq2CzKT12k/VVR_atacIWI/AAAAAAABiwk/ZDXJa9dhUh8/s0/Convict_Lake_Autumn_View_uhd.jpg' }}/>
+                 <Text style={{fontWeight: "bold", fontSize: 18}}>{item.event_name}</Text>
+                 <Text style={{fontSize: 16}}>{item.event_description}</Text>
+                </View>
+               </TouchableHighlight>
               }
               keyExtractor={(item, index) => index}
             />
