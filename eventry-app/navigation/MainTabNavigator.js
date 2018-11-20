@@ -1,11 +1,12 @@
 import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { Platform , StyleSheet, Text, View, SafeAreaView, ScrollView, Dimensions, Image } from 'react-native';
+import { createStackNavigator, createBottomTabNavigator, createDrawerNavigator, DrawerItems } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+//import QRScreen from  '../screens/QRScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -53,8 +54,42 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-export default createBottomTabNavigator({
+const TabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
+});
+
+// const QRStack = createStackNavigator({
+//   QRScreen: QRScreen,
+// },
+// {
+//   initialRouteName: 'QRScreen',
+//   headerMode: 'none',
+// }
+// });
+
+const CustomDrawerComponent = (props) => (
+  <SafeAreaView style={{flex: 1}}>
+    <View style={{ height: 150, backgroundColor: 'white', alignItems: 'center' }}>
+      <Image source={require('../assets/images/e.png')} style={{height:120 , width:120, borderRadius:100, marginTop: 20}} />
+    </View>
+    <ScrollView>
+      <DrawerItems {...props}/>
+    </ScrollView>
+  </SafeAreaView>
+);
+
+export default AppDrawerNavigator = createDrawerNavigator({
+  Home: TabNavigator,
+  //QRScreen: QRStack,
+  // Search: SearchPage,
+  // Results: SearchResults,
+  // QRPage: QRPage,
+},
+{
+  contentComponent: CustomDrawerComponent,
+  contentOptions: {
+    activeTinyColor: 'white'
+  }
 });
