@@ -6,7 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
-//import QRScreen from  '../screens/QRScreen';
+import QRScreen from  '../screens/QRScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -14,6 +14,10 @@ const HomeStack = createStackNavigator({
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
+  initialRouteName: 'Home',
+  drawerIcon: ({tintColor}) => (
+    <Icon name="home" style={{fontSize: 24, color: tintColor}}/>
+  ), 
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -32,6 +36,7 @@ const LinksStack = createStackNavigator({
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'Links',
+  initialRouteName: 'Links',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -45,6 +50,7 @@ const SettingsStack = createStackNavigator({
 });
 
 SettingsStack.navigationOptions = {
+  initialRouteName: 'Settings',
   tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -60,14 +66,9 @@ const TabNavigator = createBottomTabNavigator({
   SettingsStack,
 });
 
-// const QRStack = createStackNavigator({
-//   QRScreen: QRScreen,
-// },
-// {
-//   initialRouteName: 'QRScreen',
-//   headerMode: 'none',
-// }
-// });
+const QRStack = createStackNavigator({
+  QRPage: HomeScreen,
+});
 
 const CustomDrawerComponent = (props) => (
   <SafeAreaView style={{flex: 1}}>
@@ -82,10 +83,7 @@ const CustomDrawerComponent = (props) => (
 
 export default AppDrawerNavigator = createDrawerNavigator({
   Home: TabNavigator,
-  //QRScreen: QRStack,
-  // Search: SearchPage,
-  // Results: SearchResults,
-  // QRPage: QRPage,
+  QRPage: QRScreen,
 },
 {
   contentComponent: CustomDrawerComponent,
