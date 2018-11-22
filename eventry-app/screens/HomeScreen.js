@@ -29,7 +29,6 @@ export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
     this.state ={ isLoading: true, refreshing: false};
-    //this.renderRow = this.renderRow.bind(this);
   }
 
     static navigationOptions = {
@@ -115,9 +114,9 @@ export default class HomeScreen extends React.Component {
 
                     <SView styleName="horizontal space-between">
                       <Title>{item.event_name}</Title>
-                        <Overlay styleName="solid-bright">
-                        <Subtitle styleName="sm-gutter-horizontal">${item.event_price}</Subtitle>
-                        </Overlay>
+                      <Overlay styleName="solid-bright">
+                      <Subtitle styleName="sm-gutter-horizontal">${item.event_price}</Subtitle>
+                      </Overlay>
                     </SView>
                     <Subtitle>{item.event_description}</Subtitle>
                       <SView styleName="horizontal space-between">

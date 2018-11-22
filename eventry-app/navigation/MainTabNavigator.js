@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import QRScreen from  '../screens/QRScreen';
+import QRCodeScreen from '../screens/QRCodeScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -17,7 +18,7 @@ HomeStack.navigationOptions = {
   initialRouteName: 'Home',
   drawerIcon: ({tintColor}) => (
     <Icon name="home" style={{fontSize: 24, color: tintColor}}/>
-  ), 
+  ),
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
@@ -67,7 +68,10 @@ const TabNavigator = createBottomTabNavigator({
 });
 
 const QRStack = createStackNavigator({
-  QRPage: HomeScreen,
+  QRPage: QRScreen,
+  QRCodePage: QRCodeScreen,
+}, {
+  initialRouteName: "QRPage",
 });
 
 const CustomDrawerComponent = (props) => (
@@ -83,7 +87,7 @@ const CustomDrawerComponent = (props) => (
 
 export default AppDrawerNavigator = createDrawerNavigator({
   Home: TabNavigator,
-  QRPage: QRScreen,
+  QRPage: QRStack,
 },
 {
   contentComponent: CustomDrawerComponent,
