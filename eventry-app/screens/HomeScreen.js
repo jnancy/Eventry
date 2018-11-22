@@ -14,14 +14,27 @@ import {
   FlatList
 } from 'react-native';
 import ImageLoad from 'react-native-image-placeholder';
+import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
+import {View as SView, Text as SText} from '@shoutem/ui'
+import {Header, Left, Right, Container, Body} from 'native-base'
 
 import { MonoText } from '../components/StyledText';
 let {width,height} = Dimensions.get('window');
+
+const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
+"https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
+"https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
+
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ isLoading: true, refreshing: false}
+    this.state ={ isLoading: true, refreshing: false};
   }
+
+    static navigationOptions = {
+      header: null,
+    };
+
   _onRefresh() {
     this.setState({refreshing: true});
     fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
@@ -61,10 +74,6 @@ export default class HomeScreen extends React.Component {
       });
   }
 
-  static navigationOptions = {
-    header: null,
-  };
-
   render() {
     if(this.state.isLoading){
       return(
@@ -75,12 +84,15 @@ export default class HomeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-          <View style={styles.logo}>
-            <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 100 }} >
-              <Image source = {require('../assets/images/e.png')} style={{width: 70, height: 70}}/>
-              <Text style = {{ color: '#525EAE', fontSize: 50 }}>Eventry</Text>
-            </View>
-          </View>
+          <Header style={{backgroundColor: 'white'}}>
+          <Left>
+            <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
+          </Left>
+          <Body>
+          <Title>EVENTRY</Title>
+          </Body>
+          <Right></Right>
+          </Header>
           <FlatList
             refreshControl={
               <RefreshControl
@@ -88,20 +100,33 @@ export default class HomeScreen extends React.Component {
                 onRefresh={this._onRefresh.bind(this)}/>}
               data={this.state.EventJson}
               renderItem={({item}) =>
-                 <TouchableHighlight
-                     style = {styles.list}
-                     onPress = {() => {
-                     }}
-                     underlayColor = '#A9D9DE' >
-                 <View>
-                 <ImageLoad
-                      style={{marginLeft: 0, width: width / 10, height: height / 15, flex : 1.00 }}
-                      loadingStyle={{ size: 'small', color: 'blue' }}
-                     source={{ uri: 'https://4.bp.blogspot.com/-lYq2CzKT12k/VVR_atacIWI/AAAAAAABiwk/ZDXJa9dhUh8/s0/Convict_Lake_Autumn_View_uhd.jpg' }}/>
-                 <Text style={{fontWeight: "bold", fontSize: 18}}>{item.event_name}</Text>
-                 <Text style={{fontSize: 16}}>{item.event_description}</Text>
-                </View>
-               </TouchableHighlight>
+              <View>
+                <Tile>
+                  <ImageBackground
+                    styleName="large-banner"
+                    source={{ uri: pics[Math.floor(Math.random()*10)] }}
+                  >
+                  <Overlay styleName="rounded-small">
+                    <Icon name="add-to-favorites-on" />
+                  </Overlay>
+                  </ImageBackground>
+                  <SView styleName="content">
+
+                    <SView styleName="horizontal space-between">
+                      <Title>{item.event_name}</Title>
+                      <Overlay styleName="solid-bright">
+                      <Subtitle styleName="sm-gutter-horizontal">${item.event_price}</Subtitle>
+                      </Overlay>
+                    </SView>
+                    <Subtitle>{item.event_description}</Subtitle>
+                      <SView styleName="horizontal space-between">
+                        <Subtitle>Location: {item.event_location}</Subtitle>
+                        <Button styleName=""><Icon name="cart" /><SText>REGISTER FOR EVENT</SText></Button>
+                      </SView>
+                    </SView>
+                  </Tile>
+              <Divider styleName="section-header" />
+              </View>
               }
               keyExtractor={(item, index) => index}
             />
@@ -205,5 +230,9 @@ const styles = StyleSheet.create({
     marginRight:10,
     marginLeft:10,
     borderRadius: 15,
-  }
+  },
+  registerButton: {
+    alignItems: 'center',
+    padding: 30,
+  },
 });

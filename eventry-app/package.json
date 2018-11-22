@@ -14,15 +14,17 @@
   },
   "dependencies": {
     "@expo/samples": "2.1.1",
+    "@shoutem/ui": "^0.23.9",
     "eslint": "^5.7.0",
     "expo": "^30.0.1",
     "material-ui": "^0.20.2",
+    "native-base": "^2.8.1",
     "react": "16.3.1",
     "react-dom": "^16.5.2",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "react-native-fbsdk": "^0.8.0",
     "react-native-image-placeholder": "^1.0.14",
     "react-native-vector-icons": "^6.0.2",
-    "react-native-fbsdk": "^0.8.0",
     "react-navigation": "^2.16.0"
   },
   "devDependencies": {
