@@ -131,10 +131,10 @@ export default class QRPage extends React.Component {
               keyExtractor={(item, index) => index}
             />
             <ActionButton buttonColor="rgba(76,127,178,0.68)">
-            <ActionButton.Item buttonColor='#00a5e5' title="New Event" onPress={() => console.log("notes tapped!")}>
+            <ActionButton.Item buttonColor='#00a5e5' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
               <IonIcon name="ios-add-circle-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#0093cc' title="New Chat"
+            <ActionButton.Item buttonColor='#0093cc' title="Chat"
             onPress={() => this.props.navigation.navigate('Home')}>
               <IonIcon name="ios-chatboxes" style={styles.actionButtonIcon} />
             </ActionButton.Item>
@@ -144,9 +144,6 @@ export default class QRPage extends React.Component {
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#006e99' title="Notifications" onPress={() => {}}>
               <IonIcon name="ios-notifications-outline" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#005c7f' title="Settings" onPress={() => {}}>
-              <IonIcon name="ios-settings" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           </ActionButton>
       </View>

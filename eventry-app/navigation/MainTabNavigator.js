@@ -11,65 +11,16 @@ import QRCodeScreen from '../screens/QRCodeScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-});
-
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
-  initialRouteName: 'Home',
-  drawerIcon: ({tintColor}) => (
-    <Icon name="home" style={{fontSize: 24, color: tintColor}}/>
-  ),
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
-    />
-  ),
-};
-
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
-});
-
-LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
-  initialRouteName: 'Links',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-link${focused ? '' : '-outline'}` : 'md-link'}
-    />
-  ),
-};
-
-const SettingsStack = createStackNavigator({
-  Settings: SettingsScreen,
-});
-
-SettingsStack.navigationOptions = {
-  initialRouteName: 'Settings',
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? `ios-options${focused ? '' : '-outline'}` : 'md-options'}
-    />
-  ),
-};
-
-const TabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+  // Event: EventDescriptionScreen
 });
 
 const QRStack = createStackNavigator({
   QRPage: QRScreen,
   QRCodePage: QRCodeScreen,
+  LinksPage: LinksScreen,
+  //CameraPage:
+  //Chat
+  HomePage: HomeScreen,
 }, {
   initialRouteName: "QRPage",
 });
@@ -86,7 +37,7 @@ const CustomDrawerComponent = (props) => (
 );
 
 export default AppDrawerNavigator = createDrawerNavigator({
-  Home: TabNavigator,
+  Home: HomeStack,
   QRPage: QRStack,
 },
 {
