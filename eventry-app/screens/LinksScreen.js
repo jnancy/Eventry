@@ -7,11 +7,13 @@ import { ScrollView,
   TouchableOpacity,
   Text, 
   View, 
-  //AlertIOS,
+  Alert,
   ActivityIndicator,
   StatusBar } from "react-native";
 
   import DateTimePicker from 'react-native-modal-datetime-picker';
+
+  import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
   let {width,height} = Dimensions.get("window");
 
@@ -28,9 +30,11 @@ import { ScrollView,
       event_name:'',
       event_description:'',
       event_price:'',
-      event_loc: '',
+      event_loc: '', // get rid of
       start_date: '',
       end_date: '',
+      event_lat: '',
+      event_lng: '',
       isStartDateTimePickerVisible: false,
       isEndDateTimePickerVisible: false,
       endDateChosen: false,
@@ -96,6 +100,61 @@ import { ScrollView,
             placeholder="Price"
             placeholderTextColor="#A0AAAB"
           />
+
+        <GooglePlacesAutocomplete
+          placeholder='Location'
+          minLength={2}
+          autoFocus={false}
+          listViewDisplayed='auto'
+          fetchDetails={true}
+          renderDescription={row => row.description}
+          onPress={(data, details) => { 
+            console.log(details["geometry"]["location"]["lat"]);
+            console.log(details["geometry"]["location"]["lng"]);
+            console.log(details);
+          }}
+          
+          getDefaultValue={() => ''}
+
+          query={{
+            // available options: https://developers.google.com/places/web-service/autocomplete
+            key: 'AIzaSyDE_Llytfo-JPzY5dE4XuuNAKD_eZFO9Ww',
+            language: 'en', // language of the results
+            //types: '(cities)' // default: 'geocode'
+          }}
+
+          styles={{
+            textInputContainer: {
+              width: width *7/10,
+              height: 40,
+              
+            },
+            description: {
+              fontWeight: 'bold'
+            },
+            predefinedPlacesDescription: {
+              color: '#1faadb'
+            }
+          }}
+
+          //currentLocation={true}
+          //currentLocationLabel="Current location"
+          nearbyPlacesAPI='GooglePlacesSearch'
+          GoogleReverseGeocodingQuery={{
+            // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+          }}
+
+          GooglePlacesSearchQuery={{
+            // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+            rankby: 'distance',
+            //types: 'food'
+          }}
+          />
+
+
+
+
+
           <TextInput
             style={styles.TextInput}
             onChangeText={(event_loc) => this.setState({event_loc})}
@@ -132,8 +191,9 @@ import { ScrollView,
           mode = 'datetime'
           onConfirm={this._handleEndDatePicked}
           onCancel={this._hideEndDateTimePicker}
-          minimumDate = {this.state.start_date}
+          minimumDate = {this.state.startDateChosen? this.state.start_date : new Date()}
           />
+          <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date > this.state.end_date)?"you fucked up bro" : ""}</Text>
 
           <TouchableHighlight
             style = {{
@@ -144,6 +204,16 @@ import { ScrollView,
               borderRadius: 15,
             }}
             onPress = {() => {
+                let err = this.state.startDateChosen && this.state.endDateChosen && this.state.start_date > this.state.end_date
+                if(err){
+                  Alert.alert(
+                    "ERROR",
+                    "Please fix the error(s) and try again",
+                    [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+                    { cancelable: false }
+                  );
+                }
+                else{
                 const self = this;
                 fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", {
                   method: "POST",
@@ -159,10 +229,12 @@ import { ScrollView,
                 })
                 .then(response => response.json())
                 .then((responseData) => {
-                  /*AlertIOS.alert(
-                      "POST Response",
-                      JSON.stringify(responseData)
-                  );*/
+                  Alert.alert(
+                    "POST Response",
+                    JSON.stringify(responseData),
+                    [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+                    { cancelable: false }
+                  );
                  })
                 .catch((error) => {
                   console.error(error);
@@ -171,7 +243,7 @@ import { ScrollView,
                 this.setState({
                 screenLoading: false,
                   });
-              }
+              }}
             }
             underlayColor = "#A9D9DE" >
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> Add event </Text>
