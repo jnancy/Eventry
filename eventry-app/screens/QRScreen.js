@@ -17,6 +17,9 @@ import {
   FlatList
 } from 'react-native';
 
+import ActionButton from 'react-native-circular-action-menu';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
@@ -127,6 +130,25 @@ export default class QRPage extends React.Component {
               renderItem={({item}) => this.renderRow(item)}
               keyExtractor={(item, index) => index}
             />
+            <ActionButton buttonColor="rgba(76,127,178,0.68)">
+            <ActionButton.Item buttonColor='#00a5e5' title="New Event" onPress={() => console.log("notes tapped!")}>
+              <IonIcon name="ios-add-circle-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#0093cc' title="New Chat"
+            onPress={() => this.props.navigation.navigate('Home')}>
+              <IonIcon name="ios-chatboxes" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#0080b2' title="Add Friends"
+            onPress={() => this.props.navigation.navigate('Home')}>
+              <IonIcon name="ios-person-add" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#006e99' title="Notifications" onPress={() => {}}>
+              <IonIcon name="ios-notifications-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#005c7f' title="Settings" onPress={() => {}}>
+              <IonIcon name="ios-settings" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
       </View>
     );
   }
