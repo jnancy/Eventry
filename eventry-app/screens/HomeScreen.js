@@ -1,19 +1,14 @@
 import React from 'react';
 import {
-  Image,
   Platform,
-  ScrollView,
   StyleSheet,
-  Text,
   Dimensions,
-  TouchableHighlight,
   View,
-  ListView,
   RefreshControl,
   ActivityIndicator,
   FlatList
 } from 'react-native';
-import ImageLoad from 'react-native-image-placeholder';
+
 import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
 import {Header, Left, Right, Container, Body} from 'native-base'
