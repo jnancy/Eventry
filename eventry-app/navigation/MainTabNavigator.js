@@ -8,6 +8,7 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import QRScreen from  '../screens/QRScreen';
 import QRCodeScreen from '../screens/QRCodeScreen';
+import QRCameraScreen from '../screens/QRCameraScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -18,6 +19,7 @@ const QRStack = createStackNavigator({
   QRPage: QRScreen,
   QRCodePage: QRCodeScreen,
   LinksPage: LinksScreen,
+  QRCameraPage: QRCameraScreen,
   //CameraPage:
   //Chat
   HomePage: HomeScreen,

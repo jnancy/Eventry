@@ -131,19 +131,22 @@ export default class QRPage extends React.Component {
               keyExtractor={(item, index) => index}
             />
             <ActionButton buttonColor="rgba(76,127,178,0.68)">
-            <ActionButton.Item buttonColor='#00a5e5' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
-              <IonIcon name="ios-add-circle-outline" style={styles.actionButtonIcon} />
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
+              <IonIcon name="md-add" style={styles.actionButtonIcon} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#0093cc' title="Chat"
+            <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
             onPress={() => this.props.navigation.navigate('Home')}>
-              <IonIcon name="ios-chatboxes" style={styles.actionButtonIcon} />
+              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#0080b2' title="Add Friends"
-            onPress={() => this.props.navigation.navigate('Home')}>
-              <IonIcon name="ios-person-add" style={styles.actionButtonIcon} />
+            <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+            onPress={() => this.props.navigation.navigate('QRCameraPage')}>
+              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#006e99' title="Notifications" onPress={() => {}}>
-              <IonIcon name="ios-notifications-outline" style={styles.actionButtonIcon} />
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+              <IonIcon name="md-star" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
+              <IonIcon name="md-person" style={styles.actionButtonIcon} />
             </ActionButton.Item>
           </ActionButton>
       </View>
