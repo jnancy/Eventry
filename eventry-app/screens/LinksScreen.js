@@ -137,8 +137,8 @@ import { ScrollView,
             }
           }}
 
-          //currentLocation={true}
-          //currentLocationLabel="Current location"
+          currentLocation={true}
+          currentLocationLabel="Current location"
           nearbyPlacesAPI='GooglePlacesSearch'
           GoogleReverseGeocodingQuery={{
             // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
@@ -208,7 +208,7 @@ import { ScrollView,
                 if(err){
                   Alert.alert(
                     "ERROR",
-                    "Please fix the error(s) and try again",
+                    "Please fix the error(s) and try again" + (this.state.event_lat).toString() + " " + (this.state.event_lng).toString() ,
                     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
                     { cancelable: false }
                   );
