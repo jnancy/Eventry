@@ -76,6 +76,7 @@ export default class QRCodeScreen extends React.Component {
         </View>
       )
     }
+    const {goBack} = this.props.navigation;
     return (
       <View style={styles.container}>
       <Header style={{backgroundColor: 'white'}}>
@@ -88,22 +89,40 @@ export default class QRCodeScreen extends React.Component {
           </Body>
           <Right></Right>
       </Header>
-      <SView style={{flex: 1,alignItems: 'center'}}>
+      <Divider />
+      <SView style={{flex: 1, alignItems: 'center', flexDirection: 'column', justifyContent: 'space-around', alignSelf: 'center'}}>
+      <View style={{flex: 1,alignItems: 'center'}}>
+      <Divider />
               <QRCode
                 value={this.props.navigation.state.params.value.event_name}
-                size={width*0.6}
+                size={width*0.7}
                 bgColor='grey'
                 fgColor='white'
               />
-
           <Divider />
-          <Title styleName="hcenter" >EVENTRY TICKET</Title>
-          <Text  styleName="hcenter">Bring your generated QR code to the event host for entry into {this.props.navigation.state.params.value.event_name}!</Text>
           <Divider />
-          <Button styleName="full-width">
-          <Text style={{color: "#fff"}}>DONE</Text>
+          <Divider />
+          <Title styleName="bold" >EVENTRY TICKET</Title>
+          <Divider />
+          <SView styleName="horizontal">
+            <Button styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}>
+              <SText>UNREGISTER EVENT</SText>
+            </Button>
+            <Button styleName="confirmation secondary"
+                    onPress={() => goBack()}>
+              <SText>DONE</SText>
+            </Button>
+          </SView>
+          <Divider />
+          <SView styleName="vertical">
+          <Button styleName="stacked clear">
+            <Icon name="social-wall" />
+            <SText>Chat with other Attendees</SText>
           </Button>
+
+          </SView>
         <Divider />
+      </View>
       </SView>
       </View>
     );

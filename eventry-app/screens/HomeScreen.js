@@ -9,14 +9,13 @@ import {
   FlatList
 } from 'react-native';
 
-import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
+import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
 import { Header, Left, Right, Container, Body} from 'native-base'
 import { MonoText } from '../components/StyledText';
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-
 
 let {width,height} = Dimensions.get('window');
 
@@ -74,6 +73,13 @@ export default class HomeScreen extends React.Component {
       });
   }
 
+  _onSearchPressed(item){
+    const event = item;
+    console.log(item);
+    this.props.navigation.navigate('UserProfilePage',
+      {value: event});
+  };
+
   render() {
     if(this.state.isLoading){
       return(
@@ -104,6 +110,7 @@ export default class HomeScreen extends React.Component {
               data={this.state.EventJson}
               renderItem={({item}) =>
               <View>
+              <TouchableOpacity onPress={() => this._onSearchPressed(item) }>
                 <Tile>
                   <ImageBackground
                     styleName="large-banner"
@@ -128,6 +135,7 @@ export default class HomeScreen extends React.Component {
                       </SView>
                     </SView>
                   </Tile>
+                  </TouchableOpacity>
               <Divider styleName="section-header" />
               </View>
               }
