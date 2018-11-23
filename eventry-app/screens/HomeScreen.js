@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {
   Platform,
   StyleSheet,
@@ -11,14 +11,19 @@ import {
 
 import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
-import {Header, Left, Right, Container, Body} from 'native-base'
-
+import { Header, Left, Right, Container, Body} from 'native-base'
 import { MonoText } from '../components/StyledText';
+
+import ActionButton from 'react-native-circular-action-menu';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
+
 let {width,height} = Dimensions.get('window');
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
 "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
+
 
 export default class HomeScreen extends React.Component {
   constructor(props){
@@ -88,11 +93,14 @@ export default class HomeScreen extends React.Component {
           </Body>
           <Right></Right>
           </Header>
+
           <FlatList
             refreshControl={
               <RefreshControl
+                colors={['darkviolet']}
                 refreshing={this.state.refreshing}
                 onRefresh={this._onRefresh.bind(this)}/>}
+
               data={this.state.EventJson}
               renderItem={({item}) =>
               <View>
@@ -125,6 +133,25 @@ export default class HomeScreen extends React.Component {
               }
               keyExtractor={(item, index) => index}
             />
+            <ActionButton buttonColor="rgba(76,127,178,0.68)">
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
+              <IonIcon name="md-add" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
+            onPress={() => this.props.navigation.navigate('Home')}>
+              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+            onPress={() => this.props.navigation.navigate('QRCameraPage')}>
+              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+              <IonIcon name="md-star" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
+              <IonIcon name="md-person" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
       </View>
     );
   }
@@ -150,73 +177,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
-  welcomeImage: {
-    width: 100,
-    height: 80,
-    resizeMode: 'contain',
-    marginTop: 3,
-    marginLeft: -10,
-  },
-  getStartedContainer: {
-    alignItems: 'center',
-    marginHorizontal: 50,
-  },
-  homeScreenFilename: {
-    marginVertical: 7,
-  },
-  codeHighlightText: {
-    color: 'rgba(96,100,109, 0.8)',
-  },
-  codeHighlightContainer: {
-    backgroundColor: 'rgba(0,0,0,0.05)',
-    borderRadius: 3,
-    paddingHorizontal: 4,
-  },
-  getStartedText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    lineHeight: 24,
-    textAlign: 'center',
-  },
-  tabBarInfoContainer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    ...Platform.select({
-      ios: {
-        shadowColor: 'black',
-        shadowOffset: { height: -3 },
-        shadowOpacity: 0.1,
-        shadowRadius: 3,
-      },
-      android: {
-        elevation: 20,
-      },
-    }),
-    alignItems: 'center',
-    backgroundColor: '#fbfbfb',
-    paddingVertical: 20,
-  },
-  tabBarInfoText: {
-    fontSize: 17,
-    color: 'rgba(96,100,109, 1)',
-    textAlign: 'center',
-  },
-  navigationFilename: {
-    marginTop: 5,
-  },
-  helpContainer: {
-    marginTop: 15,
-    alignItems: 'center',
-  },
-  helpLink: {
-    paddingVertical: 15,
-  },
-  helpLinkText: {
-    fontSize: 14,
-    color: '#2e78b7',
-  },
   list: {
     backgroundColor: '#C6E9ED',
     width: width - 20,
@@ -229,5 +189,38 @@ const styles = StyleSheet.create({
   registerButton: {
     alignItems: 'center',
     padding: 30,
+  },  wrapper: {
+    flex: 1
   },
+  row: {
+    padding: 10,
+    height: 125,
+    backgroundColor: '#dccdc8',
+    borderTopWidth: 1,
+    marginBottom:-1,
+    borderBottomColor: '#E5EDF5',
+    borderTopColor: '#E5EDF5',
+    borderBottomWidth: 1,
+  },
+  text: {
+    textAlign: 'center',
+    color: 'black'
+  },
+  circle: {
+    width: 30,
+    height: 30,
+    borderRadius: 100/2,
+    backgroundColor: 'white',
+    opacity: .7
+  },
+  circle2: {
+    width: 45,
+    height: 25,
+    left: 175,
+    borderRadius: 50,
+    backgroundColor: 'black',
+    transform: [
+      {scaleX: 2}
+    ]
+  }
 });

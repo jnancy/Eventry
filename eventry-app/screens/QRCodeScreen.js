@@ -19,6 +19,7 @@ import {
 import QRCode from 'react-native-qrcode';
 
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export default class QRCodeScreen extends React.Component {
     constructor(props){
@@ -77,25 +78,33 @@ export default class QRCodeScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-          <Header style={{backgroundColor: 'white'}}>
+      <Header style={{backgroundColor: 'white'}}>
           <Left>
             <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
           </Left>
           <Body>
           <Title>EVENTRY</Title>
-          <Subtitle>My Events</Subtitle>
+          <Subtitle>QR CODE</Subtitle>
           </Body>
           <Right></Right>
-          </Header>
-          <SView style={{flexDirection: 'row', flex: 1, justifyContent: 'center',}}>
+      </Header>
+      <SView style={{flex: 1,alignItems: 'center'}}>
               <QRCode
                 value={this.props.navigation.state.params.value.event_name}
-                size={width*0.8}
+                size={width*0.6}
                 bgColor='grey'
                 fgColor='white'
               />
-          </SView>
 
+          <Divider />
+          <Title styleName="hcenter" >EVENTRY TICKET</Title>
+          <Text  styleName="hcenter">Bring your generated QR code to the event host for entry into {this.props.navigation.state.params.value.event_name}!</Text>
+          <Divider />
+          <Button styleName="full-width">
+          <Text style={{color: "#fff"}}>DONE</Text>
+          </Button>
+        <Divider />
+      </SView>
       </View>
     );
   }

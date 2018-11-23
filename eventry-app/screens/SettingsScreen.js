@@ -8,7 +8,8 @@ let {width,height} = Dimensions.get('window');
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    //title: 'app.json',
+    header:null
   };
 
   render() {
