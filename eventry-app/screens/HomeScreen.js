@@ -18,6 +18,11 @@ import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Head
 import {View as SView, Text as SText} from '@shoutem/ui'
 import { Header, Left, Right, Container, Body} from 'native-base'
 import { MonoText } from '../components/StyledText';
+
+import ActionButton from 'react-native-circular-action-menu';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
+
 let {width,height} = Dimensions.get('window');
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
@@ -93,12 +98,14 @@ export default class HomeScreen extends React.Component {
           </Body>
           <Right></Right>
           </Header>
+
           <FlatList
             refreshControl={
               <RefreshControl
                 colors={['darkviolet']}
                 refreshing={this.state.refreshing}
                 onRefresh={this._onRefresh.bind(this)}/>}
+
               data={this.state.EventJson}
               renderItem={({item}) =>
               <View>
@@ -131,6 +138,25 @@ export default class HomeScreen extends React.Component {
               }
               keyExtractor={(item, index) => index}
             />
+            <ActionButton buttonColor="rgba(76,127,178,0.68)">
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
+              <IonIcon name="md-add" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
+            onPress={() => this.props.navigation.navigate('Home')}>
+              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+            onPress={() => this.props.navigation.navigate('QRCameraPage')}>
+              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+              <IonIcon name="md-star" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
+              <IonIcon name="md-person" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
       </View>
     );
   }
@@ -168,5 +194,38 @@ const styles = StyleSheet.create({
   registerButton: {
     alignItems: 'center',
     padding: 30,
+  },  wrapper: {
+    flex: 1
   },
+  row: {
+    padding: 10,
+    height: 125,
+    backgroundColor: '#dccdc8',
+    borderTopWidth: 1,
+    marginBottom:-1,
+    borderBottomColor: '#E5EDF5',
+    borderTopColor: '#E5EDF5',
+    borderBottomWidth: 1,
+  },
+  text: {
+    textAlign: 'center',
+    color: 'black'
+  },
+  circle: {
+    width: 30,
+    height: 30,
+    borderRadius: 100/2,
+    backgroundColor: 'white',
+    opacity: .7
+  },
+  circle2: {
+    width: 45,
+    height: 25,
+    left: 175,
+    borderRadius: 50,
+    backgroundColor: 'black',
+    transform: [
+      {scaleX: 2}
+    ]
+  }
 });

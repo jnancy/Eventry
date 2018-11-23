@@ -21,10 +21,12 @@
     "native-base": "^2.8.1",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "react-native-camera": "^1.4.3",
     "react-native-circular-action-menu": "^0.5.0",
     "react-native-fbsdk": "^0.8.0",
     "react-native-image-placeholder": "^1.0.14",
     "react-native-qrcode": "^0.2.7",
+    "react-native-qrcode-scanner": "^1.1.0",
     "react-native-vector-icons": "^6.1.0",
     "react-navigation": "^2.16.0"
   },

@@ -1,58 +1,63 @@
 import React, {Component} from 'react';
+import { ImageBackground, Tile, TouchableOpacity, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 import {Header, Left, Right, Container, Body} from 'native-base'
+import {View as SView, Text as SText, Image as SImage} from '@shoutem/ui'
 import {
-  AppRegistry,
+  Image,
+  Platform,
+  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
-  Linking,
+  Dimensions,
+  TouchableHighlight,
+  View,
+  ListView,
+  RefreshControl,
+  ActivityIndicator,
+  FlatList
 } from 'react-native';
-import QRCodeScanner from 'react-native-qrcode-scanner';
+// import QRCode from 'react-native-qrcode';
+// import QRCodeScanner from 'react-native-qrcode-scanner';
 
 export default class QRCameraScreen extends React.Component {
-  onSuccess(e) {
-    Linking
-      .openURL(e.data)
-      .catch(err => console.error('An error occured', err));
-  }
+    constructor(props){
+      super(props);
+      this.state ={ isLoading: true};
+    }
+
     static navigationOptions = {
       header: null,
     };
 
   render() {
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
     return (
-      <QRCodeScanner
-          onRead={this.onSuccess.bind(this)}
-          topContent={
-            <Text style={styles.centerText}>
-              Go to <Text style={styles.textBold}>wikipedia.org/wiki/QR_code</Text> on your computer and scan the QR code.
-            </Text>
-          }
-          bottomContent={
-            <TouchableOpacity style={styles.buttonTouchable}>
-              <Text style={styles.buttonText}>OK. Got it!</Text>
-            </TouchableOpacity>
-          }
-        />
+      <View style={styles.container}>
+          <Header style={{backgroundColor: 'white'}}>
+          <Left>
+            <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
+          </Left>
+          <Body>
+          <Title>EVENTRY</Title>
+          <Subtitle>My Events</Subtitle>
+          </Body>
+          <Right></Right>
+          </Header>
+
+      </View>
     );
   }
 }
+
 const styles = StyleSheet.create({
-  centerText: {
-    flex: 1,
-    fontSize: 18,
-    padding: 32,
-    color: '#777',
-  },
-  textBold: {
-    fontWeight: '500',
-    color: '#000',
-  },
-  buttonText: {
-    fontSize: 21,
-    color: 'rgb(0,122,255)',
-  },
-  buttonTouchable: {
-    padding: 16,
-  },
+      container: {
+        flex: 1,
+        backgroundColor: '#fff',
+      },
 });
