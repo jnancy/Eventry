@@ -21,21 +21,16 @@
     "native-base": "^2.8.1",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
-<<<<<<< HEAD
-=======
+
     "react-native-camera": "^1.4.3",
     "react-native-circular-action-menu": "^0.5.0",
     "react-native-datetime-picker": "^1.1.2",
->>>>>>> 12c0dc92564ed81f85dd420c41e84847c11af071
     "react-native-fbsdk": "^0.8.0",
     "react-native-google-places": "^2.5.2",
     "react-native-google-places-autocomplete": "^1.3.9",
     "react-native-modal-datetime-picker": "^6.0.0",
-<<<<<<< HEAD
     "react-native-push-notification": "^3.1.2",
-=======
     "react-native-pull-refresh": "^1.0.0",
->>>>>>> 12c0dc92564ed81f85dd420c41e84847c11af071
     "react-native-qrcode": "^0.2.7",
     "react-native-qrcode-scanner": "^1.1.0",
     "react-native-vector-icons": "^6.1.0",
