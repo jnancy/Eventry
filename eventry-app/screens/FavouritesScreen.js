@@ -1,38 +1,40 @@
 import React, {Component} from 'react';
+import { ImageBackground, Tile, TouchableOpacity, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
+import {Header, Left, Right, Container, Body} from 'native-base'
+import {View as SView, Text as SText, Image as SImage} from '@shoutem/ui'
 import {
+  Image,
   Platform,
+  ScrollView,
   StyleSheet,
+  Text,
   Dimensions,
+  TouchableHighlight,
   View,
+  ListView,
   RefreshControl,
   ActivityIndicator,
   FlatList
 } from 'react-native';
 
-import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
-import {View as SView, Text as SText} from '@shoutem/ui'
-import { Header, Left, Right, Container, Body} from 'native-base'
-import { MonoText } from '../components/StyledText';
-
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
-let {width,height} = Dimensions.get('window');
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
 "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
 
 
-export default class HomeScreen extends React.Component {
-  constructor(props){
-    super(props);
-    this.state ={ isLoading: true, refreshing: false};
-  }
+export default class FavouritesScreen extends React.Component {
+    constructor(props){
+      super(props);
+      this.state ={ isLoading: true, refreshing: false};
+    }
 
-    static navigationOptions = {
-      header: null,
-    };
+  static navigationOptions = {
+    header: null,
+  };
 
   _onRefresh() {
     this.setState({refreshing: true});
@@ -42,7 +44,6 @@ export default class HomeScreen extends React.Component {
 
         this.setState({
           isLoading: false,
-          // HAVE TO CHANGE MOVIES
           EventJson: responseJson,
         }, function(){
           console.log('REFRESHIN');
@@ -54,14 +55,12 @@ export default class HomeScreen extends React.Component {
     }
 
   componentDidMount(){
-    // CHANGE THE URL TO MACH WITH OURS!!
     return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
       .then((response) => response.json())
       .then((responseJson) => {
 
         this.setState({
           isLoading: false,
-          // HAVE TO CHANGE MOVIES
           EventJson: responseJson,
         }, function(){
 
@@ -76,16 +75,36 @@ export default class HomeScreen extends React.Component {
   _onSearchPressed(item){
     const event = item;
     console.log(item);
-    this.props.navigation.navigate('UserProfilePage',
-      {value: event});
+    // this.props.navigation.navigate('QRCodePage',
+    //   {value: event});
   };
 
-  _onEventPressed(item){
-    const event = item;
-    console.log(item);
-    this.props.navigation.navigate('EventDescriptionPage',
-      {value: event});
-  };
+  renderRow(item){
+    //console.log(item);
+    return (
+      <TouchableOpacity
+        onPress={() => this._onSearchPressed(item) }>
+      <Row>
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: pics[Math.floor(Math.random()*10)]  }}
+        />
+        <View styleName="vertical stretch space-between">
+          <Subtitle>{item.event_name}</Subtitle>
+          <View styleName="horizontal space-between">
+            <Caption>In 3 days</Caption>
+            <Caption>{item.event_location}</Caption>
+          </View>
+        </View>
+        <Button styleName="clear"
+                style={{alignSelf:"flex-end"}}
+                onPress={() => {}}>
+          <Icon name="add-to-favorites-on"/>
+        </Button>
+      </Row>
+      </TouchableOpacity>
+    )
+  }
 
   render() {
     if(this.state.isLoading){
@@ -103,53 +122,21 @@ export default class HomeScreen extends React.Component {
           </Left>
           <Body>
           <Title>EVENTRY</Title>
+          <Subtitle>My Starred Events</Subtitle>
           </Body>
           <Right></Right>
           </Header>
-
           <FlatList
             refreshControl={
               <RefreshControl
-                colors={['darkviolet']}
                 refreshing={this.state.refreshing}
                 onRefresh={this._onRefresh.bind(this)}/>}
-
               data={this.state.EventJson}
-              renderItem={({item}) =>
-              <View>
-              <TouchableOpacity onPress={() => this._onEventPressed(item) }>
-                <Tile>
-                  <ImageBackground
-                    styleName="large-banner"
-                    source={{ uri: pics[Math.floor(Math.random()*10)] }}
-                  >
-                  <Overlay styleName="rounded-small">
-                    <Icon name="add-to-favorites-on" />
-                  </Overlay>
-                  </ImageBackground>
-                  <SView styleName="content">
-
-                    <SView styleName="horizontal space-between">
-                      <Title>{item.event_name}</Title>
-                      <Overlay styleName="solid-bright">
-                      <Subtitle styleName="sm-gutter-horizontal">${item.event_price}</Subtitle>
-                      </Overlay>
-                    </SView>
-                    <Subtitle>{item.event_description}</Subtitle>
-                      <SView styleName="horizontal space-between">
-                        <Subtitle>Location: {item.event_location}</Subtitle>
-                        <Button styleName=""><Icon name="cart" /><SText>REGISTER FOR EVENT</SText></Button>
-                      </SView>
-                    </SView>
-                  </Tile>
-                  </TouchableOpacity>
-              <Divider styleName="section-header" />
-              </View>
-              }
+              renderItem={({item}) => this.renderRow(item)}
               keyExtractor={(item, index) => index}
             />
             <ActionButton buttonColor="rgba(76,127,178,0.68)">
-            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => {}}>
               <IonIcon name="md-add" style={styles.actionButtonIcon} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
@@ -160,7 +147,7 @@ export default class HomeScreen extends React.Component {
             onPress={() => this.props.navigation.navigate('QRCameraPage')}>
               <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => this.props.navigation.navigate('FavouritesPage')}>
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
               <IonIcon name="md-star" style={styles.actionButtonIcon} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
@@ -173,69 +160,8 @@ export default class HomeScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  developmentModeText: {
-    marginBottom: 20,
-    color: 'rgba(0,0,0,0.4)',
-    fontSize: 14,
-    lineHeight: 19,
-    textAlign: 'center',
-  },
-  contentContainer: {
-    paddingTop: 30,
-  },
-  logo: {
-    alignItems: 'center',
-    marginTop: 10,
-    marginBottom: 20,
-  },
-  list: {
-    backgroundColor: '#C6E9ED',
-    width: width - 20,
-    padding: 10,
-    marginTop: 20,
-    marginRight:10,
-    marginLeft:10,
-    borderRadius: 15,
-  },
-  registerButton: {
-    alignItems: 'center',
-    padding: 30,
-  },  wrapper: {
-    flex: 1
-  },
-  row: {
-    padding: 10,
-    height: 125,
-    backgroundColor: '#dccdc8',
-    borderTopWidth: 1,
-    marginBottom:-1,
-    borderBottomColor: '#E5EDF5',
-    borderTopColor: '#E5EDF5',
-    borderBottomWidth: 1,
-  },
-  text: {
-    textAlign: 'center',
-    color: 'black'
-  },
-  circle: {
-    width: 30,
-    height: 30,
-    borderRadius: 100/2,
-    backgroundColor: 'white',
-    opacity: .7
-  },
-  circle2: {
-    width: 45,
-    height: 25,
-    left: 175,
-    borderRadius: 50,
-    backgroundColor: 'black',
-    transform: [
-      {scaleX: 2}
-    ]
-  }
+      container: {
+        flex: 1,
+        backgroundColor: '#fff',
+      },
 });
