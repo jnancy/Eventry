@@ -17,6 +17,9 @@ import {
   FlatList
 } from 'react-native';
 
+import ActionButton from 'react-native-circular-action-menu';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
@@ -127,6 +130,25 @@ export default class QRPage extends React.Component {
               renderItem={({item}) => this.renderRow(item)}
               keyExtractor={(item, index) => index}
             />
+            <ActionButton buttonColor="rgba(76,127,178,0.68)">
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
+              <IonIcon name="md-add" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
+            onPress={() => this.props.navigation.navigate('Home')}>
+              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+            onPress={() => this.props.navigation.navigate('QRCameraPage')}>
+              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+              <IonIcon name="md-star" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
+              <IonIcon name="md-person" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
       </View>
     );
   }

@@ -1,9 +1,9 @@
 import React from 'react';
-import { ScrollView, 
-  StyleSheet, 
-  TextInput, 
-  Dimensions, 
-  TouchableHighlight, 
+import { ScrollView,
+  StyleSheet,
+  TextInput,
+  Dimensions,
+  TouchableHighlight,
   TouchableOpacity,
   Text, 
   View, 
@@ -19,7 +19,8 @@ import { ScrollView,
 
   export default class LinksScreen extends React.Component {
   static navigationOptions = {
-    title: "Add a New Event",
+    //title: "Add a New Event",
+    header: null,
   };
 
   constructor(props) {
@@ -43,9 +44,9 @@ import { ScrollView,
   }
 
   _showStartDateTimePicker = () => this.setState({ isStartDateTimePickerVisible: true });
- 
+
   _hideStartDateTimePicker = () => this.setState({ isStartDateTimePickerVisible: false });
- 
+
   _handleStartDatePicked = (start_date) => {
     console.log('Start date and time: ', start_date);
     this.setState({startDateChosen: true});
@@ -54,7 +55,7 @@ import { ScrollView,
   };
 
   _showEndDateTimePicker = () => this.setState({ isEndDateTimePickerVisible: true });
- 
+
   _hideEndDateTimePicker = () => this.setState({ isEndDateTimePickerVisible: false });
 
   _handleEndDatePicked = (end_date) => {
@@ -168,7 +169,7 @@ import { ScrollView,
             TextColor='#A0AAAB'
           > {this.state.startDateChosen? (this.state.start_date).toString() : "Start Date"} </Text>
           </TouchableOpacity>
-      
+
 
           <DateTimePicker
           isVisible={this.state.isStartDateTimePickerVisible}
@@ -184,7 +185,7 @@ import { ScrollView,
             TextColor='#A0AAAB'
           > {this.state.endDateChosen? (this.state.end_date).toString() : "End Date"} </Text>
           </TouchableOpacity>
-      
+
 
           <DateTimePicker
           isVisible={this.state.isEndDateTimePickerVisible}

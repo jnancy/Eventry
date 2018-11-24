@@ -19,6 +19,7 @@ import {
 import QRCode from 'react-native-qrcode';
 
 const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 export default class QRCodeScreen extends React.Component {
     constructor(props){
@@ -75,27 +76,54 @@ export default class QRCodeScreen extends React.Component {
         </View>
       )
     }
+    const {goBack} = this.props.navigation;
     return (
       <View style={styles.container}>
-          <Header style={{backgroundColor: 'white'}}>
+      <Header style={{backgroundColor: 'white'}}>
           <Left>
             <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
           </Left>
           <Body>
           <Title>EVENTRY</Title>
-          <Subtitle>My Events</Subtitle>
+          <Subtitle>QR CODE</Subtitle>
           </Body>
           <Right></Right>
-          </Header>
-          <SView style={{flexDirection: 'row', flex: 1, justifyContent: 'center',}}>
+      </Header>
+      <Divider />
+      <SView style={{flex: 1, alignItems: 'center', flexDirection: 'column', justifyContent: 'space-around', alignSelf: 'center'}}>
+      <View style={{flex: 1,alignItems: 'center'}}>
+      <Divider />
               <QRCode
                 value={this.props.navigation.state.params.value.event_name}
-                size={width*0.8}
+                size={width*0.7}
                 bgColor='grey'
                 fgColor='white'
               />
+          <Divider />
+          <Divider />
+          <Divider />
+          <Title styleName="bold" >EVENTRY TICKET</Title>
+          <Divider />
+          <SView styleName="horizontal">
+            <Button styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}>
+              <SText>UNREGISTER EVENT</SText>
+            </Button>
+            <Button styleName="confirmation secondary"
+                    onPress={() => goBack()}>
+              <SText>DONE</SText>
+            </Button>
           </SView>
+          <Divider />
+          <SView styleName="vertical">
+          <Button styleName="stacked clear">
+            <Icon name="social-wall" />
+            <SText>Chat with other Attendees</SText>
+          </Button>
 
+          </SView>
+        <Divider />
+      </View>
+      </SView>
       </View>
     );
   }
