@@ -111,7 +111,8 @@ export default class QRCodeScreen extends React.Component {
                 <Icon name="users" />
                 <SText>Attended Events</SText>
               </Button>
-              <Button styleName="stacked clear">
+              <Button styleName="stacked clear"
+                      onPress={() => this.props.navigation.navigate('FavouritesPage')}>
                 <Icon name="add-to-favorites-on" />
                 <SText>Starred Events</SText>
               </Button>

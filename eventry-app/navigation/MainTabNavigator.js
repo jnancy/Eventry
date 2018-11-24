@@ -9,10 +9,13 @@ import SettingsScreen from '../screens/SettingsScreen';
 import QRScreen from  '../screens/QRScreen';
 import QRCodeScreen from '../screens/QRCodeScreen';
 import QRCameraScreen from '../screens/QRCameraScreen';
+import UserProfileScreen from '../screens/UserProfileScreen';
+import FavouritesScreen from '../screens/FavouritesScreen';
+import EventDescriptionScreen from '../screens/EventDescriptionScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  // Event: EventDescriptionScreen
+  EventDescriptionPage: EventDescriptionScreen,
 });
 
 const QRStack = createStackNavigator({
@@ -26,6 +29,17 @@ const QRStack = createStackNavigator({
 }, {
   initialRouteName: "QRPage",
 });
+
+
+const ProfileStack = createStackNavigator({
+  UserProfilePage: UserProfileScreen,
+  LinksPage: LinksScreen,
+  QRCameraPage: QRCameraScreen,
+  FavouritesPage: FavouritesScreen,
+}, {
+  initialRouteName: "UserProfilePage",
+});
+
 
 const CustomDrawerComponent = (props) => (
   <SafeAreaView style={{flex: 1}}>
@@ -41,6 +55,7 @@ const CustomDrawerComponent = (props) => (
 export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
   QRPage: QRStack,
+  Profile: ProfileStack,
 },
 {
   contentComponent: CustomDrawerComponent,
