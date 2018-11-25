@@ -19,7 +19,7 @@ import {
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-
+import { AsyncStorage } from "react-native"
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
@@ -31,16 +31,47 @@ const height = Dimensions.get('window').height;
 export default class HostedEventsScreen extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ isLoading: true, refreshing: false};
+      this.state ={ 
+        isLoading: true, 
+        refreshing: false,
+        gotID: false,
+        Authkey: ''
+      };
     }
 
   static navigationOptions = {
     header: null,
   };
 
-  _onRefresh() {
+  _getID = async () =>{
+    var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
+    if (value != null){
+      console.log(value);
+      return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+    }
+  }
+
+  async _onRefresh() {
     this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    if(!this.state.gotID){
+      let Authkey = await this._getID();
+      this.setState({Authkey: Authkey, gotID: true});
+    }
+    let hosting = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/hosting/';
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token ' + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -57,21 +88,7 @@ export default class HostedEventsScreen extends React.Component {
     }
 
   componentDidMount(){
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+    this._onRefresh();
   }
 
   _onSearchPressed(item){
@@ -86,6 +103,10 @@ export default class HostedEventsScreen extends React.Component {
     console.log(item);
     this.props.navigation.navigate('EventDescriptionPage',
       {value: event});
+  };
+
+  _onDeletePressed(item){
+    console.log("Need to add to this function");
   };
 
   renderRow(item){
@@ -109,7 +130,7 @@ export default class HostedEventsScreen extends React.Component {
             </View>
         </View>
         <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
-        <Button styleName="stacked clear" style={{flex: 1}}   onPress={() => this._onEventPressed(item) }>
+        <Button styleName="stacked clear" style={{flex: 1}}   onPress={() => this._onDeletePressed(item) }>
           <IonIcon type="Ionicons" name="md-trash" color='#B22222' size={30}/>
         </Button>
         </View>
@@ -120,13 +141,6 @@ export default class HostedEventsScreen extends React.Component {
   }
 
   render() {
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
     return (
       <View style={styles.container}>
           <Header style={{backgroundColor: 'white'}}>
