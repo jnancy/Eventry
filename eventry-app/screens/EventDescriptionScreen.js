@@ -19,8 +19,6 @@ import {
 import QRCode from 'react-native-qrcode';
 import ParallaxScrollView from 'react-native-parallax-scrollview';
 
-import Swiper from 'react-native-swiper';
-
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
@@ -132,14 +130,7 @@ export default class EventDescriptionScreen extends React.Component {
   render() {
     const example1 = this.mainExample(1, 'Event photos uploaded by host');
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-    var markers = [
-      {
-      latitude: this.props.navigation.state.params.value.event_point_location.latitude,
-      longitude: this.props.navigation.state.params.value.event_point_location.longitude,
-      title: this.props.navigation.state.params.value.event_name,
-      subtitle: this.props.navigation.state.params.value.event_address
-    }
-    ];
+
     return (
       <View style={styles.container}>
       <ParallaxScrollView
@@ -148,9 +139,9 @@ export default class EventDescriptionScreen extends React.Component {
         navBarTitle='  '
         navBarTitleColor='black'
         navBarColor='white'
-        userName={this.props.navigation.state.params.value.host}
-        userTitle='Host'
-        userImage='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-6wOL0HGj3DLwrc-fKSkw6BH5qmrW0Zqjy9MGF1wDdHGzP3ce'
+        userName={this.props.navigation.state.params.value.event_name}
+        userTitle='Event Tags'
+        userImage='https://tickera-wpsalad.netdna-ssl.com/wp-content/themes/tickera/style/img/freebies/icons/events/6.png'
         leftIcon={<Icon name="sidebar"/>}
       >
        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
@@ -170,7 +161,7 @@ export default class EventDescriptionScreen extends React.Component {
               <Caption>EVENT INFORMATION</Caption>
             </Divider>
             <Divider style={{height: 3}}/>
-            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_name}</Subtitle>
+            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.host}</Subtitle>
             <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
             <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_start_time} - {this.props.navigation.state.params.value.event_end_time}</Subtitle>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
