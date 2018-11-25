@@ -26,11 +26,47 @@ export default class QRCameraScreen extends React.Component {
       });
     };
 
+   async _checkinUser(qrcode){
+      this.setState({refreshing: true});
+      let Authkey = await this._getID();
+      this.setState({Authkey: Authkey});
+      let checkinURL = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/checkin_qrcode/'
+      fetch(checkinURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Token ' + this.state.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+        });
+      }).then(() => {
+        //console.log(this.state.EventJson);
+      });
+
+    }
+
+    _getID = async () =>{
+    
+      var value = await AsyncStorage.getItem('userID');
+      if (value != null){
+        console.log(value);
+        return value;
+      }
+    }
+
     _handleBarCodeRead = result => {
       if (result.data !== this.state.lastScannedUrl) {
         LayoutAnimation.spring();
         this.setState({ lastScannedUrl: result.data });
         // POST TO THE SERVER!!
+        this._checkinUser(result.data);
         const {goBack} = this.props.navigation;
         //this.props.navigation.navigate('HomeScreen');
         Alert.alert(

@@ -49,11 +49,15 @@ export default class FavouritesScreen extends React.Component {
   };
   
   _getID = async () =>{
-    
     var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
     if (value != null){
       console.log(value);
       return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
     }
   }
 
