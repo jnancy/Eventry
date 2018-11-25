@@ -9,10 +9,12 @@ import {
   FlatList
 } from 'react-native';
 
+import { AsyncStorage } from "react-native"
+
 import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
 import { Header, Left, Right, Container, Body} from 'native-base'
-import { MonoText } from '../components/StyledText';
+
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -27,19 +29,31 @@ const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', '
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ isLoading: true, refreshing: false};
+    this.state ={ 
+      isLoading: true, 
+      refreshing: false,
+      gotID: false};
   }
 
     static navigationOptions = {
       header: null,
     };
 
-  _onRefresh() {
+  async _onRefresh() {
+
     this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    let Authkey = await this._getID();
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': "Token " + Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({
           isLoading: false,
           // HAVE TO CHANGE MOVIES
@@ -50,15 +64,24 @@ export default class HomeScreen extends React.Component {
 
       }).then(() => {
         this.setState({refreshing: false});
+
+      }).catch((error) =>{
+        console.error(error);
       });
     }
 
   componentDidMount(){
-    // CHANGE THE URL TO MACH WITH OURS!!
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    this._onRefresh();
+    /*
+    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': "Token " + this.state.Authkey
+      }
+    })
       .then((response) => response.json())
       .then((responseJson) => {
-
+        //console.log("hi");
         this.setState({
           isLoading: false,
           // HAVE TO CHANGE MOVIES
@@ -71,6 +94,7 @@ export default class HomeScreen extends React.Component {
       .catch((error) =>{
         console.error(error);
       });
+      */
   }
 
   _onSearchPressed(item){
@@ -79,6 +103,15 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.navigate('UserProfilePage',
       {value: event});
   };
+
+  _getID = async () =>{
+    
+    var value = await AsyncStorage.getItem('userID');
+    if (value != null){
+      console.log(value);
+      return value;
+    }
+  }
 
   _onEventPressed(item){
     const event = item;
