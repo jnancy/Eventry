@@ -12,6 +12,8 @@ import QRCameraScreen from '../screens/QRCameraScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import FavouritesScreen from '../screens/FavouritesScreen';
 import EventDescriptionScreen from '../screens/EventDescriptionScreen';
+import SignOutScreen from '../screens/SignOutScreen'
+import ChatScreen from '../screens/ChatScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -24,6 +26,8 @@ const QRStack = createStackNavigator({
   LinksPage: LinksScreen,
   QRCameraPage: QRCameraScreen,
   HomePage: HomeScreen,
+  SignOutPage: SignOutScreen,
+  ChatPage: ChatScreen
 }, {
   initialRouteName: "QRPage",
 });
@@ -34,10 +38,33 @@ const ProfileStack = createStackNavigator({
   LinksPage: LinksScreen,
   QRCameraPage: QRCameraScreen,
   FavouritesPage: FavouritesScreen,
+  SignOutPage: SignOutScreen,
+  ChatPage: ChatScreen
 }, {
   initialRouteName: "UserProfilePage",
 });
 
+const SignOutStack = createStackNavigator({
+  UserProfilePage: UserProfileScreen,
+  LinksPage: LinksScreen,
+  QRCameraPage: QRCameraScreen,
+  FavouritesPage: FavouritesScreen,
+  SignOutPage: SignOutScreen,
+  ChatPage: ChatScreen
+}, {
+  initialRouteName: "SignOutPage",
+});
+
+const ChatStack = createStackNavigator({
+  UserProfilePage: UserProfileScreen,
+  LinksPage: LinksScreen,
+  QRCameraPage: QRCameraScreen,
+  FavouritesPage: FavouritesScreen,
+  SignOutPage: SignOutScreen,
+  ChatPage: ChatScreen
+}, {
+  initialRouteName: "ChatPage",
+});
 
 const CustomDrawerComponent = (props) => (
   <SafeAreaView style={{flex: 1}}>
@@ -54,6 +81,8 @@ export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
   QRPage: QRStack,
   Profile: ProfileStack,
+  Chat: ChatStack,
+  SignOut: SignOutStack,
 },
 {
   contentComponent: CustomDrawerComponent,

@@ -21,6 +21,8 @@ import QRCode from 'react-native-qrcode';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
+// RETRIEVE ID!!!!
+
 export default class QRCodeScreen extends React.Component {
     constructor(props){
       super(props);
@@ -50,7 +52,7 @@ export default class QRCodeScreen extends React.Component {
       <View style={{flex: 1,alignItems: 'center'}}>
       <Divider />
               <QRCode
-                value={this.props.navigation.state.params.value.event_name}
+                value={("{event_id:" + this.props.navigation.state.params.value.id + ", attendee:" + this.props.navigation.state.params.value.event_name + "}").toString()}
                 size={width*0.7}
                 bgColor='grey'
                 fgColor='white'
@@ -62,7 +64,7 @@ export default class QRCodeScreen extends React.Component {
           <Divider />
           <SView styleName="horizontal">
             <Button styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}>
-              <SText>UNREGISTER EVENT</SText>
+              <SText>UNREGISTER</SText>
             </Button>
             <Button styleName="confirmation secondary"
                     onPress={() => goBack()}>
