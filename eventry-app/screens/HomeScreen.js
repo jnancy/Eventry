@@ -9,16 +9,16 @@ import {
   FlatList
 } from 'react-native';
 
-import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, TouchableOpacity, Icon} from '@shoutem/ui'
+import { AsyncStorage } from "react-native"
+
+import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
-import { Left, Right, Container, Body, Header} from 'native-base'
-
-import { MonoText } from '../components/StyledText';
-
-import ActionButton from 'react-native-circular-action-menu';
-import IonIcon from 'react-native-vector-icons/Ionicons'
+import { Header, Left, Right, Container, Body} from 'native-base'
 
 import { SearchBar } from 'react-native-elements'
+
+import ActionButton from 'react-native-circular-action-menu';
+import IonIcon from 'react-native-vector-icons/Ionicons';
 
 let {width,height} = Dimensions.get('window');
 
@@ -30,50 +30,51 @@ const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', '
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ isLoading: true, refreshing: false};
+    this.state ={
+      isLoading: true,
+      refreshing: false,
+      gotID: false};
   }
 
     static navigationOptions = {
       header: null,
     };
 
-  _onRefresh() {
+  async _onRefresh() {
+
     this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    let Authkey = await this._getID();
+    console.log(Authkey);
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': "Token " + Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
-
         this.setState({
+
           isLoading: false,
-          // HAVE TO CHANGE MOVIES
           EventJson: responseJson,
         }, function(){
           console.log(responseJson);
+          console.log('REFRESHIN');
         });
 
       }).then(() => {
         this.setState({refreshing: false});
+
+      }).catch((error) =>{
+        console.error(error);
       });
     }
 
   componentDidMount(){
-    // CHANGE THE URL TO MACH WITH OURS!!
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          // HAVE TO CHANGE MOVIES
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+    this._onRefresh();
   }
 
   _onSearchPressed(item){
@@ -82,6 +83,19 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.navigate('UserProfilePage',
       {value: event});
   };
+
+  _getID = async () =>{
+    var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
+    if (value != null){
+      console.log(value);
+      return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+    }
+  }
 
   _onEventPressed(item){
     const event = item;
@@ -109,7 +123,6 @@ export default class HomeScreen extends React.Component {
           </Body>
           <Right></Right>
           </Header>
-
           <SearchBar
             containerStyle={{backgroundColor: '#f2f2f2', borderColor: 'white', borderWidth: 1, borderRadius: 5}}
             inputStyle={{backgroundColor: 'white'}}
