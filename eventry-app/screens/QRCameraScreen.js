@@ -38,11 +38,21 @@ export default class QRCameraScreen extends React.Component {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        credentials: 'include'
+        credentials: 'include',
+        body: JSON.stringify({
+          QRcode: qrcode
+        }),
       })
       .then((response) => response.json())
       .then((responseJson) => {
-
+        Alert.alert(
+          "Status",
+          responseJson,
+          [{text: 'Go back Home', onPress: () => this.props.navigation.navigate('HomePage')},
+           {text: 'Scan Another', onPress: () => console.log('scan another Pressed')}],
+          { cancelable: false }
+        );
+        console.log(responseJson);
         this.setState({
           isLoading: false,
         });
@@ -52,31 +62,15 @@ export default class QRCameraScreen extends React.Component {
 
     }
 
-    _getID = async () =>{
-    
-      var value = await AsyncStorage.getItem('userID');
-      if (value != null){
-        console.log(value);
-        return value;
-      }
-    }
-
     _handleBarCodeRead = result => {
       if (result.data !== this.state.lastScannedUrl) {
         LayoutAnimation.spring();
         this.setState({ lastScannedUrl: result.data });
         // POST TO THE SERVER!!
         this._checkinUser(result.data);
-        const {goBack} = this.props.navigation;
+        //const {goBack} = this.props.navigation;
         //this.props.navigation.navigate('HomeScreen');
-        Alert.alert(
-          "Done!",
-          "User is checked in!",
-          [{text: 'OK', onPress: () => this.props.navigation.navigate('HomePage')},
-           {text: 'Scan Another', onPress: () => console.log('scan another Pressed')}],
-          { cancelable: false }
-        );
-        console.log("I'm in home screen");
+        //console.log("I'm in home screen");
       }
     };
   

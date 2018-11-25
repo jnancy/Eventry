@@ -6,7 +6,8 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 
 import { AsyncStorage } from "react-native"
@@ -33,7 +34,9 @@ export default class HomeScreen extends React.Component {
     this.state ={
       isLoading: true,
       refreshing: false,
-      gotID: false};
+      gotID: false,
+      Authkey: '',
+    };
   }
 
     static navigationOptions = {
@@ -44,8 +47,9 @@ export default class HomeScreen extends React.Component {
 
     this.setState({refreshing: true});
     let Authkey = await this._getID();
-    console.log(Authkey);
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+    this.setState({Authkey: Authkey});
+    console.log("PRINT" + Authkey);
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/', {
       method: 'GET',
       headers: {
         'Authorization': "Token " + Authkey,
@@ -61,7 +65,7 @@ export default class HomeScreen extends React.Component {
           isLoading: false,
           EventJson: responseJson,
         }, function(){
-          console.log(responseJson);
+          //console.log(responseJson);
           console.log('REFRESHIN');
         });
 
@@ -103,6 +107,34 @@ export default class HomeScreen extends React.Component {
     this.props.navigation.navigate('EventDescriptionPage',
       {value: event});
   };
+
+  _register(item){
+    let regURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + item.id + "/register/"
+    console.log(regURL);
+    fetch(regURL, {
+      method: 'POST',
+      headers: {
+        'Authorization': "Token " + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        Alert.alert(
+          "Status",
+          responseJson.status,
+          [{text: 'Ok', onPress: () => {}}],
+          { cancelable: false }
+        );
+        console.log(responseJson);
+        this.setState({isLoading: false});
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
 
   render() {
     if(this.state.isLoading){
@@ -165,7 +197,7 @@ export default class HomeScreen extends React.Component {
                     <Subtitle>{item.event_description}</Subtitle>
                       <SView styleName="horizontal space-between">
                         <Subtitle>Location: {item.event_location}</Subtitle>
-                        <Button styleName=""><Icon name="cart" /><SText>REGISTER FOR EVENT</SText></Button>
+                        <Button styleName="" onPress={() => this._register(item)}><Icon name="cart" /><SText>REGISTER FOR EVENT</SText></Button>
                       </SView>
                     </SView>
                   </Tile>

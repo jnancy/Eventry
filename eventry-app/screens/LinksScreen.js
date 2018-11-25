@@ -9,6 +9,7 @@ import { ScrollView,
   View, 
   Alert,
   ActivityIndicator,
+  Image,
   StatusBar } from "react-native";
   import DateTimePicker from 'react-native-modal-datetime-picker';
   import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -21,7 +22,6 @@ import { ScrollView,
 
   export default class LinksScreen extends React.Component {
   static navigationOptions = {
-    //title: "Add a New Event",
     header: null,
   };
 
@@ -42,8 +42,7 @@ import { ScrollView,
       isEndDateTimePickerVisible: false,
       endDateChosen: false,
       startDateChosen: false,
-      image: null,
-      //event_type: ['Fo', 'NT', 'PT'] 
+      image: [],
     };
   }
 
@@ -119,20 +118,37 @@ import { ScrollView,
           screenLoading: false,
           });
     }
-  
+    
+    _renderImages() {
+      let images = [];
+      //let remainder = 4 - (this.state.devices % 4);
+      this.state.image.map((item, index) => {
+        images.push(
+          <Image
+            key={index}
+            source={{ uri: item }}
+            style={{ width: 100, height: 100 }}
+          />
+        );
+      });
+      return images;
+    }
 
+    
   _pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
+      allowsEditing: false,
       aspect: [4, 3],
     });
 
     console.log(result);
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
-    }
+      this.setState({ 
+        image: this.state.image.concat([result.uri])
+    });
   };
+}
 
   render() {
     let { image } = this.state;
@@ -256,16 +272,16 @@ import { ScrollView,
           />
           <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date)?"Invalid end date: Has to be after start date" : ""}</Text>
 
-          <TouchableOpacity style={{height: 40}}onPress={this._pickImage}>
+          <TouchableOpacity style={{height: 40}} onPress={this._pickImage}>
           <Text
             style={styles.DateText}
             TextColor='#A0AAAB'
           > Pick an image</Text>
           </TouchableOpacity>
-          {image &&
-          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
+          <View>
+          {this._renderImages()}}
+          </View>
           
-
           <TouchableHighlight
             style = {{
               backgroundColor: "#C6E9ED",

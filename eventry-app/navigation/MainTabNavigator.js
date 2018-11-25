@@ -86,7 +86,7 @@ const CustomDrawerComponent = (props) => (
 
 export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
-  QRPage: QRStack,
+  'Registered Events': QRStack,
   Profile: ProfileStack,
   Chat: ChatStack,
   SignOut: SignOutStack,
