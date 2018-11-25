@@ -26,6 +26,7 @@ const height = Dimensions.get('window').height;
 export default class QRCodeScreen extends React.Component {
     constructor(props){
       super(props);
+
       this.state ={ 
         isLoading: true,
         Authkey: ''
@@ -35,7 +36,6 @@ export default class QRCodeScreen extends React.Component {
     static navigationOptions = {
       header: null,
     };
-
 
   _onRefresh() {
     this.setState({refreshing: true});
@@ -99,6 +99,7 @@ export default class QRCodeScreen extends React.Component {
         </View>
       )
     }
+
     const {goBack} = this.props.navigation;
     return (
       <View style={styles.container}>
