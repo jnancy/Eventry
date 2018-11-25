@@ -169,9 +169,6 @@ export default class FavouritesScreen extends React.Component {
     }
     return (
       <View style={styles.container}>
-          {
-            //this._getID()
-          }
           <Header style={{backgroundColor: 'white'}}>
           <Left>
             <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
