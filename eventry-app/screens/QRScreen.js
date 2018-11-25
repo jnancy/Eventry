@@ -30,16 +30,42 @@ const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', '
 export default class QRPage extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ isLoading: true, refreshing: false};
+      this.state ={ 
+        isLoading: true, 
+        refreshing: false,
+        Authkey: ''
+      };
     }
 
   static navigationOptions = {
     header: null,
   };
 
-  _onRefresh() {
+  _getID = async () =>{
+    var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
+    if (value != null){
+      return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+    }
+  }
+
+  async _onRefresh() {
     this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    let Authkey = await this._getID();
+    this.setState({Authkey: Authkey});
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/registered/', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token ' + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -56,28 +82,15 @@ export default class QRPage extends React.Component {
     }
 
   componentDidMount(){
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+    this._onRefresh();
   }
 
   _onSearchPressed(item){
     const event = item;
     console.log(item);
     this.props.navigation.navigate('QRCodePage',
-      {value: event});
+      {value: event,
+      Authkey: this.state.Authkey});
   };
 
   renderRow(item){

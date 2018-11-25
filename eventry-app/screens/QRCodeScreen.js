@@ -14,7 +14,8 @@ import {
   ListView,
   RefreshControl,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 import QRCode from 'react-native-qrcode';
 import { AsyncStorage } from "react-native"
@@ -22,14 +23,12 @@ import { AsyncStorage } from "react-native"
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-// RETRIEVE ID!!!!
 
 export default class QRCodeScreen extends React.Component {
     constructor(props){
       super(props);
 
       this.state ={ 
-        isLoading: true,
         Authkey: ''
       };
     }
@@ -38,33 +37,41 @@ export default class QRCodeScreen extends React.Component {
       header: null,
     };
 
-  async _onRefresh() {
-    this.setState({refreshing: true});
+  async _unregister(id){
     let Authkey = await this._getID();
     this.setState({Authkey: Authkey});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
-      method: 'GET',
+    let unregURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + id + "/unregister/"
+    console.log(unregURL);
+    fetch(unregURL, {
+      method: 'POST',
       headers: {
-        'Authorization': "Token " + this.state.Authkey
-      },
-    })
+        'Authorization': "Token " + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
       .then((response) => response.json())
       .then((responseJson) => {
-
+        //const {goBack} = this.props.navigation;
+        // Alert.alert(
+        //   "Status",
+        //   responseJson.status,
+        //   {text: 'Ok', onPress: () => goBack()},
+        //   {cancelable: false }
+        // );
+        Alert.alert(
+          "Status",
+          responseJson.status
+          );
+        //console.log(responseJson);
         this.setState({
           isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-          console.log('REFRESHIN');
-        });
-
-      }).then(() => {
-        this.setState({refreshing: false});
+          AlertMess : responseJson.status});
+      })
+      .catch((error) =>{
+        console.error(error);
       });
-    }
-
-  componentDidMount(){
-    this._onRefresh();
   }
 
   _getID = async () =>{
@@ -81,15 +88,6 @@ export default class QRCodeScreen extends React.Component {
   }
 
   render() {
-    
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
-
     const {goBack} = this.props.navigation;
     return (
       <View style={styles.container}>
@@ -108,7 +106,7 @@ export default class QRCodeScreen extends React.Component {
       <View style={{flex: 1,alignItems: 'center'}}>
       <Divider />
               <QRCode
-                value={("{\"event_id\": " + this.props.navigation.state.params.value.id + ", \"attendee\": \"" + this.state.Authkey + "\" }").toString()}
+                value={("{\"event_id\": " + this.props.navigation.state.params.value.id + ", \"attendee\": \"" + this.props.navigation.state.params.Authkey + "\" }").toString()}
                 size={width*0.7}
                 bgColor='grey'
                 fgColor='white'
@@ -119,7 +117,10 @@ export default class QRCodeScreen extends React.Component {
           <Title styleName="bold" >EVENTRY TICKET</Title>
           <Divider />
           <SView styleName="horizontal">
-            <Button styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}>
+            <Button styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}} 
+                    onPress = {() => {
+                                this._unregister(this.props.navigation.state.params.value.id);
+                                }} >
               <SText>UNREGISTER</SText>
             </Button>
             <Button styleName="confirmation secondary"

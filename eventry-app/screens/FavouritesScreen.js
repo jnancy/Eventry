@@ -212,45 +212,6 @@ export default class FavouritesScreen extends React.Component {
   }
 }
 
-// class Event extends React.PureComponent {
-//   constructor(props){
-//     super(props);
-//     this.state={
-//       item : this.props.item
-//     }
-//   }
-  
-//   _onPress = () => {
-//     this.props.onPressItem(this.props.id);
-//   };
-
-//   render() {
-//     //const textColor = this.props.selected ? "red" : "black";
-//     return (
-//       <TouchableOpacity
-//       onPress={() => this._onSearchPressed(item) }>
-//     <Row>
-//       <SImage
-//         styleName="medium rounded-corners"
-//         source={{ uri: pics[Math.floor(Math.random()*10)]  }}
-//       />
-//       <View styleName="vertical stretch space-between">
-//         <Subtitle>{item.event_name}</Subtitle>
-//         <View styleName="horizontal space-between">
-//           <Caption>In 3 days</Caption>
-//           <Caption>{item.event_location}</Caption>
-//         </View>
-//       </View>
-//       <Button styleName="clear"
-//               style={{alignSelf:"flex-end"}}
-//               onPress={() => { this.state.unfav?this.setState({unfav: false}): this.setState({unfav: true}) }}>
-//         <Icon name={this.state.unfav? "add-to-favorites-off":"add-to-favorites-on"}/>
-//       </Button>
-//     </Row>
-//     </TouchableOpacity>
-//     );
-//   }
-// }
 
 const styles = StyleSheet.create({
       container: {
