@@ -15,6 +15,7 @@ import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Head
 import {View as SView, Text as SText} from '@shoutem/ui'
 import { Header, Left, Right, Container, Body} from 'native-base'
 
+import { SearchBar } from 'react-native-elements'
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -29,8 +30,8 @@ const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', '
 export default class HomeScreen extends React.Component {
   constructor(props){
     super(props);
-    this.state ={ 
-      isLoading: true, 
+    this.state ={
+      isLoading: true,
       refreshing: false,
       gotID: false};
   }
@@ -56,7 +57,7 @@ export default class HomeScreen extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
-          
+
           isLoading: false,
           EventJson: responseJson,
         }, function(){
@@ -122,7 +123,17 @@ export default class HomeScreen extends React.Component {
           </Body>
           <Right></Right>
           </Header>
-
+          <SearchBar
+            containerStyle={{backgroundColor: '#f2f2f2', borderColor: 'white', borderWidth: 1, borderRadius: 5}}
+            inputStyle={{backgroundColor: 'white'}}
+            lightTheme
+            round
+            clearIcon={{ color: 'gray' }}
+            searchIcon={false}
+            //onChangeText={someMethod}
+            //onClear={someMethod}
+            placeholder='Type Here...'>
+            </SearchBar>
           <FlatList
             refreshControl={
               <RefreshControl

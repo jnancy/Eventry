@@ -12,12 +12,16 @@ import QRCameraScreen from '../screens/QRCameraScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import FavouritesScreen from '../screens/FavouritesScreen';
 import EventDescriptionScreen from '../screens/EventDescriptionScreen';
-import SignOutScreen from '../screens/SignOutScreen'
-import ChatScreen from '../screens/ChatScreen'
+import SignOutScreen from '../screens/SignOutScreen';
+import ChatScreen from '../screens/ChatScreen';
+import OtherUserProfileScreen from '../screens/OtherUserProfileScreen';
+import UserListScreen from '../screens/UserListScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   EventDescriptionPage: EventDescriptionScreen,
+  UserScreen: OtherUserProfileScreen,
+  UserList: UserListScreen,
 });
 
 const QRStack = createStackNavigator({
@@ -84,6 +88,7 @@ export default AppDrawerNavigator = createDrawerNavigator({
   Profile: ProfileStack,
   Chat: ChatStack,
   SignOut: SignOutStack,
+  UserList: UserListScreen,
 },
 {
   contentComponent: CustomDrawerComponent,

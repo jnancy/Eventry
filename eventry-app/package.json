@@ -26,6 +26,7 @@
     "prop-types": "^15.6.2",
     "react": "16.3.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-30.0.0.tar.gz",
+    "react-native-atoz-listview": "0.0.7",
     "react-native-camera": "^1.4.3",
     "react-native-circular-action-menu": "^0.5.0",
     "react-native-datetime-picker": "^1.1.2",
@@ -44,7 +45,6 @@
     "react-native-qrcode": "^0.2.7",
     "react-native-qrcode-scanner": "^1.1.0",
     "react-native-snap-carousel": "^3.7.5",
-    "react-native-swiper": "^1.5.13",
     "react-native-vector-icons": "^6.1.0",
     "react-navigation": "^2.16.0"
   },
