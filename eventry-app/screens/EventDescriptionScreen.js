@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { ImageBackground, Tile, Card, TouchableOpacity, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
+import { ImageBackground, Tile, Card, TouchableOpacity, InlineGallery, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 import {Header, Left, Right, Container, Body} from 'native-base'
-import {View as SView, Text as SText, Image as SImage} from '@shoutem/ui'
+import {View as SView, Text as SText, Image as SImage, Button as SButton} from '@shoutem/ui'
 import {
   Image,
   Platform,
@@ -17,85 +17,240 @@ import {
   FlatList
 } from 'react-native';
 import QRCode from 'react-native-qrcode';
+import ParallaxScrollView from 'react-native-parallax-scrollview';
+
+import Swiper from 'react-native-swiper';
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
+import { StatusBar, SafeAreaView } from 'react-native';
+import { LinearGradient } from 'expo';
+import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { sliderWidth, itemWidth } from '../carousel/SliderEntry.style';
+import SliderEntry from '../carousel/SliderEntry';
+import styles, { colors } from '../carousel/index.style';
+import { ENTRIES1, ENTRIES2 } from '../carousel/entries';
+import { scrollInterpolators, animatedStyles } from '../carousel/animations';
+
+import {MapView} from 'expo';
+
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
-export default class QRCodeScreen extends React.Component {
+const IS_ANDROID = Platform.OS === 'android';
+const SLIDER_1_FIRST_ITEM = 1;
+
+export default class EventDescriptionScreen extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ isLoading: true};
+      this.state = {
+          slider1ActiveSlide: SLIDER_1_FIRST_ITEM
+        }
     }
 
     static navigationOptions = {
       header: null,
     };
 
-
-  _onRefresh() {
-    this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-          console.log('REFRESHIN');
-        });
-
-      }).then(() => {
-        this.setState({refreshing: false});
-      });
+    _renderItem ({item, index}) {
+        return <SliderEntry data={item} even={(index + 1) % 2 === 0} />;
     }
 
-  componentDidMount(){
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
+    _renderItemWithParallax ({item, index}, parallaxProps) {
+        return (
+            <SliderEntry
+              data={item}
+              even={(index + 1) % 2 === 0}
+              parallax={true}
+              parallaxProps={parallaxProps}
+            />
+        );
+    }
 
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
+    _renderLightItem ({item, index}) {
+        return <SliderEntry data={item} even={false} />;
+    }
 
-        });
+    _renderDarkItem ({item, index}) {
+        return <SliderEntry data={item} even={true} />;
+    }
 
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-  }
+    mainExample (number, title) {
+         const { slider1ActiveSlide } = this.state;
+
+         return (
+             <View style={styles.exampleContainer}>
+                 <Text style={styles.subtitle}>{title}</Text>
+                 <Carousel
+                   ref={c => this._slider1Ref = c}
+                   data={ENTRIES1}
+                   renderItem={this._renderItemWithParallax}
+                   sliderWidth={sliderWidth}
+                   itemWidth={itemWidth}
+                   hasParallaxImages={true}
+                   firstItem={SLIDER_1_FIRST_ITEM}
+                   inactiveSlideScale={0.94}
+                   inactiveSlideOpacity={0.7}
+                   // inactiveSlideShift={20}
+                   containerCustomStyle={styles.slider}
+                   contentContainerCustomStyle={styles.sliderContentContainer}
+                   loop={true}
+                   loopClonesPerSide={2}
+                   autoplay={true}
+                   autoplayDelay={500}
+                   autoplayInterval={3000}
+                   onSnapToItem={(index) => this.setState({ slider1ActiveSlide: index }) }
+                 />
+                 <Pagination
+                   dotsLength={ENTRIES1.length}
+                   activeDotIndex={slider1ActiveSlide}
+                   containerStyle={styles.paginationContainer}
+                   dotColor={'rgba(255, 255, 255, 0.92)'}
+                   dotStyle={styles.paginationDot}
+                   inactiveDotColor={colors.black}
+                   inactiveDotOpacity={0.4}
+                   inactiveDotScale={0.6}
+                   carouselRef={this._slider1Ref}
+                   tappableDots={!!this._slider1Ref}
+                 />
+             </View>
+         );
+     }
+
+     get gradient () {
+         return (
+             <LinearGradient
+               colors={[colors.background1, colors.background2]}
+               startPoint={{ x: 1, y: 0 }}
+               endPoint={{ x: 0, y: 1 }}
+               style={styles.gradient}
+             />
+         );
+     }
 
   render() {
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
-
+    const example1 = this.mainExample(1, 'Event photos uploaded by host');
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+    var markers = [
+      {
+      latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+      longitude: this.props.navigation.state.params.value.event_point_location.longitude,
+      title: this.props.navigation.state.params.value.event_name,
+      subtitle: this.props.navigation.state.params.value.event_address
+    }
+    ];
     return (
       <View style={styles.container}>
-        <Header style={{backgroundColor: 'white'}}>
-        <Left>
-          <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
-        </Left>
-        <Body>
-        <Title>EVENTRY</Title>
-        </Body>
-        <Right></Right>
-      </Header>1
-      <FlatList>
-              <View style={{ backgroundColor: rcolor, flex: 0.3, }}></View>
-              
-      </FlatList>
+      <ParallaxScrollView
+        windowHeight={height * 0.4}
+        backgroundSource={{uri: "https://avatars.mds.yandex.net/get-pdb/49816/f72a1ec0-94d4-426c-be58-b74f61094680/orig"}}
+        navBarTitle='  '
+        navBarTitleColor='black'
+        navBarColor='white'
+        userName={this.props.navigation.state.params.value.host}
+        userTitle='Host'
+        userImage='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-6wOL0HGj3DLwrc-fKSkw6BH5qmrW0Zqjy9MGF1wDdHGzP3ce'
+        leftIcon={<Icon name="sidebar"/>}
+      >
+       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+        <View style={{height: height*0.1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+            <SView styleName="horizontal">
+                <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}>
+                  <SText>REGISTER</SText>
+                </SButton>
+                <SButton styleName="confirmation secondary">
+                  <SText>SEE ATTENDEES</SText>
+                </SButton>
+              </SView>
+          </View>
+          <View style={{height: height*0.45, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+            <Divider styleName="section-header"
+                     style={{backgroundColor: 'white'}}>
+              <Caption>EVENT INFORMATION</Caption>
+            </Divider>
+            <Divider style={{height: 3}}/>
+            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_name}</Subtitle>
+            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
+            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_start_time} - {this.props.navigation.state.params.value.event_end_time}</Subtitle>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
+              <Button styleName="stacked clear">
+                <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
+                <SText>Attendees</SText>
+              </Button>
+              <Button styleName="stacked clear">
+              <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
+              <SText>Price in USD</SText>
+              </Button>
+              <Button styleName="stacked clear">
+              <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
+              <SText>Days Away</SText>
+              </Button>
+              </View>
+              <Divider styleName="section-header"
+                       style={{backgroundColor: 'white'}}>
+                <Caption>EVENT DESCRIPTION</Caption>
+              </Divider>
+              <Divider style={{height: 3}}/>
+            <SText style={{fontSize:16, textAlign: 'center', marginLeft: 20, marginRight: 20}}>{this.props.navigation.state.params.value.event_description} {this.props.navigation.state.params.value.event_description}</SText>
+          </View>
+          <Divider styleName="section-header"
+                   style={{backgroundColor: 'white'}}>
+            <Caption>EVENT LOCATION</Caption>
+          </Divider>
+          <View style={{height: height*0.3, marginLeft: 10, marginRight: 10}}>
+             <MapView
+               style={{ height: height*0.3}}
+               initialRegion={{
+                 latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+                 longitude: this.props.navigation.state.params.value.event_point_location.longitude,
+                 latitudeDelta: 0.0922,
+                 longitudeDelta: 0.0421,
+               }}>
+                <MapView.Marker
+                coordinate= {{latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+                              longitude: this.props.navigation.state.params.value.event_point_location.longitude}}
+                title={this.props.navigation.state.params.value.event_name}
+                description={this.props.navigation.state.params.value.event_address}
+                />
+               </MapView>
+             </View>
+             <Divider/>
+          <View style={{height: height*0.55, justifyContent: 'center', alignItems: 'center'}}>
+          {this.gradient}
+              <ScrollView
+                style={styles.scrollview}
+                scrollEventThrottle={200}
+                directionalLockEnabled={true}
+              >
+              { example1 }
+          </ScrollView>
+          </View>
+
+          <Divider styleName="section-header"
+                   style={{backgroundColor: 'white'}}>
+            <Caption>ADDITIONAL INFORMATION</Caption>
+          </Divider>
+          <View style={{height: height*0.25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+            <Button styleName="stacked clear">
+              <Icon name="email" />
+              <SText>Message Host</SText>
+            </Button>
+            <Button styleName="stacked clear">
+              <Icon name="users" />
+              <SText>Message Attendees</SText>
+            </Button>
+            <Button styleName="stacked clear"
+                    onPress={() => this.props.navigation.navigate('FavouritesPage')}>
+              <Icon name="add-to-favorites-on" />
+              <SText>Star Event</SText>
+            </Button>
+         </View>
+          </View>
+         </ScrollView>
+      </ParallaxScrollView>
       <ActionButton buttonColor="rgba(76,127,178,0.68)">
       <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
         <IonIcon name="md-add" style={styles.actionButtonIcon} />
@@ -108,7 +263,7 @@ export default class QRCodeScreen extends React.Component {
       onPress={() => this.props.navigation.navigate('QRCameraPage')}>
         <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
       </ActionButton.Item>
-      <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+      <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => this.props.navigation.navigate('FavouritesPage')}>
         <IonIcon name="md-star" style={styles.actionButtonIcon} />
       </ActionButton.Item>
       <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
@@ -119,56 +274,3 @@ export default class QRCodeScreen extends React.Component {
     );
   }
 }
-
-
-const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        backgroundColor: '#fff',
-      },
-      header:{
-          backgroundColor: '#fff',
-          flex: 0.35,
-        },
-    avatar: {
-      width: 130,
-      height: 130,
-      borderRadius: 63,
-      borderWidth: 4,
-      borderColor: "white",
-      marginBottom:10,
-      alignSelf:'center',
-      position: 'absolute',
-      marginTop:140
-    },
-    name:{
-      fontSize:22,
-      color:"#FFFFFF",
-      fontWeight:'600',
-    },
-    body:{
-      marginTop:40,
-      flex: 1,
-    },
-    bodyContent: {
-      flex: 1,
-      alignItems: 'center',
-      padding:30,
-    },
-    name:{
-      fontSize:28,
-      color: "#696969",
-      fontWeight: "600"
-    },
-    buttonContainer: {
-      marginTop:10,
-      height:45,
-      flexDirection: 'row',
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginBottom:20,
-      width:250,
-      borderRadius:30,
-      backgroundColor: "#00BFFF",
-    },
-});

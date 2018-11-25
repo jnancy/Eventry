@@ -26,7 +26,6 @@ const height = Dimensions.get('window').height;
 export default class QRCodeScreen extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ isLoading: true};
     }
 
     static navigationOptions = {
@@ -34,50 +33,7 @@ export default class QRCodeScreen extends React.Component {
     };
 
 
-  _onRefresh() {
-    this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-          console.log('REFRESHIN');
-        });
-
-      }).then(() => {
-        this.setState({refreshing: false});
-      });
-    }
-
-  componentDidMount(){
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-  }
-
   render() {
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
     const {goBack} = this.props.navigation;
     return (
       <View style={styles.container}>
