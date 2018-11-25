@@ -32,6 +32,7 @@ export default class SettingsScreen extends React.Component {
     }
     onPress = {
       () => {
+        console.log("signed out" + AsyncStorage.getItem("userID"));
         onSignOut().then(() => {
           this.props.navigation.navigate("LoginScreen");
           this.setState({
@@ -40,8 +41,8 @@ export default class SettingsScreen extends React.Component {
         });
       }
     }
-    underlayColor = "#22222" >
-    <LoginButton icon = {""} loginText = {"Confirm Sign Out"}/>
+    underlayColor = "#222" >
+    <LoginButton icon = {"ios-star"} loginText = {"Confirm Sign Out"}/>
     </TouchableHighlight >
     </View>
   }
