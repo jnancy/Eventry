@@ -20,15 +20,15 @@ import {
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
 "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
-export default class QRPage extends React.Component {
+export default class HostedEventsScreen extends React.Component {
     constructor(props){
       super(props);
       this.state ={ isLoading: true, refreshing: false};
@@ -81,41 +81,40 @@ export default class QRPage extends React.Component {
       {value: event});
   };
 
-
-    _onEventPressed(item){
-      const event = item;
-      console.log(item);
-      this.props.navigation.navigate('EventDescriptionPage',
-        {value: event});
-    };
+  _onEventPressed(item){
+    const event = item;
+    console.log(item);
+    this.props.navigation.navigate('EventDescriptionPage',
+      {value: event});
+  };
 
   renderRow(item){
     //console.log(item);
     return (
       <TouchableOpacity
         onPress={() => this._onEventPressed(item) }>
-        <Row>
-          <SImage
-            styleName="medium rounded-corners"
-            source={{ uri: pics[Math.floor(Math.random()*10)]  }}
-          />
-          <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
-          <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
-              <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
-                <Subtitle>{item.event_name}</Subtitle>
-                <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
-                  <Caption>In 3 days</Caption>
-                  <Caption>LOCATION</Caption>
-                </View>
+      <Row>
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: pics[Math.floor(Math.random()*10)]  }}
+        />
+        <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
+        <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
+            <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
+              <Subtitle>{item.event_name}</Subtitle>
+              <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
+                <Caption>In 3 days</Caption>
+                <Caption>LOCATION</Caption>
               </View>
-          </View>
-          <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
-          <Button styleName="stacked clear" style={{flex: 1}} onPress={() => this._onSearchPressed(item) }>
-            <IonIcon type="Ionicons" name="md-qr-scanner" color='black' size={30}/>
-          </Button>
-          </View>
-          </View>
-        </Row>
+            </View>
+        </View>
+        <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
+        <Button styleName="stacked clear" style={{flex: 1}}   onPress={() => this._onEventPressed(item) }>
+          <IonIcon type="Ionicons" name="md-trash" color='#B22222' size={30}/>
+        </Button>
+        </View>
+        </View>
+      </Row>
       </TouchableOpacity>
     )
   }
@@ -136,7 +135,7 @@ export default class QRPage extends React.Component {
           </Left>
           <Body>
           <Title>EVENTRY</Title>
-          <Subtitle>My Events</Subtitle>
+          <Subtitle>My Hosted Events</Subtitle>
           </Body>
           <Right></Right>
           </Header>
