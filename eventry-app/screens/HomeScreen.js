@@ -9,13 +9,16 @@ import {
   FlatList
 } from 'react-native';
 
-import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
+import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, TouchableOpacity, Icon} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
-import { Header, Left, Right, Container, Body} from 'native-base'
+import { Left, Right, Container, Body, Header} from 'native-base'
+
 import { MonoText } from '../components/StyledText';
 
 import ActionButton from 'react-native-circular-action-menu';
-import IonIcon from 'react-native-vector-icons/Ionicons';
+import IonIcon from 'react-native-vector-icons/Ionicons'
+
+import { SearchBar } from 'react-native-elements'
 
 let {width,height} = Dimensions.get('window');
 
@@ -45,7 +48,7 @@ export default class HomeScreen extends React.Component {
           // HAVE TO CHANGE MOVIES
           EventJson: responseJson,
         }, function(){
-          console.log('REFRESHIN');
+          console.log(responseJson);
         });
 
       }).then(() => {
@@ -107,6 +110,17 @@ export default class HomeScreen extends React.Component {
           <Right></Right>
           </Header>
 
+          <SearchBar
+            containerStyle={{backgroundColor: '#f2f2f2', borderColor: 'white', borderWidth: 1, borderRadius: 5}}
+            inputStyle={{backgroundColor: 'white'}}
+            lightTheme
+            round
+            clearIcon={{ color: 'gray' }}
+            searchIcon={false}
+            //onChangeText={someMethod}
+            //onClear={someMethod}
+            placeholder='Type Here...'>
+            </SearchBar>
           <FlatList
             refreshControl={
               <RefreshControl
