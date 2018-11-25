@@ -1,75 +1,82 @@
 import React from "react";
-import { StyleSheet, Text, View, Platform, StatusBar } from "react-native";
+import { GiftedChat } from "react-native-gifted-chat";
+import Chatkit from "@pusher/chatkit-client";
 
-import ChatEngineCore from "chat-engine";
-import typingIndicator from "chat-engine-typing-indicator";
+const CHATKIT_TOKEN_PROVIDER_ENDPOINT = "https://us1.pusherplatform.io/services/chatkit_token_provider/v1/0fa52852-e026-4a78-b9fd-9ef562cc901c/token";
+const CHATKIT_INSTANCE_LOCATOR = "v1:us1:0fa52852-e026-4a78-b9fd-9ef562cc901c";
+const CHATKIT_ROOM_ID = "19465103";
+const CHATKIT_USER_NAME = "test";
+const YOUR_KEY = "6da31832-1c47-48cc-ab3b-d02d54ed226c:ftQrAOm3k3zdq6YIOARDpq2HqGmq8hcmZp07arOxT44=";
 
-import {MessageEntry} from "chat-engine-react-native";
-import {MessageList} from "chat-engine-react-native";
-
-
-const ChatEngine = ChatEngineCore.create({
-  publishKey: "pub-c-2849f512-15df-49ce-9a5c-014a6855762a",
-  subscribeKey: "sub-c-6d9cba8e-f03b-11e8-b4c2-46cd67be4fbe"
-});
-
-const now = new Date().getTime();
-const username = ['user', now].join('-');
-
-export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      chat: null,
-      renderChat: false,
-      me: null,
-    };
-  }
+export default class MyChat extends React.Component {
+  state = {
+    messages: [{
+        _id: "id",
+        text: "Welcome to zee chat",
+        createdAt: new Date(),
+        user: {
+          _id: "senderId",
+          name: "senderId",
+          avatar:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmXGGuS_PrRhQt73sGzdZvnkQrPXvtA-9cjcPxJLhLo8rW-sVA"
+        }
+      }]
+  };
 
   componentDidMount() {
-    //chatengine throws some warning about timing that is a part of the library itself
-    console.disableYellowBox = true;
+    const tokenProvider = new Chatkit.TokenProvider({
+      url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
+    });
 
-    ChatEngine.connect(username, {
-        signedOnTime: now
-    }, 'auth-key');
+    const chatManager = new Chatkit.ChatManager({
+      instanceLocator: CHATKIT_INSTANCE_LOCATOR,
+      userId: CHATKIT_USER_NAME,
+      tokenProvider: tokenProvider
+    });
 
-    ChatEngine.on("$.ready", data => {
-      const me = data.me;
-      let chat = new ChatEngine.Chat('MyChat');
+    chatManager.connect().then(currentUser => {
+      this.currentUser = currentUser;
+      this.currentUser.subscribeToRoom({
+        roomId: CHATKIT_ROOM_ID,
+        hooks: {
+          onMessage: this.onReceive.bind(this)
+        }
+      });
+    });
+  }
 
-     chat.plugin(typingIndicator({ timeout: 5000 })); //set this if you want your message entry to have a typing indicator
+  onReceive(data) {
+    const { id, senderId, text, createdAt } = data;
+    const incomingMessage = {
+      _id: id,
+      text: text,
+      createdAt: new Date(createdAt),
+      user: {
+        _id: senderId,
+        name: senderId,
+      }
+    };
+    this.setState(previousState => ({
+      messages: GiftedChat.append(previousState.messages, incomingMessage)
+    }));
+  }
 
-      this.setState({chat: chat, renderChat: true, me: data.me});
+  onSend([message]) {
+    this.currentUser.sendMessage({
+      text: message.text,
+      roomId: CHATKIT_ROOM_ID
     });
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        {!this.state.renderChat ? (
-          <Text> Loading </Text>
-        ) : (
-          <View style={{flex:1}}>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-            {Platform.OS === 'android' && <View style={styles.statusBarUnderlay} />}
-            <MessageList chat={this.state.chat} />
-            <MessageEntry chat={this.state.chat} typingIndicator />
-          </View>
-        )}
-      </View>
+      <GiftedChat
+        messages={this.state.messages}
+        onSend={messages => this.onSend(messages)}
+        user={{
+          _id: CHATKIT_USER_NAME
+        }}
+      />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-  statusBarUnderlay: {
-    height: 24,
-    backgroundColor: 'rgba(0,0,0,0.2)',
-  },
-});

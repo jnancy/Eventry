@@ -19,55 +19,28 @@ import {
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-import { AsyncStorage } from "react-native"
 
-const width = Dimensions.get('window').width;
-const height = Dimensions.get('window').height;
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
 "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
-export default class QRPage extends React.Component {
+export default class HostedEventsScreen extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ 
-        isLoading: true, 
-        refreshing: false,
-        Authkey: ''
-      };
+      this.state ={ isLoading: true, refreshing: false};
     }
 
   static navigationOptions = {
     header: null,
   };
 
-  _getID = async () =>{
-    var value = await AsyncStorage.getItem('userID');
-    console.log("here" + value);
-    if (value != null){
-      return value;
-    }
-    else{
-      //default key
-      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
-    }
-  }
-
-  async _onRefresh() {
+  _onRefresh() {
     this.setState({refreshing: true});
-    let Authkey = await this._getID();
-    this.setState({Authkey: Authkey});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/registered/', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Token ' + this.state.Authkey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      credentials: 'include'
-    })
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -84,52 +57,64 @@ export default class QRPage extends React.Component {
     }
 
   componentDidMount(){
-    this._onRefresh();
+    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          EventJson: responseJson,
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
   }
 
   _onSearchPressed(item){
     const event = item;
     console.log(item);
     this.props.navigation.navigate('QRCodePage',
-      {value: event,
-      Authkey: this.state.Authkey});
+      {value: event});
   };
 
-
-    _onEventPressed(item){
-      const event = item;
-      console.log(item);
-      this.props.navigation.navigate('EventDescriptionPage',
-        {value: event});
-    };
+  _onEventPressed(item){
+    const event = item;
+    console.log(item);
+    this.props.navigation.navigate('EventDescriptionPage',
+      {value: event});
+  };
 
   renderRow(item){
     //console.log(item);
     return (
       <TouchableOpacity
         onPress={() => this._onEventPressed(item) }>
-        <Row>
-          <SImage
-            styleName="medium rounded-corners"
-            source={{ uri: pics[Math.floor(Math.random()*10)]  }}
-          />
-          <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
-          <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
-              <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
-                <Subtitle>{item.event_name}</Subtitle>
-                <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
-                  <Caption>In 3 days</Caption>
-                  <Caption>LOCATION</Caption>
-                </View>
+      <Row>
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: pics[Math.floor(Math.random()*10)]  }}
+        />
+        <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
+        <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
+            <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
+              <Subtitle>{item.event_name}</Subtitle>
+              <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
+                <Caption>In 3 days</Caption>
+                <Caption>LOCATION</Caption>
               </View>
-          </View>
-          <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
-          <Button styleName="stacked clear" style={{flex: 1}} onPress={() => this._onSearchPressed(item) }>
-            <IonIcon type="Ionicons" name="md-qr-scanner" color='black' size={30}/>
-          </Button>
-          </View>
-          </View>
-        </Row>
+            </View>
+        </View>
+        <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
+        <Button styleName="stacked clear" style={{flex: 1}}   onPress={() => this._onEventPressed(item) }>
+          <IonIcon type="Ionicons" name="md-trash" color='#B22222' size={30}/>
+        </Button>
+        </View>
+        </View>
+      </Row>
       </TouchableOpacity>
     )
   }
@@ -150,7 +135,7 @@ export default class QRPage extends React.Component {
           </Left>
           <Body>
           <Title>EVENTRY</Title>
-          <Subtitle>My Events</Subtitle>
+          <Subtitle>My Hosted Events</Subtitle>
           </Body>
           <Right></Right>
           </Header>
