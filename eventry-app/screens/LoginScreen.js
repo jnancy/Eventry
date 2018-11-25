@@ -37,10 +37,44 @@ export default class LoginScreen extends React.Component {
 
    signIn = (json) => {
     console.log("Response from DB: ");
-    console.log(json);
-    onSignIn();
+    var str = JSON.stringify(json);
+    console.log(str);
+    onSignIn(str);
   }
 
+  signInRegular = async () => {
+    this.setState({
+        screenLoading: true,
+    })
+    console.log("loading screen...");
+    let signInData = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'username' : this.state.username,
+        'password' : this.state.password
+      }),
+    }
+    try{
+      fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/login/', signInData).then(response => response.json()).  // Promise
+      then(res => {this.checkResp(res)});
+    }
+    catch(err){
+      console.log("err: " + err);
+    }
+  }
+  checkResp = (json) => {
+    console.log("Resp:" + JSON.stringify(json) );
+    if(json.hasOwnProperty('key')){
+      onSignIn(json.key);
+      console.log("auth successful");
+      this.props.navigation.navigate("SignedIn");
+    }
+
+  }
 
   signInWithGoogleAsync = async () => {
           this.setState({
@@ -69,8 +103,8 @@ export default class LoginScreen extends React.Component {
                 }),
               }
 
-              fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google', data).then(response => response.json())  // Promise
-              .then(json => {this.signIn(json)}).then(this.setState({successfulAuth: true}));
+              fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google/', data).then(response => response.json()).  // Promise
+              then(res => {this.signIn(res.key)}).then(this.setState({successfulAuth: true}));
 
             } else {
               return { cancelled: true };
@@ -143,11 +177,14 @@ export default class LoginScreen extends React.Component {
             }}
             onPress = {
               () => {
-                onSignIn().then(() => {
-                  this.props.navigation.navigate("SignedIn");
-                  this.setState({
-                    screenLoading: false,
-                  });
+                this.signInRegular().then(() => {
+                  if (this.state.successfulAuth === true) {
+                    console.log("auth successful");
+                    this.props.navigation.navigate("SignedIn");
+                  } else {
+                    console.log("failed auth");
+                    this.setState({ screenLoading: false, });
+                  }
                 });
               }
             }
@@ -164,12 +201,10 @@ export default class LoginScreen extends React.Component {
             }}
             onPress = {
               () => {
-                onSignIn().then(() => {
                   this.props.navigation.navigate("SignUp");
                   this.setState({
                     screenLoading: false,
                   });
-                });
               }
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
