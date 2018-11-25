@@ -6,6 +6,8 @@ import LoginButton from '../components/LoginButton';
 import FBLoginButton from '../components/FBLoginButton'
 import { onSignIn, storeUserID } from '../auth/fakeAuth';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 const ANDROID_CLIENT_ID = '';
 const IOS_CLIENT_ID = '';
 
@@ -24,13 +26,40 @@ export default class SignupScreen extends React.Component {
     this.state = {
       successfulAuth: false,
       screenLoading: false,
-      username:'',
-      firstName:'',
-      lastName:'',
-      email: '',
-      password:'',
-      password2: '',
+      Username:'',
+      FirstName:'',
+      LastName:'',
+      Email:'',
+      Password1:'',
+      Password2: '',
     };
+
+    this.onSignUp = this.onSignUp.bind(this);
+    this.checkResp = this.checkResp.bind(this);
+  }
+
+  onSignUp = () => {
+    let data = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        'username' : this.state.Username,
+        'email' : this.state.Email,
+        'password1' : this.state.Password1,
+        'password2' : this.state.Password2,
+      }),
+    }
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/registration/', data).then(response => response.json()).then(json => this.checkResp(json));
+  }
+
+  checkResp = (json) => {
+    console.log("Resp:" + JSON.stringify(json) );
+    if(json.hasOwnProperty('key')){
+      this.props.navigation.navigate("LoginScreen");
+    }
   }
 
   render() {
@@ -45,6 +74,7 @@ export default class SignupScreen extends React.Component {
 
     return (
       <ImageBackground source = {require('../img/login2.jpg')} style = {{ width: '100%', height: '100%'}} >
+      <KeyboardAwareScrollView>
       <View style = {{ flex: 1 }} >
         <View style = {{flexDirection: 'row', justifyContent: 'center', height: 60, alignItems: 'center', marginTop: height / 7 }} >
           <Image source = {require('../img/e.jpg')} style={{width: 70, height: 70}}/>
@@ -64,8 +94,8 @@ export default class SignupScreen extends React.Component {
               width: width*7/10,
               fontSize: 15,
             }}
-            onChangeText={(username) => this.setState({username})}
-            value={this.state.username}
+            onChangeText={(Username) => this.setState({Username})}
+            value={this.state.Username}
             placeholder='Username'
             placeholderTextColor='#fff'
           />
@@ -79,8 +109,8 @@ export default class SignupScreen extends React.Component {
               width: width*7/10,
               fontSize: 15,
             }}
-            onChangeText={(firstName) => this.setState({firstName})}
-            value={this.state.firstName}
+            onChangeText={(FirstName) => this.setState({FirstName})}
+            value={this.state.FirstName}
             placeholder='First Name'
             placeholderTextColor='#fff'
           />
@@ -109,8 +139,8 @@ export default class SignupScreen extends React.Component {
               width: width*7/10,
               fontSize: 15,
             }}
-            onChangeText={(email) => this.setState({email})}
-            value={this.state.email}
+            onChangeText={(Email) => this.setState({Email})}
+            value={this.state.Email}
             placeholder='Email'
             placeholderTextColor='#fff'
           />
@@ -124,7 +154,7 @@ export default class SignupScreen extends React.Component {
               width: width*7/10,
               fontSize: 15,
             }}
-            onChangeText={(password) => this.setState({password})}
+            onChangeText={(Password1) => this.setState({Password1})}
             value={this.state.password}
             placeholder='Password'
             secureTextEntry={true}
@@ -140,8 +170,8 @@ export default class SignupScreen extends React.Component {
               width: width*7/10,
               fontSize: 15,
             }}
-            onChangeText={(password2) => this.setState({password2})}
-            value={this.state.password2}
+            onChangeText={(Password2) => this.setState({Password2})}
+            value={this.state.Password2}
             placeholder='Re-enter Password'
             secureTextEntry={true}
             placeholderTextColor='#fff'
@@ -156,12 +186,7 @@ export default class SignupScreen extends React.Component {
             }}
             onPress = {
               () => {
-                onSignIn().then(() => {
-                  this.props.navigation.navigate("LoginScreen");
-                  this.setState({
-                    screenLoading: false,
-                  });
-                });
+                this.onSignUp();
               }
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
@@ -169,6 +194,7 @@ export default class SignupScreen extends React.Component {
           </TouchableHighlight >
         </View>
       </View >
+      </KeyboardAwareScrollView>
       </ImageBackground>
     );
   }
