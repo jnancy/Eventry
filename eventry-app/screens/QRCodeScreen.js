@@ -26,17 +26,84 @@ const height = Dimensions.get('window').height;
 export default class QRCodeScreen extends React.Component {
     constructor(props){
       super(props);
+
+      this.state ={ 
+        isLoading: true,
+        Authkey: ''
+      };
     }
 
     static navigationOptions = {
       header: null,
     };
 
+  _onRefresh() {
+    this.setState({refreshing: true});
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': "Token " + this.state.Authkey
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          EventJson: responseJson,
+        }, function(){
+          console.log('REFRESHIN');
+        });
+
+      }).then(() => {
+        this.setState({refreshing: false});
+      });
+    }
+
+  componentDidMount(){
+    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': "Token " + this.state.Authkey
+      }
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          EventJson: responseJson,
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
+
+  _getID = () =>{
+    AsyncStorage.getItem('userID', (err, Authkey) => {
+      this.setState({Authkey});
+    })
+  }
 
   render() {
+    
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          {this._getID()}
+          <ActivityIndicator/>
+        </View>
+      )
+    }
+
     const {goBack} = this.props.navigation;
     return (
       <View style={styles.container}>
+       {this._getID()}
       <Header style={{backgroundColor: 'white'}}>
           <Left>
             <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
@@ -52,7 +119,7 @@ export default class QRCodeScreen extends React.Component {
       <View style={{flex: 1,alignItems: 'center'}}>
       <Divider />
               <QRCode
-                value={("{event_id:" + this.props.navigation.state.params.value.id + ", attendee:" + this.props.navigation.state.params.value.event_name + "}").toString()}
+                value={("{\"event_id\": " + this.props.navigation.state.params.value.id + ", \"attendee\": \"" + this.props.navigation.state.params.value.event_name + "\" }").toString()}
                 size={width*0.7}
                 bgColor='grey'
                 fgColor='white'

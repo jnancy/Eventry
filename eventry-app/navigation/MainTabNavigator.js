@@ -25,6 +25,7 @@ const QRStack = createStackNavigator({
   QRCodePage: QRCodeScreen,
   LinksPage: LinksScreen,
   QRCameraPage: QRCameraScreen,
+  //Chat
   HomePage: HomeScreen,
   SignOutPage: SignOutScreen,
   ChatPage: ChatScreen

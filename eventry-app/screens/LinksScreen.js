@@ -30,7 +30,7 @@ import { ScrollView,
 
     this.state = {
       screenLoading: false,
-      event_host: '',
+      Authkey: '',
       event_name:'',
       event_description:'',
       event_price:'',
@@ -41,7 +41,8 @@ import { ScrollView,
       isStartDateTimePickerVisible: false,
       isEndDateTimePickerVisible: false,
       endDateChosen: false,
-      startDateChosen: false
+      startDateChosen: false,
+      //event_type: ['Fo', 'NT', 'PT'] 
     };
   }
 
@@ -66,25 +67,18 @@ import { ScrollView,
     this.setState({end_date});
     this._hideEndDateTimePicker();
   };
-/*
-  _getID = async () => {
-    try {
-      console.log("reached here");
-      const value = await AsyncStorage.getItem('userID');
-      if (value !== null) {
-        //this.setState({Userkey: value});
-        console.log(value);
-      }
-     } catch (error) {
-      console.log(error);
-     }
+
+  _getID = () =>{
+    AsyncStorage.getItem('userID', (err, Authkey) => {
+      this.setState({Authkey});
+    })
   }
-  */
 
   render() {
     if (this.state.screenLoading) {
       return (
         <View style = { styles.container } >
+        {this._getID()}
           <ActivityIndicator />
           <StatusBar barStyle = "default" />
         </View>
@@ -96,10 +90,6 @@ import { ScrollView,
       <View style = {{ flex: 1 }} >
 
         <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
-          {
-            /*this._getID()}
-         <Text>{this.state.Userkey}</Text>
-          */}
           <TextInput
             style={styles.TextInput}
             onChangeText={(event_name) => this.setState({event_name})}
@@ -230,14 +220,17 @@ import { ScrollView,
                 const self = this;
                 fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", {
                   method: "POST",
+                  headers: {
+                    'Authorization': 'Token ' + this.state.Authkey
+                  },
                   body: JSON.stringify({
                     event_name: self.state.event_name,
                     event_description: self.state.event_description,
                     event_price : self.state.event_price,
-                    /*event_point_location: JSON.stringify({
+                    event_point_location: JSON.stringify({
                       latitude: self.state.event_lat,
                       longitude: self.state.event_lng,
-                    }), */
+                    }),
                   }),
                   headers: new Headers({
                     "Content-Type": "application/json"
