@@ -83,10 +83,13 @@ export default class QRCodeScreen extends React.Component {
       });
   }
 
-  _getID = () =>{
-    AsyncStorage.getItem('userID', (err, Authkey) => {
-      this.setState({Authkey});
-    })
+  _getID = async () =>{
+    
+    var value = await AsyncStorage.getItem('userID');
+    if (value != null){
+      console.log(value);
+      return value;
+    }
   }
 
   render() {

@@ -43,6 +43,7 @@ export default class HomeScreen extends React.Component {
 
     this.setState({refreshing: true});
     let Authkey = await this._getID();
+    console.log(Authkey);
     fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
       method: 'GET',
       headers: {
@@ -55,10 +56,11 @@ export default class HomeScreen extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         this.setState({
+          
           isLoading: false,
-          // HAVE TO CHANGE MOVIES
           EventJson: responseJson,
         }, function(){
+          console.log(responseJson);
           console.log('REFRESHIN');
         });
 
@@ -72,29 +74,6 @@ export default class HomeScreen extends React.Component {
 
   componentDidMount(){
     this._onRefresh();
-    /*
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
-      method: 'GET',
-      headers: {
-        'Authorization': "Token " + this.state.Authkey
-      }
-    })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        //console.log("hi");
-        this.setState({
-          isLoading: false,
-          // HAVE TO CHANGE MOVIES
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-      */
   }
 
   _onSearchPressed(item){
@@ -105,11 +84,15 @@ export default class HomeScreen extends React.Component {
   };
 
   _getID = async () =>{
-    
     var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
     if (value != null){
       console.log(value);
       return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
     }
   }
 
