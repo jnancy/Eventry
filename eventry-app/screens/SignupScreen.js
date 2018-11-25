@@ -37,8 +37,8 @@ export default class SignupScreen extends React.Component {
     if (this.state.screenLoading) {
       return (
         <View style = { styles.container } >
-          <ActivityIndicator / >
-          <StatusBar barStyle = "default" / >
+          <ActivityIndicator />
+          <StatusBar barStyle = "default" />
         </View>
       );
     }

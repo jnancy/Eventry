@@ -15,6 +15,8 @@ import { ScrollView,
 
   import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
+  import { AsyncStorage } from "react-native"
+
   let {width,height} = Dimensions.get("window");
 
   export default class LinksScreen extends React.Component {
@@ -28,10 +30,10 @@ import { ScrollView,
 
     this.state = {
       screenLoading: false,
+      event_host: '',
       event_name:'',
       event_description:'',
       event_price:'',
-      event_loc: '', // get rid of
       start_date: '',
       end_date: '',
       event_lat: '',
@@ -64,6 +66,20 @@ import { ScrollView,
     this.setState({end_date});
     this._hideEndDateTimePicker();
   };
+/*
+  _getID = async () => {
+    try {
+      console.log("reached here");
+      const value = await AsyncStorage.getItem('userID');
+      if (value !== null) {
+        //this.setState({Userkey: value});
+        console.log(value);
+      }
+     } catch (error) {
+      console.log(error);
+     }
+  }
+  */
 
   render() {
     if (this.state.screenLoading) {
@@ -74,11 +90,16 @@ import { ScrollView,
         </View>
       );
     }
+  
     return (
       <ScrollView style={styles.container}>
       <View style = {{ flex: 1 }} >
 
         <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
+          {
+            /*this._getID()}
+         <Text>{this.state.Userkey}</Text>
+          */}
           <TextInput
             style={styles.TextInput}
             onChangeText={(event_name) => this.setState({event_name})}
@@ -112,7 +133,9 @@ import { ScrollView,
           onPress={(data, details) => { 
             console.log(details["geometry"]["location"]["lat"]);
             console.log(details["geometry"]["location"]["lng"]);
-            console.log(details);
+            this.setState({event_lat: details["geometry"]["location"]["lat"]});
+            this.setState({event_lng: details["geometry"]["location"]["lng"]})
+            //console.log(details);
           }}
           
           getDefaultValue={() => ''}
@@ -131,15 +154,15 @@ import { ScrollView,
               
             },
             description: {
-              fontWeight: 'bold'
+              //fontWeight: 'bold'
             },
             predefinedPlacesDescription: {
               color: '#1faadb'
             }
           }}
 
-          currentLocation={true}
-          currentLocationLabel="Current location"
+          //currentLocation={true}
+          //currentLocationLabel="Current location"
           nearbyPlacesAPI='GooglePlacesSearch'
           GoogleReverseGeocodingQuery={{
             // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
@@ -151,18 +174,7 @@ import { ScrollView,
             //types: 'food'
           }}
           />
-
-
-
-
-
-          <TextInput
-            style={styles.TextInput}
-            onChangeText={(event_loc) => this.setState({event_loc})}
-            value={this.state.event_loc}
-            placeholder="Location"
-            placeholderTextColor="#A0AAAB"
-          />
+          
           <TouchableOpacity style={{height: 40}}onPress={this._showStartDateTimePicker}>
           <Text
             style={styles.DateText}
@@ -194,7 +206,7 @@ import { ScrollView,
           onCancel={this._hideEndDateTimePicker}
           minimumDate = {this.state.startDateChosen? this.state.start_date : new Date()}
           />
-          <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date > this.state.end_date)?"you fucked up bro" : ""}</Text>
+          <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date)?"Invalid end date: Has to be after start date" : ""}</Text>
 
           <TouchableHighlight
             style = {{
@@ -205,7 +217,7 @@ import { ScrollView,
               borderRadius: 15,
             }}
             onPress = {() => {
-                let err = this.state.startDateChosen && this.state.endDateChosen && this.state.start_date > this.state.end_date
+                let err = this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date
                 if(err){
                   Alert.alert(
                     "ERROR",
@@ -221,8 +233,11 @@ import { ScrollView,
                   body: JSON.stringify({
                     event_name: self.state.event_name,
                     event_description: self.state.event_description,
-                    event_location: self.state.event_loc,
                     event_price : self.state.event_price,
+                    /*event_point_location: JSON.stringify({
+                      latitude: self.state.event_lat,
+                      longitude: self.state.event_lng,
+                    }), */
                   }),
                   headers: new Headers({
                     "Content-Type": "application/json"
