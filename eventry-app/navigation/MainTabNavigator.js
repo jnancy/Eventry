@@ -16,6 +16,7 @@ import SignOutScreen from '../screens/SignOutScreen';
 import ChatScreen from '../screens/ChatScreen';
 import OtherUserProfileScreen from '../screens/OtherUserProfileScreen';
 import UserListScreen from '../screens/UserListScreen';
+import HostedEventsScreen from '../screens/HostedEventsScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -32,7 +33,8 @@ const QRStack = createStackNavigator({
   //Chat
   HomePage: HomeScreen,
   SignOutPage: SignOutScreen,
-  ChatPage: ChatScreen
+  ChatPage: ChatScreen,
+  EventDescriptionPage: EventDescriptionScreen,
 }, {
   initialRouteName: "QRPage",
 });
@@ -89,6 +91,7 @@ export default AppDrawerNavigator = createDrawerNavigator({
   Chat: ChatStack,
   SignOut: SignOutStack,
   UserList: UserListScreen,
+  HostedList: HostedEventsScreen,
 },
 {
   contentComponent: CustomDrawerComponent,
