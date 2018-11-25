@@ -31,12 +31,12 @@ export default class QRCameraScreen extends React.Component {
         LayoutAnimation.spring();
         this.setState({ lastScannedUrl: result.data });
         // POST TO THE SERVER!!
-
+        const {goBack} = this.props.navigation;
         //this.props.navigation.navigate('HomeScreen');
         Alert.alert(
           "Done!",
           "User is checked in!",
-          [{text: 'OK', onPress: () => console.log('OK Pressed')},
+          [{text: 'OK', onPress: () => this.props.navigation.navigate('HomePage')},
            {text: 'Scan Another', onPress: () => console.log('scan another Pressed')}],
           { cancelable: false }
         );
@@ -44,8 +44,9 @@ export default class QRCameraScreen extends React.Component {
       }
     };
   
-
+    
   render() {
+    
     return (
       <View style={styles.container}>
 
