@@ -96,13 +96,13 @@ export default class UserProfileScreen extends React.Component {
           </Divider>
           <View style={{height: height*0.25, marginLeft: 10, marginRight: 10}}>
               <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
-              <Button styleName="stacked clear">
+              <Button styleName="stacked clear"  onPress={() => this.props.navigation.navigate('Hosted Events')}>
                 <Icon name="address" />
                 <SText>Hosted Events</SText>
               </Button>
-              <Button styleName="stacked clear">
+              <Button styleName="stacked clear" onPress={() => this.props.navigation.navigate('Registered Events')}>
                 <Icon name="users" />
-                <SText>Attending Events</SText>
+                <SText>Registered Events</SText>
               </Button>
               <Button styleName="stacked clear"
                       onPress={() => this.props.navigation.navigate('FavouritesPage')}>
@@ -115,21 +115,21 @@ export default class UserProfileScreen extends React.Component {
       </ParallaxScrollView>
       <ActionButton buttonColor="rgba(76,127,178,0.68)">
       <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
-        <IonIcon name="md-add" style={styles.actionButtonIcon} />
+        <IonIcon name="md-add" size={20} />
       </ActionButton.Item>
       <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
       onPress={() => this.props.navigation.navigate('Home')}>
-        <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+        <IonIcon name="ios-chatbubbles-outline" size={20} />
       </ActionButton.Item>
       <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
       onPress={() => this.props.navigation.navigate('QRCameraPage')}>
-        <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+        <IonIcon name="ios-camera-outline" size={20} />
       </ActionButton.Item>
       <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => this.props.navigation.navigate('FavouritesPage')}>
-        <IonIcon name="md-star" style={styles.actionButtonIcon} />
+        <IonIcon name="md-star" size={20} />
       </ActionButton.Item>
       <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
-        <IonIcon name="md-person" style={styles.actionButtonIcon} />
+        <IonIcon name="md-person" size={20} />
       </ActionButton.Item>
     </ActionButton>
     </View>
