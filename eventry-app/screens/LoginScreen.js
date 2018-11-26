@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
+import {Alert, TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import LoginButton from '../components/LoginButton';
