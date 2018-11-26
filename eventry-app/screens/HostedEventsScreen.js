@@ -63,7 +63,7 @@ export default class HostedEventsScreen extends React.Component {
       this.setState({Authkey: Authkey, gotID: true});
     }
     let hosting = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/hosting/';
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+    fetch(hosting, {
       method: 'GET',
       headers: {
         'Authorization': 'Token ' + this.state.Authkey,
@@ -115,17 +115,24 @@ export default class HostedEventsScreen extends React.Component {
       <TouchableOpacity
         onPress={() => this._onEventPressed(item) }>
       <Row>
+        {(item.event_media.length == 0 || item.event_media == null || item.event_media == undefined)?
         <SImage
           styleName="medium rounded-corners"
           source={{ uri: pics[Math.floor(Math.random()*10)]  }}
         />
+        :
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: item.event_media[0].image}}
+        />
+        }
         <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
         <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
             <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
               <Subtitle>{item.event_name}</Subtitle>
               <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
-                <Caption>In 3 days</Caption>
-                <Caption>LOCATION</Caption>
+                <Caption>{new Date(item.event_start_time).toString().substring(4,21)}</Caption>
+                <Caption>{item.event_address}</Caption>
               </View>
             </View>
         </View>

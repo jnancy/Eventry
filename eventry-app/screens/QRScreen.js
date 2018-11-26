@@ -109,10 +109,19 @@ export default class QRPage extends React.Component {
       <TouchableOpacity
         onPress={() => this._onEventPressed(item) }>
         <Row>
-          <SImage
-            styleName="medium rounded-corners"
-            source={{ uri: pics[Math.floor(Math.random()*10)]  }}
-          />
+
+        {(item.event_media.length == 0 || item.event_media == null || item.event_media == undefined)?
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: pics[Math.floor(Math.random()*10)]  }}
+        />
+        :
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: item.event_media[0].image}}
+        />
+        }
+
           <View style={{flexDirection:'column', flex: 1, justifyContent: 'space-around', backgroundColor: 'white', alignItems: 'center'}}>
               <View style={{flexDirection: 'row', flex: 2, backgroundColor: 'white', alignItems: 'flex-start'}}>
                 <Subtitle style={{alignSelf: 'flex-start', flex: 1}}>{item.event_name}</Subtitle>
@@ -125,6 +134,7 @@ export default class QRPage extends React.Component {
                         <Button styleName="stacked clear" style={{flex: 1}} onPress={() => this._onSearchPressed(item) }>
                           <IonIcon type="Ionicons" name="md-qr-scanner" color='black' size={30}/>
                         </Button>
+
               </View>
           </View>
         </Row>

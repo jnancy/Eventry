@@ -90,12 +90,12 @@ const CustomDrawerComponent = (props) => (
 
 export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
-  'Registered Events': QRStack,
   Profile: ProfileStack,
-  UserList: UserListScreen,
-  HostedList: HostedEventsScreen,
+  'Registered Events': QRStack,
+  //UserList: UserListScreen,
+  'Hosted Events': HostedEventsScreen,
   Notifications: NotificationScreen,
-  SignOut: SignOutStack,
+  'Sign Out': SignOutStack,
 },
 {
   contentComponent: CustomDrawerComponent,
