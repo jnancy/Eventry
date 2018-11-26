@@ -256,6 +256,7 @@ export default class EventDescriptionScreen extends React.Component {
 
     return (
       <View style={styles.container}>
+      {(this.props.navigation.state.params.value.event_media.length == 0 || this.props.navigation.state.params.value.event_media == undefined)?
       <ParallaxScrollView
         windowHeight={height * 0.4}
         backgroundSource={{uri: "https://avatars.mds.yandex.net/get-pdb/49816/f72a1ec0-94d4-426c-be58-b74f61094680/orig"}}
@@ -267,122 +268,251 @@ export default class EventDescriptionScreen extends React.Component {
         userImage='https://tickera-wpsalad.netdna-ssl.com/wp-content/themes/tickera/style/img/freebies/icons/events/6.png'
         leftIcon={<Icon name="sidebar"/>}
       >
-       <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
-        <View style={{height: height*0.1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
-            <SView styleName="horizontal">
-                <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}
-                onPress= {() =>
-                  {
-                    if(this.state.registered){
-                      this._unregister(this.props.navigation.state.params.value.id);
-                    }
-                    else{
-                      this._register(this.props.navigation.state.params.value.id);
-                    }
-                  }}>
-                  <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
-                </SButton>
-                <SButton styleName="confirmation secondary"
-                onPress= {() => this.props.navigation.navigate('UserList')}>
-                  <SText>SEE ATTENDEES</SText>
-                </SButton>
-              </SView>
-          </View>
-          <View style={{height: height*0.45, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
-            <Divider styleName="section-header"
-                     style={{backgroundColor: 'white'}}>
-              <Caption>EVENT INFORMATION</Caption>
-            </Divider>
-            <Divider style={{height: 3}}/>
-            <Subtitle styleName='bold'>Host: {this.props.navigation.state.params.value.host}</Subtitle>
-            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
-            <Subtitle styleName='bold'>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
-              <Button styleName="stacked clear">
-                <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
-                <SText>Attendees</SText>
-              </Button>
-              <Button styleName="stacked clear">
-              <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
-              <SText>Price in CAD</SText>
-              </Button>
-              <Button styleName="stacked clear">
-              <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
-              <SText>Days Away</SText>
-              </Button>
-              </View>
-              <Divider styleName="section-header"
-                       style={{backgroundColor: 'white'}}>
-                <Caption>EVENT DESCRIPTION</Caption>
-              </Divider>
-              <Divider style={{height: 3}}/>
-            <SText style={{fontSize:16, textAlign: 'center', marginLeft: 20, marginRight: 20}}>{this.props.navigation.state.params.value.event_description} {this.props.navigation.state.params.value.event_description}</SText>
-          </View>
-          <Divider styleName="section-header"
-                   style={{backgroundColor: 'white'}}>
-            <Caption>EVENT LOCATION</Caption>
-          </Divider>
-          <View style={{height: height*0.3, marginLeft: 10, marginRight: 10}}>
-             <MapView
-               style={{ height: height*0.3}}
-               initialRegion={{
-                 latitude: this.props.navigation.state.params.value.event_point_location.latitude,
-                 longitude: this.props.navigation.state.params.value.event_point_location.longitude,
-                 latitudeDelta: 0.0922,
-                 longitudeDelta: 0.0421,
-               }}>
-                <MapView.Marker
-                coordinate= {{latitude: this.props.navigation.state.params.value.event_point_location.latitude,
-                              longitude: this.props.navigation.state.params.value.event_point_location.longitude}}
-                title={this.props.navigation.state.params.value.event_name}
-                description={this.props.navigation.state.params.value.event_address}
-                />
-               </MapView>
-             </View>
-             <Divider/>
-          <View style={{height: height*0.55, justifyContent: 'center', alignItems: 'center'}}>
-          {this.gradient}
-              <ScrollView
-                style={styles.scrollview}
-                scrollEventThrottle={200}
-                directionalLockEnabled={true}
-              >
-              { example1 }
-          </ScrollView>
-          </View>
-
-          <Divider styleName="section-header"
-                   style={{backgroundColor: 'white'}}>
-            <Caption>ADDITIONAL INFORMATION</Caption>
-          </Divider>
-          <View style={{height: height*0.25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
-
-            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
-            <Button styleName="stacked clear">
-              <Icon name="email" />
-              <SText>Host Profile</SText>
-            </Button>
-            <Button styleName="stacked clear"
-              onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
-              <Icon name="users" />
-              <SText>Message Attendees</SText>
-            </Button>
-            <Button styleName="stacked clear"
-                    onPress={() => {
-                      if(this.state.favourited){
-                        this._unfavourite(this.props.navigation.state.params.value.id);
-                      }
-                      else{
-                        this._favourite(this.props.navigation.state.params.value.id);
-                      }
-                      }}>
-              <Icon name={this.state.favourited? "add-to-favorites-on" : "add-to-favorites-off"} />
-              <SText>{this.state.favourited ?'Starred': 'Star Event'}</SText>
-            </Button>
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+       <View style={{height: height*0.1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+           <SView styleName="horizontal">
+               <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}
+               onPress= {() =>
+                 {
+                   if(this.state.registered){
+                     this._unregister(this.props.navigation.state.params.value.id);
+                   }
+                   else{
+                     this._register(this.props.navigation.state.params.value.id);
+                   }
+                 }}>
+                 <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
+               </SButton>
+               <SButton styleName="confirmation secondary"
+               onPress= {() => this.props.navigation.navigate('UserList')}>
+                 <SText>SEE ATTENDEES</SText>
+               </SButton>
+             </SView>
          </View>
-          </View>
+         <View style={{height: height*0.45, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+           <Divider styleName="section-header"
+                    style={{backgroundColor: 'white'}}>
+             <Caption>EVENT INFORMATION</Caption>
+           </Divider>
+           <Divider style={{height: 3}}/>
+           <Subtitle styleName='bold'>Host: {this.props.navigation.state.params.value.host}</Subtitle>
+           <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
+           <Subtitle styleName='bold'>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
+           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
+             <Button styleName="stacked clear">
+               <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
+               <SText>Attendees</SText>
+             </Button>
+             <Button styleName="stacked clear">
+             <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
+             <SText>Price in CAD</SText>
+             </Button>
+             <Button styleName="stacked clear">
+             <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
+             <SText>Days Away</SText>
+             </Button>
+             </View>
+             <Divider styleName="section-header"
+                      style={{backgroundColor: 'white'}}>
+               <Caption>EVENT DESCRIPTION</Caption>
+             </Divider>
+             <Divider style={{height: 3}}/>
+           <SText style={{fontSize:16, textAlign: 'center', marginLeft: 20, marginRight: 20}}>{this.props.navigation.state.params.value.event_description} {this.props.navigation.state.params.value.event_description}</SText>
+         </View>
+         <Divider styleName="section-header"
+                  style={{backgroundColor: 'white'}}>
+           <Caption>EVENT LOCATION</Caption>
+         </Divider>
+         <View style={{height: height*0.3, marginLeft: 10, marginRight: 10}}>
+            <MapView
+              style={{ height: height*0.3}}
+              initialRegion={{
+                latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+                longitude: this.props.navigation.state.params.value.event_point_location.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}>
+               <MapView.Marker
+               coordinate= {{latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+                             longitude: this.props.navigation.state.params.value.event_point_location.longitude}}
+               title={this.props.navigation.state.params.value.event_name}
+               description={this.props.navigation.state.params.value.event_address}
+               />
+              </MapView>
+            </View>
+            <Divider/>
+         <View style={{height: height*0.55, justifyContent: 'center', alignItems: 'center'}}>
+         {this.gradient}
+             <ScrollView
+               style={styles.scrollview}
+               scrollEventThrottle={200}
+               directionalLockEnabled={true}
+             >
+             { example1 }
          </ScrollView>
-      </ParallaxScrollView>
+         </View>
+
+         <Divider styleName="section-header"
+                  style={{backgroundColor: 'white'}}>
+           <Caption>ADDITIONAL INFORMATION</Caption>
+         </Divider>
+         <View style={{height: height*0.25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+
+           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+           <Button styleName="stacked clear">
+             <Icon name="email" />
+             <SText>Host Profile</SText>
+           </Button>
+           <Button styleName="stacked clear"
+             onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
+             <Icon name="users" />
+             <SText>Message Attendees</SText>
+           </Button>
+           <Button styleName="stacked clear"
+                   onPress={() => {
+                     if(this.state.favourited){
+                       this._unfavourite(this.props.navigation.state.params.value.id);
+                     }
+                     else{
+                       this._favourite(this.props.navigation.state.params.value.id);
+                     }
+                     }}>
+             <Icon name={this.state.favourited? "add-to-favorites-on" : "add-to-favorites-off"} />
+             <SText>{this.state.favourited ?'Starred': 'Star Event'}</SText>
+           </Button>
+        </View>
+         </View>
+        </ScrollView>
+     </ParallaxScrollView>
+      :
+      <ParallaxScrollView
+        windowHeight={height * 0.4}
+        backgroundSource={{uri: this.props.navigation.state.params.value.event_media[0].image }}
+        navBarTitle='  '
+        navBarTitleColor='black'
+        navBarColor='white'
+        userName={this.props.navigation.state.params.value.event_name}
+        userTitle='Event Tags'
+        userImage='https://tickera-wpsalad.netdna-ssl.com/wp-content/themes/tickera/style/img/freebies/icons/events/6.png'
+        leftIcon={<Icon name="sidebar"/>}
+      >
+      <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
+       <View style={{height: height*0.1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+           <SView styleName="horizontal">
+               <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}
+               onPress= {() =>
+                 {
+                   if(this.state.registered){
+                     this._unregister(this.props.navigation.state.params.value.id);
+                   }
+                   else{
+                     this._register(this.props.navigation.state.params.value.id);
+                   }
+                 }}>
+                 <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
+               </SButton>
+               <SButton styleName="confirmation secondary"
+               onPress= {() => this.props.navigation.navigate('UserList')}>
+                 <SText>SEE ATTENDEES</SText>
+               </SButton>
+             </SView>
+         </View>
+         <View style={{height: height*0.45, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+           <Divider styleName="section-header"
+                    style={{backgroundColor: 'white'}}>
+             <Caption>EVENT INFORMATION</Caption>
+           </Divider>
+           <Divider style={{height: 3}}/>
+           <Subtitle styleName='bold'>Host: {this.props.navigation.state.params.value.host}</Subtitle>
+           <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
+           <Subtitle styleName='bold'>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
+           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
+             <Button styleName="stacked clear">
+               <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
+               <SText>Attendees</SText>
+             </Button>
+             <Button styleName="stacked clear">
+             <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
+             <SText>Price in CAD</SText>
+             </Button>
+             <Button styleName="stacked clear">
+             <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
+             <SText>Days Away</SText>
+             </Button>
+             </View>
+             <Divider styleName="section-header"
+                      style={{backgroundColor: 'white'}}>
+               <Caption>EVENT DESCRIPTION</Caption>
+             </Divider>
+             <Divider style={{height: 3}}/>
+           <SText style={{fontSize:16, textAlign: 'center', marginLeft: 20, marginRight: 20}}>{this.props.navigation.state.params.value.event_description} {this.props.navigation.state.params.value.event_description}</SText>
+         </View>
+         <Divider styleName="section-header"
+                  style={{backgroundColor: 'white'}}>
+           <Caption>EVENT LOCATION</Caption>
+         </Divider>
+         <View style={{height: height*0.3, marginLeft: 10, marginRight: 10}}>
+            <MapView
+              style={{ height: height*0.3}}
+              initialRegion={{
+                latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+                longitude: this.props.navigation.state.params.value.event_point_location.longitude,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}>
+               <MapView.Marker
+               coordinate= {{latitude: this.props.navigation.state.params.value.event_point_location.latitude,
+                             longitude: this.props.navigation.state.params.value.event_point_location.longitude}}
+               title={this.props.navigation.state.params.value.event_name}
+               description={this.props.navigation.state.params.value.event_address}
+               />
+              </MapView>
+            </View>
+            <Divider/>
+         <View style={{height: height*0.55, justifyContent: 'center', alignItems: 'center'}}>
+         {this.gradient}
+             <ScrollView
+               style={styles.scrollview}
+               scrollEventThrottle={200}
+               directionalLockEnabled={true}
+             >
+             { example1 }
+         </ScrollView>
+         </View>
+
+         <Divider styleName="section-header"
+                  style={{backgroundColor: 'white'}}>
+           <Caption>ADDITIONAL INFORMATION</Caption>
+         </Divider>
+         <View style={{height: height*0.25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
+
+           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
+           <Button styleName="stacked clear">
+             <Icon name="email" />
+             <SText>Host Profile</SText>
+           </Button>
+           <Button styleName="stacked clear"
+             onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
+             <Icon name="users" />
+             <SText>Message Attendees</SText>
+           </Button>
+           <Button styleName="stacked clear"
+                   onPress={() => {
+                     if(this.state.favourited){
+                       this._unfavourite(this.props.navigation.state.params.value.id);
+                     }
+                     else{
+                       this._favourite(this.props.navigation.state.params.value.id);
+                     }
+                     }}>
+             <Icon name={this.state.favourited? "add-to-favorites-on" : "add-to-favorites-off"} />
+             <SText>{this.state.favourited ?'Starred': 'Star Event'}</SText>
+           </Button>
+        </View>
+         </View>
+        </ScrollView>
+     </ParallaxScrollView>}
+
       <ActionButton buttonColor="rgba(76,127,178,0.68)">
       <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
         <IonIcon name="md-add" style={styles.actionButtonIcon} />

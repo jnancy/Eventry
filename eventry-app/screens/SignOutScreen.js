@@ -9,7 +9,10 @@ import { ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStora
 let {width,height} = Dimensions.get('window');
 
 export default class SettingsScreen extends React.Component {
-
+  static navigationOptions = {
+    header: null,
+  };
+  
   render() {
     return <View>
     <Header style={{backgroundColor: 'white'}}>
