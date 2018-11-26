@@ -30,20 +30,23 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 
+let attendURL = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/attending/';
+
 export default class NavigationScreen extends React.Component {
 
 	constructor(props) {
+
 		super(props);
 		this.ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
 		this.state = {
-			listViewData: Array(5).fill('').map((_,i) => ({key: `${i}`, text: `item #${i}`})),
-      isLoading: true,
+			listViewData: [],
+			isLoading: true,
       refreshing: false,
       Authkey: ''
     };
 
 		this.rowSwipeAnimatedValues = {};
-		Array(5).fill('').forEach((_, i) => {
+		Array(1).fill('').forEach((_, i) => {
 			this.rowSwipeAnimatedValues[`${i}`] = new Animated.Value(0);
 		});
 	}
@@ -83,10 +86,11 @@ export default class NavigationScreen extends React.Component {
 		const { key, value } = swipeData;
 		this.rowSwipeAnimatedValues[key].setValue(Math.abs(value));
 	}
-  _getID = async () =>{
+	_getID = async () =>{
     var value = await AsyncStorage.getItem('userID');
     console.log("here" + value);
     if (value != null){
+      console.log(value);
       return value;
     }
     else{
@@ -97,28 +101,34 @@ export default class NavigationScreen extends React.Component {
 
   async _onRefresh() {
     this.setState({refreshing: true});
-    let Authkey = await this._getID();
-    this.setState({Authkey: Authkey});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/', {
-      method: 'GET',
-      headers: {
-        'Authorization': 'Token ' + this.state.Authkey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      credentials: 'include'
-    })
+    if(!this.state.gotID){
+      let Authkey = await this._getID();
+      this.setState({Authkey: Authkey, gotID: true});
+    }
+    this.setState({unfav: new Map()})
+    console.log("This is saved!!:" + this.state.Authkey);
+    fetch(attendURL, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Token ' + this.state.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
       .then((response) => response.json())
       .then((responseJson) => {
-
+	 			var len = responseJson.length;
         this.setState({
           isLoading: false,
           EventJson: responseJson,
+					listViewData:  Array(len).fill('').map((_,i) => ({key: `${i}`, text: `item #${i}`}))
         }, function(){
           console.log('REFRESHIN');
         });
 
       }).then(() => {
+        //console.log(this.state.EventJson);
         this.setState({refreshing: false});
       });
     }
@@ -160,7 +170,6 @@ export default class NavigationScreen extends React.Component {
                   style={{width: 73, height: 73}}
                 />
                 <SText>Today</SText>
-                <Title style={{fontWeight: 'bold'}}>11:45</Title>
             </View>
 
             <View style={{flex: 4, padding: 5}}>
@@ -173,7 +182,7 @@ export default class NavigationScreen extends React.Component {
                     <Title styleName='bold' style={{marginLeft: 10, color: rcolor}}>eventry-bot</Title>
                 </View>
                 <View style={{flexDirection: 'row', backgroundColor: 'white', flex: 4, marginLeft: 20, marginRight: 20}}>
-                  <Subtitle styleName="top">This is the content of the notification, is there something else that is supposed to also be here or nah?</Subtitle>
+                  <Subtitle styleName="top">You are attending {this.state.EventJson[data.key].host}'s event: {this.state.EventJson[data.key].event_name} at {this.state.EventJson[data.key].event_address}!</Subtitle>
                 </View>
             </View>
             </View>
