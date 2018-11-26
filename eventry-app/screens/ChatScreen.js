@@ -12,7 +12,7 @@ export default class MyChat extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      ROOM_ID: this.props.navigation.state.params.value.room_id,
+      ROOM_ID: this.props.navigation.state.params.value.room_id.toString(),
       USER_NAME: this.props.navigation.state.params.pk,
       messages: [{
           _id: "id",
