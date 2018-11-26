@@ -176,19 +176,19 @@ export default class UserListScreen extends React.Component {
               <IonIcon name="md-add" size={20} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
-            onPress={() => this.props.navigation.navigate('Home')}>
+            onPress={() => this.props.navigation.navigate('Notifications')}>
               <IonIcon name="ios-chatbubbles-outline" size={20} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
             onPress={() => this.props.navigation.navigate('QRCameraPage')}>
               <IonIcon name="ios-camera-outline" size={20}/>
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {this.props.navigation.navigate('FavouritesPage')}}>
               <IonIcon name="md-star" size={20} />
             </ActionButton.Item>
-            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
+            {/* <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
               <IonIcon name="md-person" size={20} />
-            </ActionButton.Item>
+            </ActionButton.Item> */}
           </ActionButton>
       </View>
     );
