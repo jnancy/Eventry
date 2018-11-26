@@ -31,7 +31,9 @@ export default class UserListScreen extends React.Component {
       this.state ={ 
         isLoading: true, 
         refreshing: false,
-        UserJson: ''};
+        UserJson: '',
+        empty: false,
+      };
     }
 
   static navigationOptions = {
@@ -67,6 +69,7 @@ export default class UserListScreen extends React.Component {
         this.setState({
           isLoading: false,
           UserJson: responseJson,
+          empty: (responseJson.length == 0)
         })
         console.log("###########RESPONSE############");
         console.log(responseJson);
@@ -167,6 +170,7 @@ export default class UserListScreen extends React.Component {
               renderItem={({item}) => this.renderRow(item)}
               keyExtractor={(item, index) => index}
             />
+            <Text>{this.state.empty?"No event attendees yet..":''}</Text>
             <ActionButton buttonColor="rgba(76,127,178,0.68)">
             <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
               <IonIcon name="md-add" size={20} />
