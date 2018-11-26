@@ -261,9 +261,7 @@ export default class EventDescriptionScreen extends React.Component {
          );
      }
 
-  render() {
-    //this._isFavourite();
-    
+  render() {    
     const example1 = this.mainExample(1, 'Event photos uploaded by host');
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 
