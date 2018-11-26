@@ -1,5 +1,5 @@
 import React from 'react';
-import {KeyboardAvoidingView, TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
+import {Alert, KeyboardAvoidingView, TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import LoginButton from '../components/LoginButton';
@@ -50,6 +50,8 @@ export default class SignupScreen extends React.Component {
         'email' : this.state.Email,
         'password1' : this.state.Password1,
         'password2' : this.state.Password2,
+        "first_name" : this.state.FirstName,
+        "last_name": this.state.LastName,
       }),
     }
     fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/registration/', data).then(response => response.json()).then(json => this.checkResp(json));
@@ -62,8 +64,8 @@ export default class SignupScreen extends React.Component {
     }
     else{
       Alert.alert(
-        "POST Response",
-        JSON.stringify(responseData),
+        "Signup Failed",
+        JSON.stringify(json),
         [{text: 'OK', onPress: () => console.log('OK Pressed')}],
         { cancelable: false }
       );
@@ -132,7 +134,7 @@ export default class SignupScreen extends React.Component {
               width: width*7/10,
               fontSize: 15,
             }}
-            onChangeText={(lastName) => this.setState({lastName})}
+            onChangeText={(LastName) => this.setState({LastName})}
             value={this.state.lastName}
             placeholder='Last Name'
             placeholderTextColor='#fff'
