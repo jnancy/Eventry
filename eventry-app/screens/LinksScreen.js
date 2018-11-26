@@ -10,14 +10,14 @@ import { ScrollView,
   Alert,
   ActivityIndicator,
   Image,
-  StatusBar } from "react-native";
+  StatusBar,
+  Platform } from "react-native";
   import DateTimePicker from 'react-native-modal-datetime-picker';
   import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
   import { AsyncStorage } from "react-native"
-  import { ImagePicker } from 'expo';
+  import { ImagePicker, Permissions } from 'expo';
   import ActionButton from 'react-native-circular-action-menu';
   import IonIcon from 'react-native-vector-icons/Ionicons';
-  import ParallaxScrollView from 'react-native-parallax-scrollview';
 
   let {width,height} = Dimensions.get("window");
 
@@ -46,6 +46,8 @@ import { ScrollView,
       endDateChosen: false,
       startDateChosen: false,
       image: [],
+      event_max_capacity: '',
+
     };
   }
 
@@ -73,9 +75,8 @@ import { ScrollView,
 
   _getID = async () =>{
     var value = await AsyncStorage.getItem('userID');
-    console.log("here" + value);
     if (value != null){
-      console.log(value);
+      //console.log(value);
       return value;
     }
     else{
@@ -88,18 +89,70 @@ import { ScrollView,
     if(!this.state.gotID){
       let Authkey = await this._getID();
       this.setState({Authkey: Authkey, gotID: true});
-    }
+    } 
       //console.log("hereeee " + (this.state.start_date).format(Date));
       //console.log("hereeee " + (this.state.end_date).format(Date));
       const self = this;
+      //var test = new FormData();
+      // test.append('event_name' , 'somethin');
+      // test.append('event_description', 'im tired');
+      // test.append('event_price', '2');
+      // test.append('event_point_location', JSON.stringify({latitude: self.state.event_lat, longitude: self.state.event_lng}));
+      // test.append('event_start_time', self.state.start_date);
+      // test.append('event_end_time', self.state.end_date);
+      // test.append('event_media', self.state.image);
+      // test.append('event_pic', {uri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540niloo9876%252Feventry-app/ImagePicker/5d8a3d75-0c3a-4850-8fc5-cbf5bc3613e7.jpg', name: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540niloo9876%252Feventry-app/ImagePicker/5d8a3d75-0c3a-4850-8fc5-cbf5bc3613e7.jpg', type: 'image/jpg'});
+      // console.log(test);
+
+
+
+       var formData = new FormData();
+      // formData.append('event_name' , self.state.event_name);
+      // formData.append('event_description', self.state.event_description);
+      // formData.append('event_price', self.state.event_price);
+      // formData.append('event_point_location', JSON.stringify({latitude: self.state.event_lat, longitude: self.state.event_lng}));
+      // formData.append('event_start_time', self.state.start_date);
+      // formData.append('event_end_time', self.state.end_date);
+      // formData.append('event_media', self.state.image);
+      
+      var length = 1;
+      //console.log(length);
+       for(var i = 0; i< length; i++){
+        formData.append('event_pic', {uri: self.state.image[0].uri, name: self.state.image[0].uri, type: 'image/jpg'});
+      }
+      console.log(formData);
+
+      /*
+       var request = new XMLHttpRequest();
+      request.onreadystatechange = (e) => {
+        if (request.readyState !== 4) {
+          return;
+        }
+
+        if (request.status === 200) {
+          console.log('success', request.responseText);
+        } else {
+          console.warn('error');
+        }
+      }; 
+      request.open("POST", "http://eventry-dev.us-west-2.elasticbeanstalk.com/events/");
+      request.setRequestHeader('Authorization', 'Token ' + this.state.Authkey);
+      request.setRequestHeader('Content-Type', 'multipart/form-data; boundary=---------------------------7692764ac82');
+      request.send(test);
+      console.log(request.response);
+      
+      */
+
       fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", 
           {
             method: "POST",
             headers: {
             'Authorization': 'Token ' + this.state.Authkey,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
             },
-            body: JSON.stringify({
+             body:
+             JSON.stringify({
               event_name: self.state.event_name,
               event_description: self.state.event_description,
               event_price : self.state.event_price,
@@ -109,16 +162,44 @@ import { ScrollView,
               }),
               event_start_time: self.state.start_date,
               event_end_time: self.state.end_date,
+              //event_media: self.state.image,
+              event_address: self.state.event_location,
+              // event_pic: this.state.image
             }),
           })
           .then(response => response.json())
           .then((responseData) => {
-            Alert.alert(
-            "POST Response",
-            JSON.stringify(responseData),
-              [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-              { cancelable: false }
-            );
+            //console.log("parent " + responseData.toString());
+              var length = self.state.image.length;
+              //console.log(length);
+              for(var i =0; i< length; i++){
+                var formData = new FormData();
+                formData.append('event_media', {uri: self.state.image[i].uri, name: self.state.image[i].uri, type: 'image/jpg'});
+                  let url = "http://eventry-dev.us-west-2.elasticbeanstalk.com/events/" + responseData.id + "/add_image/" 
+                  fetch(url,
+                  {
+                    method: "POST",
+                    headers: {
+                  'Authorization': 'Token ' + this.state.Authkey,
+                  'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary7MA',
+                  'Accept': 'application/json, text/plain, */*'
+                  },
+                    body:formData
+                  }).then(response => response.json())
+                  .then((responseData) => {
+                    //console.log("child " + i.toString() + responseData.toString());
+                  }).catch((error) => {
+                    console.error(error);
+                  });
+              }
+
+            // Alert.alert(
+            // "POST Response",
+            // JSON.stringify(responseData),
+            //   [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+            //   { cancelable: false }
+            // );
+            
           })
           .catch((error) => {
           console.error(error);
@@ -126,37 +207,53 @@ import { ScrollView,
           this.setState({
           screenLoading: false,
           });
+
+           
     }
     
-    _renderImages() {
-      let images = [];
-      //let remainder = 4 - (this.state.devices % 4);
-      this.state.image.map((item, index) => {
-        images.push(
-          /*<Image
-            key={index}
-            source={{ uri: item }}
-            style={{ width: 100, height: 100 }}
-          />*/
-          console.log("image" + index)
-        );
-      });
-      return images;
-    }
+    // _renderImages() {
+    //   let images = [];
+    //   //let remainder = 4 - (this.state.devices % 4);
+    //   this.state.image.map((item, index) => {
+    //     images.push(
+    //       /*<Image
+    //         key={index}
+    //         source={{ uri: item }}
+    //         style={{ width: 100, height: 100 }}
+    //       />*/
+    //       console.log("image" + index)
+    //     );
+    //   });
+    //   return images;
+    // }
 
     
   _pickImage = async () => {
+
+    console.log("picking an image");
+    if(Platform.OS === 'ios'){
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      this.setState({
+        hasCameraPermission: status === 'granted',
+      });
+    }
     let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: false,
+      allowsEditing: true,
       aspect: [4, 3],
     });
 
-    console.log(result);
-
+    //console.log(result);
+   /* let pic = {
+      uri: result.uri,
+      name: result.uri,
+      type: result.type,
+    }*/
+    //console.log(pic);
     if (!result.cancelled) {
       this.setState({ 
-        image: this.state.image.concat([result.uri])
+        image: this.state.image.concat([result])
     });
+    //console.log(this.state.image);
   };
 }
 
@@ -201,6 +298,14 @@ import { ScrollView,
             placeholderTextColor="#A0AAAB"
           />
 
+          <TextInput
+            style={styles.TextInput}
+            onChangeText={(event_max_capacity) => this.setState({event_max_capacity})}
+            value={this.state.event_max_capacity}
+            placeholder="Event Maximum Capacity"
+            placeholderTextColor="#A0AAAB"
+          />
+
         <GooglePlacesAutocomplete
           placeholder='Location'
           minLength={2}
@@ -209,13 +314,13 @@ import { ScrollView,
           fetchDetails={true}
           renderDescription={row => row.description}
           onPress={(data, details) => { 
-            console.log(details["geometry"]["location"]["lat"]);
-            console.log(details["geometry"]["location"]["lng"]);
+            //console.log(details["geometry"]["location"]["lat"]);
+            //console.log(details["geometry"]["location"]["lng"]);
             this.setState({event_lat: details["geometry"]["location"]["lat"]});
             this.setState({event_lng: details["geometry"]["location"]["lng"]})
             //console.log(details);
             this.setState({event_location: data["structured_formatting"]["main_text"]});
-            console.log(data);
+            //console.log(data);
           }}
           
           getDefaultValue={() => ''}

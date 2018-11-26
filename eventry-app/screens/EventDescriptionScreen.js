@@ -46,7 +46,7 @@ export default class EventDescriptionScreen extends React.Component {
       this.state = {
           slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
           registered: false,
-          favourited: false,
+          //favourited: false,
         }
     }
 
@@ -141,12 +141,6 @@ export default class EventDescriptionScreen extends React.Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-          Alert.alert(
-            "Status",
-            responseJson.status,
-            [{text: 'Ok', onPress: () => {}}],
-            { cancelable: false }
-          );
           this.setState({favourited: false});
           console.log(responseJson);
           this.setState({isLoading: false});
@@ -170,12 +164,6 @@ export default class EventDescriptionScreen extends React.Component {
         })
         .then((response) => response.json())
         .then((responseJson) => {
-          Alert.alert(
-            "Status",
-            responseJson.status,
-            [{text: 'Ok', onPress: () => {}}],
-            { cancelable: false }
-          );
           this.setState({favourited: true});
           console.log(responseJson);
           this.setState({isLoading: false});
@@ -184,6 +172,30 @@ export default class EventDescriptionScreen extends React.Component {
           console.error(error);
         });
     }
+
+    componentDidMount(){
+      console.log("In EventDescriptionScreen");
+      let unfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + this.props.navigation.state.params.value.id + "/is_favourite/"
+      console.log(unfavURL);
+      fetch(unfavURL, {
+        method: 'GET',
+        headers: {
+          'Authorization': "Token " + this.props.navigation.state.params.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({favourited: responseJson.is_favourite});
+          console.log(responseJson.is_favourite);
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+    }
+
     _renderLightItem ({item, index}) {
         return <SliderEntry data={item} even={false} />;
     }
@@ -246,9 +258,10 @@ export default class EventDescriptionScreen extends React.Component {
      }
 
   render() {
+    //this._isFavourite();
+    
     const example1 = this.mainExample(1, 'Event photos uploaded by host');
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
-    console.log("In EventDescriptionScreen");
 
     return (
       <View style={styles.container}>
