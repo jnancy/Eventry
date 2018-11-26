@@ -5,11 +5,11 @@ import { Ionicons } from '@expo/vector-icons';
 import LoginButton from '../components/LoginButton';
 import FBLoginButton from '../components/FBLoginButton'
 import { onSignIn, storeUserID } from '../auth/fakeAuth';
+import { Permissions, Notifications } from 'expo';
 
 const ANDROID_CLIENT_ID = '197432669439-5p52pkenhoc55j57h1p59sr664io7bd9.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '197432669439-n45mkfg71nala1pu0vv0se9vrls5vst8.apps.googleusercontent.com';
 
-import {Permissions, Notifications} from 'expo';
 
 const FBSDK = require('react-native-fbsdk');
 const {LoginManager} = FBSDK;
@@ -25,7 +25,8 @@ export default class LoginScreen extends React.Component {
       successfulAuth: false,
       screenLoading: false,
       username:'',
-      password:''
+      password:'',
+      Authkey: '',
     };
     this.signIn = this.signIn.bind(this);
   }
@@ -61,11 +62,60 @@ export default class LoginScreen extends React.Component {
       console.log("err: " + err);
     }
   }
+
+  async _registerForPushNotificationsAsync() {
+      const { status: existingStatus } = await Permissions.getAsync(
+        Permissions.NOTIFICATIONS
+      );
+      let finalStatus = existingStatus;
+    
+      // only ask if permissions have not already been determined, because
+      // iOS won't necessarily prompt the user a second time.
+      if (existingStatus !== 'granted') {
+        // Android remote notification permissions are granted during the app
+        // install, so this will only ask on iOS
+        const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+        finalStatus = status;
+      }
+    
+      // Stop here if the user did not grant permissions
+      if (finalStatus !== 'granted') {
+        return;
+      }
+    
+      // Get the token that uniquely identifies this device
+      let token = await Notifications.getExpoPushTokenAsync();
+      console.log("The auth key here " + this.state.Authkey);
+      // POST the token to your backend server from where you can retrieve it to send push notifications.
+      return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/users/update_expo_token', {
+        method: 'POST',
+        headers: {
+          'Authorization': "Token " + this.state.Authkey,
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          expo_push_token: token,
+        })
+      }).then((response) => response.json())
+      .then((responseJson) => {
+        
+          console.log(responseJson);
+
+      }).then(() => {
+
+      }).catch((error) =>{
+        console.error(error);
+      });
+    }
+
   checkResp = (json) => {
     console.log("Resp:" + JSON.stringify(json) );
     if(json.hasOwnProperty('key')){
+      this.setState({Authkey: json.key});
       onSignIn(json.key);
       console.log("auth successful");
+      //this._registerForPushNotificationsAsync();
       this.props.navigation.navigate("SignedIn");
     }
     else{
@@ -179,10 +229,11 @@ export default class LoginScreen extends React.Component {
               borderRadius: 15,
             }}
             onPress = {
-              () => {
+               () => {
                 this.signInRegular().then(() => {
                   if (this.state.successfulAuth === true) {
                     console.log("auth successful");
+                    //this._registerForPushNotificationsAsync();
                     this.props.navigation.navigate("SignedIn");
                   } else {
                     console.log("failed auth");
@@ -237,6 +288,7 @@ export default class LoginScreen extends React.Component {
                 this.signInWithGoogleAsync().then(() => {
                   if (this.state.successfulAuth === true) {
                     console.log("auth successful");
+                    //this._registerForPushNotificationsAsync();
                     this.props.navigation.navigate("SignedIn");
                   } else {
                     console.log("failed auth");
