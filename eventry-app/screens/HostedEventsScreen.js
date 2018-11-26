@@ -31,8 +31,8 @@ const height = Dimensions.get('window').height;
 export default class HostedEventsScreen extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ 
-        isLoading: true, 
+      this.state ={
+        isLoading: true,
         refreshing: false,
         gotID: false,
         Authkey: ''

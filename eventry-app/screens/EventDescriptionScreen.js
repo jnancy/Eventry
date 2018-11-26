@@ -229,7 +229,8 @@ export default class EventDescriptionScreen extends React.Component {
               <Icon name="email" />
               <SText>Message Host</SText>
             </Button>
-            <Button styleName="stacked clear">
+            <Button styleName="stacked clear"
+              onPress={() => this.props.navigation.navigate('ChatPage', {value: this.props.navigation.state.params.value})}>
               <Icon name="users" />
               <SText>Message Attendees</SText>
             </Button>
