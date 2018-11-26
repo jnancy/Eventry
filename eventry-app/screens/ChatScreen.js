@@ -1,4 +1,5 @@
 import React from "react";
+import { AsyncStorage } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import Chatkit from "@pusher/chatkit-client";
 
@@ -11,8 +12,8 @@ export default class MyChat extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      ROOM_ID: CHATKIT_ROOM_ID,
-      USER_NAME: CHATKIT_USER_NAME,
+      ROOM_ID: this.props.navigation.state.params.value.room_id,
+      USER_NAME: this.props.navigation.state.params.pk,
       messages: [{
           _id: "id",
           text: "Welcome to the chat for " + this.props.navigation.state.params.value.event_name,
@@ -26,32 +27,15 @@ export default class MyChat extends React.Component {
       }]
     }
   }
-
-  _getID = async () =>{
-    var value = await AsyncStorage.getItem('userName');
-    console.log("here" + value);
-    if (value != null){
-      console.log(value);
-      return value;
-    }
-    else{
-      //default key
-      return "test";
-    }
-  }
-
   componentDidMount() {
-    if(this.props.navigation.state.params.value.roomid > 0){
-      this.setState({ROOM_ID: this.props.navigation.state.params.value.roomid.toString()});
-      this.setState({USER_NAME: this._getID()})
-    }
+    console.log("USERNAME" + this.state.USER_NAME);
     const tokenProvider = new Chatkit.TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
     });
 
     const chatManager = new Chatkit.ChatManager({
       instanceLocator: CHATKIT_INSTANCE_LOCATOR,
-      userId: CHATKIT_USER_NAME,
+      userId: this.state.USER_NAME,
       tokenProvider: tokenProvider
     });
 
@@ -85,7 +69,7 @@ export default class MyChat extends React.Component {
   onSend([message]) {
     this.currentUser.sendMessage({
       text: message.text,
-      roomId: CHATKIT_ROOM_ID
+      roomId: this.state.ROOM_ID
     });
   }
 
@@ -95,7 +79,7 @@ export default class MyChat extends React.Component {
         messages={this.state.messages}
         onSend={messages => this.onSend(messages)}
         user={{
-          _id: CHATKIT_USER_NAME
+          _id: this.state.USER_NAME
         }}
       />
     );
