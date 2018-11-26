@@ -314,7 +314,19 @@ export default class EventDescriptionScreen extends React.Component {
                  <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
                </SButton>
                <SButton styleName="confirmation secondary"
-               onPress= {() => this.props.navigation.navigate('UserList')}>
+               onPress= {() => 
+               {
+                console.log("PRESSED");
+                const event = this.props.navigation.state.params.value; 
+               const Authkey = this.props.navigation.state.params.Authkey; 
+               console.log("Authkey: " + Authkey); 
+               console.log("Event: " + event);  
+               console.log("PRINT");
+               this.props.navigation.navigate(
+                  'UserList', 
+                  {value: event, 
+                  Authkey : Authkey })}}
+               >
                  <SText>SEE ATTENDEES</SText>
                </SButton>
              </SView>
@@ -442,7 +454,18 @@ export default class EventDescriptionScreen extends React.Component {
                  <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
                </SButton>
                <SButton styleName="confirmation secondary"
-               onPress= {() => this.props.navigation.navigate('UserList')}>
+               onPress= {() => {
+                console.log("PRESSED");
+                const event = this.props.navigation.state.params.value; 
+               const Authkey = this.props.navigation.state.params.Authkey; 
+               console.log("Authkey: " + Authkey); 
+               console.log("Event: " + event);  
+               console.log("PRINT");
+               this.props.navigation.navigate(
+                  'UserList', 
+                  {value: event, 
+                  Authkey : Authkey })}}
+                 >
                  <SText>SEE ATTENDEES</SText>
                </SButton>
              </SView>
