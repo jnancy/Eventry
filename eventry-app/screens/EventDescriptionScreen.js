@@ -490,10 +490,6 @@ export default class EventDescriptionScreen extends React.Component {
              <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
              <SText>Price in CAD</SText>
              </Button>
-             <Button styleName="stacked clear">
-             <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
-             <SText>Days Away</SText>
-             </Button>
              </View>
              <Divider styleName="section-header"
                       style={{backgroundColor: 'white'}}>

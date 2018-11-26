@@ -56,7 +56,7 @@ const ProfileStack = createStackNavigator({
 });
 
 const SignOutStack = createStackNavigator({
-  UserProfilePage: UserProfileScreen,
+  UserProfilePage: ProfileStack,
   LinksPage: LinksScreen,
   QRCameraPage: QRCameraScreen,
   FavouritesPage: FavouritesScreen,
@@ -67,7 +67,7 @@ const SignOutStack = createStackNavigator({
 });
 
 const ChatStack = createStackNavigator({
-  UserProfilePage: UserProfileScreen,
+  UserProfilePage: ProfileStack,
   LinksPage: LinksScreen,
   QRCameraPage: QRCameraScreen,
   FavouritesPage: FavouritesScreen,
