@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Linking, Dimensions, LayoutAnimation, Text, View, StatusBar, StyleSheet, TouchableOpacity } from 'react-native';
 import { BarCodeScanner, Permissions } from 'expo';
+import { AsyncStorage } from "react-native";
 
 export default class QRCameraScreen extends React.Component {
     constructor(props){
@@ -26,6 +27,19 @@ export default class QRCameraScreen extends React.Component {
       });
     };
 
+    _getID = async () =>{
+      var value = await AsyncStorage.getItem('userID');
+      console.log("here" + value);
+      if (value != null){
+        console.log(value);
+        return value;
+      }
+      else{
+        //default key
+        return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+      }
+    }
+
    async _checkinUser(qrcode){
       this.setState({refreshing: true});
       let Authkey = await this._getID();
@@ -40,14 +54,14 @@ export default class QRCameraScreen extends React.Component {
         },
         credentials: 'include',
         body: JSON.stringify({
-          QRcode: qrcode
+          QRcode: qrcode.toString()
         }),
       })
       .then((response) => response.json())
       .then((responseJson) => {
         Alert.alert(
           "Status",
-          responseJson,
+          responseJson.status,
           [{text: 'Go back Home', onPress: () => this.props.navigation.navigate('HomePage')},
            {text: 'Scan Another', onPress: () => console.log('scan another Pressed')}],
           { cancelable: false }
