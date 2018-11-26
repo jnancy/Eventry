@@ -1,7 +1,6 @@
 import { AsyncStorage } from "react-native";
 //import * as firebase from 'firebase';
 
-export const USER_KEY = "auth-demo-key";
 let keys = ['userID'];
 
 export const onSignIn = (userkey) => {
@@ -50,7 +49,7 @@ export const onSignOut = async () => {
 
 export const isSignedIn = () => {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(USER_KEY)
+    AsyncStorage.getItem('userID')
       .then(res => {
         if (res !== null) {
           resolve(true);

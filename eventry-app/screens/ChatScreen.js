@@ -28,7 +28,7 @@ export default class MyChat extends React.Component {
     }
   }
   componentDidMount() {
-    console.log("USERNAME" + this.state.USER_NAME);
+    console.log("USERNAME " + this.state.USER_NAME);
     const tokenProvider = new Chatkit.TokenProvider({
       url: CHATKIT_TOKEN_PROVIDER_ENDPOINT
     });
@@ -51,14 +51,15 @@ export default class MyChat extends React.Component {
   }
 
   onReceive(data) {
-    const { id, senderId, text, createdAt } = data;
+    const { id, senderId, sender, text, createdAt } = data;
+
     const incomingMessage = {
       _id: id,
       text: text,
       createdAt: new Date(createdAt),
       user: {
         _id: senderId,
-        name: senderId,
+        name: sender.name,
       }
     };
     this.setState(previousState => ({

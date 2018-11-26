@@ -68,6 +68,14 @@ export default class LoginScreen extends React.Component {
       console.log("auth successful");
       this.props.navigation.navigate("SignedIn");
     }
+    else{
+      Alert.alert(
+      "Login Failed",
+      JSON.stringify(json),
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      );
+    }
 
   }
 
