@@ -126,7 +126,7 @@ export default class EventDescriptionScreen extends React.Component {
           console.error(error);
         });
     }
-  
+
     _unfavourite(id){
       let unfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + id + "/unfavourite/"
       console.log(unfavURL);
@@ -267,7 +267,7 @@ export default class EventDescriptionScreen extends React.Component {
         <View style={{height: height*0.1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
             <SView styleName="horizontal">
                 <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}
-                onPress= {() => 
+                onPress= {() =>
                   {
                     if(this.state.registered){
                       this._unregister(this.props.navigation.state.params.value.id);
@@ -356,7 +356,7 @@ export default class EventDescriptionScreen extends React.Component {
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
             <Button styleName="stacked clear">
               <Icon name="email" />
-              <SText>Message Host</SText>
+              <SText>Host Profile</SText>
             </Button>
             <Button styleName="stacked clear">
               <Icon name="users" />
@@ -372,7 +372,7 @@ export default class EventDescriptionScreen extends React.Component {
                       }
                       }}>
               <Icon name={this.state.favourited? "add-to-favorites-on" : "add-to-favorites-off"} />
-              <SText>{this.state.favourited ?'Stared': 'Star Event'}</SText>
+              <SText>{this.state.favourited ?'Starred': 'Star Event'}</SText>
             </Button>
          </View>
           </View>
