@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {AsyncStorage} from 'react-native';
 import { ImageBackground, Tile, Card, TouchableOpacity, InlineGallery, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 import {Header, Left, Right, Container, Body} from 'native-base'
 import {View as SView, Text as SText, Image as SImage, Button as SButton} from '@shoutem/ui'
@@ -40,6 +41,7 @@ const height = Dimensions.get('window').height;
 const IS_ANDROID = Platform.OS === 'android';
 const SLIDER_1_FIRST_ITEM = 1;
 
+
 export default class EventDescriptionScreen extends React.Component {
     constructor(props){
       super(props);
@@ -47,6 +49,8 @@ export default class EventDescriptionScreen extends React.Component {
           slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
           registered: false,
           favourited: false,
+          pk: '',
+          gotPK: false
         }
     }
 
@@ -358,7 +362,8 @@ export default class EventDescriptionScreen extends React.Component {
               <Icon name="email" />
               <SText>Host Profile</SText>
             </Button>
-            <Button styleName="stacked clear">
+            <Button styleName="stacked clear"
+              onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
               <Icon name="users" />
               <SText>Message Attendees</SText>
             </Button>

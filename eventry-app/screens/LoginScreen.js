@@ -6,11 +6,6 @@ import LoginButton from '../components/LoginButton';
 import FBLoginButton from '../components/FBLoginButton'
 import { onSignIn, storeUserID } from '../auth/fakeAuth';
 
-/*import {
-  ANDROID_CLIENT_ID,
-  IOS_CLIENT_ID
-} from 'react-native-dotenv';*/
-
 const ANDROID_CLIENT_ID = '197432669439-5p52pkenhoc55j57h1p59sr664io7bd9.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '197432669439-n45mkfg71nala1pu0vv0se9vrls5vst8.apps.googleusercontent.com';
 
@@ -72,6 +67,14 @@ export default class LoginScreen extends React.Component {
       onSignIn(json.key);
       console.log("auth successful");
       this.props.navigation.navigate("SignedIn");
+    }
+    else{
+      Alert.alert(
+      "Login Failed",
+      JSON.stringify(json),
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      );
     }
 
   }

@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
+import {KeyboardAvoidingView, TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import LoginButton from '../components/LoginButton';
@@ -59,6 +59,14 @@ export default class SignupScreen extends React.Component {
     console.log("Resp:" + JSON.stringify(json) );
     if(json.hasOwnProperty('key')){
       this.props.navigation.navigate("LoginScreen");
+    }
+    else{
+      Alert.alert(
+        "POST Response",
+        JSON.stringify(responseData),
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      );
     }
   }
 
@@ -191,6 +199,22 @@ export default class SignupScreen extends React.Component {
             }
             underlayColor = "rgba(115, 115, 115, 0.63)" >
             <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> SIGNUP </Text>
+          </TouchableHighlight >
+          <TouchableHighlight
+            style = {{
+              backgroundColor: "rgba(255, 255, 255, 0.51)",
+              width: width * (7 / 10),
+              padding: 10,
+              marginTop: 20,
+              borderRadius: 15,
+            }}
+            onPress = {
+              () => {
+                this.props.navigation.navigate("LoginScreen");
+              }
+            }
+            underlayColor = "rgba(115, 115, 115, 0.63)" >
+            <Text style={{textAlign: 'center', color: '#425187', fontSize: 15, fontWeight: 'bold'}}> LOGIN </Text>
           </TouchableHighlight >
         </View>
       </View >
