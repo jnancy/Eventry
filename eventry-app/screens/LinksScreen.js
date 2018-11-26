@@ -291,11 +291,7 @@ import { ScrollView,
             TextColor='#A0AAAB'
           > Pick an image</Text>
           </TouchableOpacity>
-         {/* <View>
-          {this._renderImages()}}
-          </View>*/
-         }
-          
+                  
           <TouchableHighlight
             style = {{
               backgroundColor: "#C6E9ED",
