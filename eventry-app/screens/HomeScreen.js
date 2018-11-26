@@ -6,11 +6,12 @@ import {
   View,
   RefreshControl,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 
 import { AsyncStorage } from "react-native"
-
+import { Constants, Location, Permissions } from 'expo';
 import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
 import { Header, Left, Right, Container, Body} from 'native-base'
@@ -33,19 +34,45 @@ export default class HomeScreen extends React.Component {
     this.state ={
       isLoading: true,
       refreshing: false,
-      gotID: false};
+      gotID: false,
+      Authkey: '',
+      location: null,
+      errorMessage: null,
+    };
   }
 
     static navigationOptions = {
       header: null,
     };
 
+  componentWillMount() {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      this.setState({
+        errorMessage: 'Try it on your device!',
+        });
+    } else {
+      this._getLocationAsync();
+    }
+  }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+  };
+
   async _onRefresh() {
 
     this.setState({refreshing: true});
     let Authkey = await this._getID();
-    console.log(Authkey);
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+    this.setState({Authkey: Authkey});
+    console.log("PRINT" + Authkey);
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/', {
       method: 'GET',
       headers: {
         'Authorization': "Token " + Authkey,
@@ -61,7 +88,7 @@ export default class HomeScreen extends React.Component {
           isLoading: false,
           EventJson: responseJson,
         }, function(){
-          console.log(responseJson);
+          //console.log(responseJson);
           console.log('REFRESHIN');
         });
 
@@ -101,8 +128,39 @@ export default class HomeScreen extends React.Component {
     const event = item;
     console.log(item);
     this.props.navigation.navigate('EventDescriptionPage',
-      {value: event});
+      { 
+        value: event,
+        Authkey: this.state.Authkey
+      });
   };
+
+  _register(item){
+    let regURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + item.id + "/register/"
+    console.log(regURL);
+    fetch(regURL, {
+      method: 'POST',
+      headers: {
+        'Authorization': "Token " + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        Alert.alert(
+          "Status",
+          responseJson.status,
+          [{text: 'Ok', onPress: () => {}}],
+          { cancelable: false }
+        );
+        console.log(responseJson);
+        this.setState({isLoading: false});
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
 
   render() {
     if(this.state.isLoading){
@@ -165,7 +223,7 @@ export default class HomeScreen extends React.Component {
                     <Subtitle>{item.event_description}</Subtitle>
                       <SView styleName="horizontal space-between">
                         <Subtitle>Location: {item.event_location}</Subtitle>
-                        <Button styleName=""><Icon name="cart" /><SText>REGISTER FOR EVENT</SText></Button>
+                        <Button styleName="" onPress={() => this._register(item)}><Icon name="add-to-cart" /><SText>REGISTER</SText></Button>
                       </SView>
                     </SView>
                   </Tile>
