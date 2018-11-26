@@ -149,7 +149,7 @@ export default class EditUserScreen extends React.Component {
           width: window.width,
           height: window.height * 0.12}}>
             <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1,
-            marginBottom: 45}}>
+            marginBottom: 45}} onPress={() => goBack()}>
               <SText>SAVE</SText>
             </SButton>
             <SButton styleName="confirmation secondary" style={{marginBottom: 45}} onPress={() => goBack()}>
