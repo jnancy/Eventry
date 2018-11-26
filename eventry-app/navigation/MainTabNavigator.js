@@ -24,6 +24,7 @@ const HomeStack = createStackNavigator({
   EventDescriptionPage: EventDescriptionScreen,
   UserScreen: OtherUserProfileScreen,
   UserList: UserListScreen,
+  ChatPage: ChatScreen,
 });
 
 const QRStack = createStackNavigator({

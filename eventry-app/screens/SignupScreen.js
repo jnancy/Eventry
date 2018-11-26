@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
+import {Alert, TextInput, Image, ImageBackground, Dimensions, TouchableHighlight, Text, View, AsyncStorage, ActivityIndicator, StatusBar} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import LoginButton from '../components/LoginButton';
@@ -59,6 +59,14 @@ export default class SignupScreen extends React.Component {
     console.log("Resp:" + JSON.stringify(json) );
     if(json.hasOwnProperty('key')){
       this.props.navigation.navigate("LoginScreen");
+    }
+    else{
+      Alert.alert(
+      "SignUp Failed",
+      JSON.stringify(json),
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      );
     }
   }
 
