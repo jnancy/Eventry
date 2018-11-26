@@ -134,10 +134,17 @@ export default class FavouritesScreen extends React.Component {
       <TouchableOpacity
         onPress={() => this._onSearchPressed(item) }>
       <Row>
+       {(item.event_media.length == 0 || item.event_media == null || item.event_media == undefined)?
         <SImage
           styleName="medium rounded-corners"
           source={{ uri: pics[Math.floor(Math.random()*10)]  }}
         />
+        :
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: item.event_media[0].image  }}
+        />
+       }
         <View styleName="vertical stretch space-between">
           <Subtitle>{item.event_name}</Subtitle>
           <View styleName="horizontal space-between">

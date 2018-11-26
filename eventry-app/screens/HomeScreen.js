@@ -279,9 +279,6 @@ export default class HomeScreen extends React.Component {
                         <ImageBackground
                           styleName="large-banner"
                           source={{ uri: item.event_media[0].image }}>
-                          <Overlay styleName="rounded-small">
-                            <Icon name="add-to-favorites-on" />
-                          </Overlay>
                           </ImageBackground>
                         }
                   <View>
@@ -290,7 +287,7 @@ export default class HomeScreen extends React.Component {
 
                       <View style= {{ backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between',
                                       marginTop: 15,  borderBottomWidth: 2, borderBottomColor: '#F8F8F8'}}>
-                        <View style={{backgroundColor: 'white', flexDirection: 'column', flex: 5, marginLeft: 10, backgroundColor: 'red'}}>
+                        <View style={{backgroundColor: 'white', flexDirection: 'column', flex: 5, marginLeft: 10, backgroundColor: 'white'}}>
                             <Heading style={{marginLeft: 5, marginRight: 5, fontSize: 20}}>{item.event_name.toUpperCase()}</Heading>
                           <Text style={{ padding: 5}}>{item.event_description}</Text>
                         </View>
@@ -311,11 +308,11 @@ export default class HomeScreen extends React.Component {
                               <View style={{flexDirection: 'row', backgroundColor: 'transparent',justifyContent: 'space-between',
                                             padding: 15}}>
                                 <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                  <IonIcon name="md-clock" size={20} />
+                                  <IonIcon name="md-clock" size={20} color='#9C640C' />
                                   <SText style={{padding: 10, color: '#696969'}}>{new Date(item.event_start_time).toString().substring(0,21)}</SText>
                                 </View>
-                                <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end'}}>
-                                  <IonIcon name="md-cash" size={20} />
+                                <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end', alignItems:'center'}}>
+                                  <IonIcon name="md-cash" size={20} color='#006400'/>
                                   <SText style={{padding: 10, color: 'gray', fontWeight:'bold'}}>${item.event_price}</SText>
                                 </View>
                               </View>
@@ -324,15 +321,15 @@ export default class HomeScreen extends React.Component {
                       <View style= {{ backgroundColor: 'transparent', flexDirection: 'row', flex: 2, padding: 5, justifyContent: 'space-around', alignItems:'center',
                                       borderBottomRightRadius: 10, borderBottomLeftRadius: 10,}}>
                                       <View style={{flexDirection: 'row', backgroundColor: 'transparent',justifyContent: 'space-between',
-                                                    padding: 15}}>
+                                                    padding: 15, alignItems: 'center'}}>
                                         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                          <IonIcon name="md-pin" size={20} />
+                                          <IonIcon name="md-pin" size={20} color='#7B241C'/>
                                           <SText style={{padding: 10, color: '#696969'}}>{item.event_address}</SText>
                                         </View>
-                                        <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end'}}>
-                                          <IonIcon name="md-plane" size={20} color="red"/>
+                                        <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end', alignItems:'center'}}>
+                                          <IonIcon name="md-plane" size={20} color="#72B3DD"/>
                                             <View style={{flexDirection: 'column'}}>
-                                            <SText style={{marginLeft: 10}}>Distance Away</SText>
+                                            <SText styleName='bold' style={{marginLeft: 10}}>Distance Away</SText>
                                             <SText style={{marginLeft: 10, color: 'gray', fontWeight:'bold'}}>? km</SText>
                                             </View>
                                           </View>
