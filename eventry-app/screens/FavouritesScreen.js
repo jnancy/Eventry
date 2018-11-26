@@ -170,6 +170,7 @@ export default class FavouritesScreen extends React.Component {
   }
 
   render() {
+    
     if(this.state.isLoading){
       return(
         <View style={{flex: 1, padding: 20}}>
