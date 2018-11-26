@@ -95,7 +95,7 @@ export default AppDrawerNavigator = createDrawerNavigator({
   //UserList: UserListScreen,
   'Hosted Events': HostedEventsScreen,
   Notifications: NotificationScreen,
-  'Sign out': SignOutStack,
+  'Sign Out': SignOutStack,
 },
 {
   contentComponent: CustomDrawerComponent,

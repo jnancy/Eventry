@@ -5,8 +5,8 @@ import { ScrollView,
   Dimensions,
   TouchableHighlight,
   TouchableOpacity,
-  Text, 
-  View, 
+  Text,
+  View,
   Alert,
   ActivityIndicator,
   Image,
@@ -22,6 +22,10 @@ import { ScrollView,
   import { Tile, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 
   let {width,height} = Dimensions.get("window");
+
+  export const IMAGE_HEIGHT = window.width / 3;
+  export const IMAGE_HEIGHT_SMALL = window.width /7;
+  import logo from '../assets/images/edit_icon.png';
 
   export default class LinksScreen extends React.Component {
   static navigationOptions = {
@@ -87,11 +91,11 @@ import { ScrollView,
     }
   }
 
-  async _AddEvent(){ 
+  async _AddEvent(){
     if(!this.state.gotID){
       let Authkey = await this._getID();
       this.setState({Authkey: Authkey, gotID: true});
-    } 
+    }
       //console.log("hereeee " + (this.state.start_date).format(Date));
       //console.log("hereeee " + (this.state.end_date).format(Date));
       const self = this;
@@ -128,7 +132,7 @@ import { ScrollView,
               for(var i =0; i< length; i++){
                 var formData = new FormData();
                 formData.append('event_media', {uri: self.state.image[i].uri, name: self.state.image[i].uri, type: 'image/jpg'});
-                  let url = "http://eventry-dev.us-west-2.elasticbeanstalk.com/events/" + responseData.id + "/add_image/" 
+                  let url = "http://eventry-dev.us-west-2.elasticbeanstalk.com/events/" + responseData.id + "/add_image/"
                   fetch(url,
                   {
                     method: "POST",
@@ -152,7 +156,7 @@ import { ScrollView,
                [{text: 'OK', onPress: () => console.log('OK Pressed')}],
                { cancelable: false }
              );
-            
+
           })
           .catch((error) => {
           console.error(error);
@@ -161,11 +165,11 @@ import { ScrollView,
           screenLoading: false,
           });
 
-           
-    }
-    
 
-    
+    }
+
+
+
   _pickImage = async () => {
     this.setState({pic_clicked: true});
     console.log("picking an image");
@@ -181,7 +185,7 @@ import { ScrollView,
     });
 
     if (!result.cancelled) {
-      this.setState({ 
+      this.setState({
         image: this.state.image.concat([result])
     });
   };
@@ -198,7 +202,7 @@ import { ScrollView,
         </View>
       );
     }
-  
+
     return (
       // ADDED THE HEADER
   <View style={styles.container}>
@@ -212,7 +216,7 @@ import { ScrollView,
     </Body>
     <Right></Right>
     </Header>
-      
+
       <ScrollView>
       <View style = {{ flex: 1 }} >
 
@@ -229,6 +233,7 @@ import { ScrollView,
             style={styles.TextInput}
             onChangeText={(event_description) => this.setState({event_description})}
             value={this.state.event_description}
+            multiline={true}
             placeholder="Tell us more about your event"
             placeholderTextColor="#A0AAAB"
           />
@@ -257,10 +262,10 @@ import { ScrollView,
           placeholder='Location'
           minLength={2}
           autoFocus={false}
-          listViewDisplayed='auto'
+          listViewDisplayed={false}
           fetchDetails={true}
           renderDescription={row => row.description}
-          onPress={(data, details) => { 
+          onPress={(data, details) => {
             //console.log(details["geometry"]["location"]["lat"]);
             //console.log(details["geometry"]["location"]["lng"]);
             this.setState({event_lat: details["geometry"]["location"]["lat"]});
@@ -269,7 +274,7 @@ import { ScrollView,
             this.setState({event_location: data["structured_formatting"]["main_text"]});
             //console.log(data);
           }}
-          
+
           getDefaultValue={() => ''}
 
           query={{
@@ -283,7 +288,7 @@ import { ScrollView,
             textInputContainer: {
               width: width *7/10,
               height: 40,
-              
+
             },
             description: {
               //fontWeight: 'bold'
@@ -303,7 +308,7 @@ import { ScrollView,
             //types: 'food'
           }}
           />
-          
+
           <TouchableOpacity style={{height: 40}}onPress={this._showStartDateTimePicker}>
           <Text
             style={styles.DateText}
@@ -345,6 +350,7 @@ import { ScrollView,
           </TouchableOpacity>
 
           <Text style = {{color: 'red'}}>{this.state.image === undefined || this.state.image.length == 0 && this.state.pic_clicked?"Image is required": ""}</Text>     
+
           <TouchableHighlight
             style = {{
               backgroundColor: "#C6E9ED",
@@ -371,7 +377,7 @@ import { ScrollView,
                     { cancelable: false }
                   );
                 }
-                else{ 
+                else{
                 this._AddEvent();
               }
             }
@@ -383,7 +389,7 @@ import { ScrollView,
       </View>
       </ScrollView>
       <ActionButton buttonColor="rgba(76,127,178,0.68)">
-        <ActionButton.Item buttonColor='#B1D8ED' title="New Event" 
+        <ActionButton.Item buttonColor='#B1D8ED' title="New Event"
         onPress={() =>  this.props.navigation.navigate('LinksPage')}>
           <IonIcon name="md-add" style={styles.actionButtonIcon} />
         </ActionButton.Item>
@@ -395,11 +401,11 @@ import { ScrollView,
         onPress={() => this.props.navigation.navigate('QRCameraPage')}>
           <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
         </ActionButton.Item>
-        <ActionButton.Item buttonColor='#2181A1' title="Starred Events" 
+        <ActionButton.Item buttonColor='#2181A1' title="Starred Events"
         onPress={() => this.props.navigation.navigate('FavouritesPage')}>
           <IonIcon name="md-star" style={styles.actionButtonIcon} />
         </ActionButton.Item>
-        <ActionButton.Item buttonColor='#035D75' title="My Profile" 
+        <ActionButton.Item buttonColor='#035D75' title="My Profile"
         onPress={() => {}}>
           <IonIcon name="md-person" style={styles.actionButtonIcon} />
         </ActionButton.Item>

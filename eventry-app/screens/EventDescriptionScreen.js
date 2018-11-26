@@ -280,7 +280,7 @@ export default class EventDescriptionScreen extends React.Component {
          );
      }
 
-  render() {    
+  render() {
     const example1 = this.mainExample(1, 'Event photos uploaded by host');
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
 
@@ -294,7 +294,7 @@ export default class EventDescriptionScreen extends React.Component {
         navBarTitleColor='black'
         navBarColor='white'
         userName={this.props.navigation.state.params.value.event_name}
-        userTitle='Event Tags'
+        userTitle={this.props.navigation.state.pararms.value.host}
         userImage='https://tickera-wpsalad.netdna-ssl.com/wp-content/themes/tickera/style/img/freebies/icons/events/6.png'
         leftIcon={<Icon name="sidebar"/>}
       >
@@ -336,30 +336,33 @@ export default class EventDescriptionScreen extends React.Component {
                     style={{backgroundColor: 'white'}}>
              <Caption>EVENT INFORMATION</Caption>
            </Divider>
-           <Divider style={{height: 3}}/>
-           <Subtitle styleName='bold'>Host: {this.props.navigation.state.params.value.host}</Subtitle>
-           <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
-           <Subtitle styleName='bold'>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
-           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
-             <Button styleName="stacked clear">
-               <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
-               <SText>Attendees</SText>
-             </Button>
-             <Button styleName="stacked clear">
-             <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
-             <SText>Price in CAD</SText>
-             </Button>
-             <Button styleName="stacked clear">
-             <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
-             <SText>Days Away</SText>
-             </Button>
-             </View>
+           <View style={{flexDirection: 'row', backgroundColor: 'white'}}>
+            <View style={{flexDirection: 'row', backgroundColor: 'white', flex: 1}}>
+               <Subtitle styleName='bold'>Hosted by {this.props.navigation.state.params.value.host}</Subtitle>
+               <Subtitle >{this.props.navigation.state.params.value.event_address}</Subtitle>
+               <Subtitle >{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
+               </View>
+                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'red', alignItems: 'center'}}>
+                 <Button styleName="stacked clear">
+                   <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
+                   <SText>Attendees</SText>
+                 </Button>
+                 <Button styleName="stacked clear">
+                 <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
+                 <SText>Price in CAD</SText>
+                 </Button>
+                 <Button styleName="stacked clear">
+                 <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
+                 <SText>Days Away</SText>
+                 </Button>
+                 </View>
+            </View>
              <Divider styleName="section-header"
                       style={{backgroundColor: 'white'}}>
                <Caption>EVENT DESCRIPTION</Caption>
              </Divider>
              <Divider style={{height: 3}}/>
-           <SText style={{fontSize:16, textAlign: 'center', marginLeft: 20, marginRight: 20}}>{this.props.navigation.state.params.value.event_description} {this.props.navigation.state.params.value.event_description}</SText>
+           <SText style={{fontSize:16, textAlign: 'center', marginLeft: 20, marginRight: 20}}>{this.props.navigation.state.params.value.event_description}</SText>
          </View>
          <Divider styleName="section-header"
                   style={{backgroundColor: 'white'}}>
@@ -434,7 +437,7 @@ export default class EventDescriptionScreen extends React.Component {
         navBarTitleColor='black'
         navBarColor='white'
         userName={this.props.navigation.state.params.value.event_name}
-        userTitle='Event Tags'
+        userTitle={this.props.navigation.state.params.value.host}
         userImage='https://tickera-wpsalad.netdna-ssl.com/wp-content/themes/tickera/style/img/freebies/icons/events/6.png'
         leftIcon={<Icon name="sidebar"/>}
       >
@@ -476,10 +479,12 @@ export default class EventDescriptionScreen extends React.Component {
              <Caption>EVENT INFORMATION</Caption>
            </Divider>
            <Divider style={{height: 3}}/>
-           <Subtitle styleName='bold'>Host: {this.props.navigation.state.params.value.host}</Subtitle>
-           <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
-           <Subtitle styleName='bold'>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
-           <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
+          <View style={{flexDirection: 'column', backgroundColor: 'white', flex: 1, alignItems: 'center', justifyContent: 'space-around'}}>
+               <Subtitle styleName='bold'>Hosted by {this.props.navigation.state.params.value.host}</Subtitle>
+               <Subtitle>{this.props.navigation.state.params.value.event_address}</Subtitle>
+               <Subtitle>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
+          </View>
+            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white', alignItems: 'center'}}>
              <Button styleName="stacked clear">
                <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
                <SText>Attendees</SText>
