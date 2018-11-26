@@ -18,6 +18,8 @@ import { ScrollView,
   import { ImagePicker, Permissions, Constants } from 'expo';
   import ActionButton from 'react-native-circular-action-menu';
   import IonIcon from 'react-native-vector-icons/Ionicons';
+  import {Header, Left, Right, Container, Body} from 'native-base'
+  import { Tile, Title, Subtitle, Divider, Row, Overlay, Caption, Heading, Button, Icon} from '@shoutem/ui'
 
   let {width,height} = Dimensions.get("window");
 
@@ -193,12 +195,12 @@ import { ScrollView,
                   });
               }
 
-            // Alert.alert(
-            // "POST Response",
-            // JSON.stringify(responseData),
-            //   [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-            //   { cancelable: false }
-            // );
+             Alert.alert(
+             "POST Response",
+             JSON.stringify(responseData),
+               [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+               { cancelable: false }
+             );
             
           })
           .catch((error) => {
@@ -270,7 +272,19 @@ import { ScrollView,
     }
   
     return (
-      <View style={styles.container}>
+      // ADDED THE HEADER
+  <View style={styles.container}>
+      <Header style={{backgroundColor: 'white'}}>
+    <Left>
+      <Icon name="sidebar" onPress={()=>this.props.navigation.openDrawer()}/>
+    </Left>
+    <Body>
+    <Title>EVENTRY</Title>
+    <Subtitle>Add an Event</Subtitle>
+    </Body>
+    <Right></Right>
+    </Header>
+      
       <ScrollView>
       <View style = {{ flex: 1 }} >
 

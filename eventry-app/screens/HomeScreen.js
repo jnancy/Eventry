@@ -147,7 +147,7 @@ export default class HomeScreen extends React.Component {
           isLoading: false,
           EventJson: responseJson,
         }, function(){
-          //console.log(responseJson);
+          console.log(responseJson);
           console.log('REFRESHIN');
         });
 
