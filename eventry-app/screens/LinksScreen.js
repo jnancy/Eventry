@@ -15,7 +15,7 @@ import { ScrollView,
   import DateTimePicker from 'react-native-modal-datetime-picker';
   import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
   import { AsyncStorage } from "react-native"
-  import { ImagePicker, Permissions } from 'expo';
+  import { ImagePicker, Permissions, Constants } from 'expo';
   import ActionButton from 'react-native-circular-action-menu';
   import IonIcon from 'react-native-vector-icons/Ionicons';
 

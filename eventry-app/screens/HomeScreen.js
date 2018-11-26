@@ -38,6 +38,7 @@ export default class HomeScreen extends React.Component {
       Authkey: '',
       location: null,
       errorMessage: null,
+      searchWord: '',
     };
   }
 
@@ -68,9 +69,9 @@ export default class HomeScreen extends React.Component {
     return location;
   };
 
-  async _Onsearch(){
+  /*async _Onsearch(){
 
-  }
+  }*/
 
   async _onRefresh() {
     this.setState({refreshing: true});
@@ -85,15 +86,21 @@ export default class HomeScreen extends React.Component {
     //console.log(location);
     console.log(this.state.location.coords.latitude);
     console.log(this.state.location.coords.longitude);
+    var url;
     if(location == null){
-      let url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/';
+      url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired';
+      if(this.state.searchWord != ''){
+        url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired&search=' + encodeURIComponent(this.state.searchWord);
+      }
     }
     else{
-      let url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/location?lon=${encodeURIComponent(location.coords.latitude)}&lat=${encodeURIComponent(location.coords.longitude)}';
-      console.log(url);
+      url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired&lon=' + encodeURIComponent(location.coords.latitude) + '&lat=' + encodeURIComponent(location.coords.longitude);
+      if(this.state.searchWord != ''){
+        url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired&lon=' + encodeURIComponent(location.coords.latitude) + '&lat=' + encodeURIComponent(location.coords.longitude) + '&search=' + encodeURIComponent(this.state.searchWord);
+      }
     }
-    
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/', {
+    console.log('url' + url);
+    fetch(url, {
       method: 'GET',
       headers: {
         'Authorization': "Token " + Authkey,
@@ -208,11 +215,13 @@ export default class HomeScreen extends React.Component {
             inputStyle={{backgroundColor: 'white'}}
             lightTheme
             round
-            clearIcon={{ color: 'gray' }}
-            searchIcon={false}
-            //onChangeText={someMethod}
-            //onClear={someMethod}
-            placeholder='Type Here...'>
+            //clearIcon={{ color: 'gray' }}
+            searchIcon={true}
+            onChangeText={(searchWord) => 
+                {this.setState({searchWord});
+                  this._onRefresh();}}
+            //onClear={() => this.setState({searchWord: ''})}
+            placeholder='Search Here...'>
             </SearchBar>
           <FlatList
             refreshControl={
