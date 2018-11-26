@@ -166,6 +166,7 @@ import { ScrollView,
               event_end_time: self.state.end_date,
               //event_media: self.state.image,
               event_address: self.state.event_location,
+              event_max_capacity: self.state.event_max_capacity,
               // event_pic: this.state.image
             }),
           })
