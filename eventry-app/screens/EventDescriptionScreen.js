@@ -14,7 +14,8 @@ import {
   ListView,
   RefreshControl,
   ActivityIndicator,
-  FlatList
+  FlatList,
+  Alert
 } from 'react-native';
 import QRCode from 'react-native-qrcode';
 import ParallaxScrollView from 'react-native-parallax-scrollview';
@@ -43,7 +44,9 @@ export default class EventDescriptionScreen extends React.Component {
     constructor(props){
       super(props);
       this.state = {
-          slider1ActiveSlide: SLIDER_1_FIRST_ITEM
+          slider1ActiveSlide: SLIDER_1_FIRST_ITEM,
+          registered: false,
+          favourited: false,
         }
     }
 
@@ -66,6 +69,121 @@ export default class EventDescriptionScreen extends React.Component {
         );
     }
 
+    _register(id){
+      let regURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + id + "/register/"
+      console.log(regURL);
+      fetch(regURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': "Token " + this.props.navigation.state.params.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          Alert.alert(
+            "Status",
+            responseJson.status,
+            [{text: 'Ok', onPress: () => {}}],
+            { cancelable: false }
+          );
+          this.setState({registered: true});
+          console.log(responseJson);
+          this.setState({isLoading: false});
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+    }
+
+    _unregister(id){
+      let regURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + id + "/unregister/"
+      console.log(regURL);
+      fetch(regURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': "Token " + this.props.navigation.state.params.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          Alert.alert(
+            "Status",
+            responseJson.status,
+            [{text: 'Ok', onPress: () => {}}],
+            { cancelable: false }
+          );
+          this.setState({registered: false});
+          console.log(responseJson);
+          this.setState({isLoading: false});
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+    }
+  
+    _unfavourite(id){
+      let unfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + id + "/unfavourite/"
+      console.log(unfavURL);
+      fetch(unfavURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': "Token " + this.props.navigation.state.params.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          Alert.alert(
+            "Status",
+            responseJson.status,
+            [{text: 'Ok', onPress: () => {}}],
+            { cancelable: false }
+          );
+          this.setState({favourited: false});
+          console.log(responseJson);
+          this.setState({isLoading: false});
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+    }
+
+    _favourite(id){
+      let unfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + id + "/favourite/"
+      console.log(unfavURL);
+      fetch(unfavURL, {
+        method: 'POST',
+        headers: {
+          'Authorization': "Token " + this.props.navigation.state.params.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          Alert.alert(
+            "Status",
+            responseJson.status,
+            [{text: 'Ok', onPress: () => {}}],
+            { cancelable: false }
+          );
+          this.setState({favourited: true});
+          console.log(responseJson);
+          this.setState({isLoading: false});
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+    }
     _renderLightItem ({item, index}) {
         return <SliderEntry data={item} even={false} />;
     }
@@ -130,6 +248,7 @@ export default class EventDescriptionScreen extends React.Component {
   render() {
     const example1 = this.mainExample(1, 'Event photos uploaded by host');
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
+    console.log("In EventDescriptionScreen");
 
     return (
       <View style={styles.container}>
@@ -147,10 +266,20 @@ export default class EventDescriptionScreen extends React.Component {
        <ScrollView style={{flex: 1, backgroundColor: 'white'}}>
         <View style={{height: height*0.1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
             <SView styleName="horizontal">
-                <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}>
-                  <SText>REGISTER</SText>
+                <SButton styleName="confirmation" style={{ borderColor: 'black', borderWidth: 1}}
+                onPress= {() => 
+                  {
+                    if(this.state.registered){
+                      this._unregister(this.props.navigation.state.params.value.id);
+                    }
+                    else{
+                      this._register(this.props.navigation.state.params.value.id);
+                    }
+                  }}>
+                  <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
                 </SButton>
-                <SButton styleName="confirmation secondary">
+                <SButton styleName="confirmation secondary"
+                onPress= {() => this.props.navigation.navigate('UserList')}>
                   <SText>SEE ATTENDEES</SText>
                 </SButton>
               </SView>
@@ -161,9 +290,9 @@ export default class EventDescriptionScreen extends React.Component {
               <Caption>EVENT INFORMATION</Caption>
             </Divider>
             <Divider style={{height: 3}}/>
-            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.host}</Subtitle>
+            <Subtitle styleName='bold'>Host: {this.props.navigation.state.params.value.host}</Subtitle>
             <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_address}</Subtitle>
-            <Subtitle styleName='bold'>{this.props.navigation.state.params.value.event_start_time} - {this.props.navigation.state.params.value.event_end_time}</Subtitle>
+            <Subtitle styleName='bold'>{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
               <Button styleName="stacked clear">
                 <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
@@ -171,7 +300,7 @@ export default class EventDescriptionScreen extends React.Component {
               </Button>
               <Button styleName="stacked clear">
               <SText style={{fontSize: 30, color: "#5FACBE"}}>${this.props.navigation.state.params.value.event_price}</SText>
-              <SText>Price in USD</SText>
+              <SText>Price in CAD</SText>
               </Button>
               <Button styleName="stacked clear">
               <SText style={{fontSize: 30, color: "#5FACBE"}}>27</SText>
@@ -235,9 +364,16 @@ export default class EventDescriptionScreen extends React.Component {
               <SText>Message Attendees</SText>
             </Button>
             <Button styleName="stacked clear"
-                    onPress={() => this.props.navigation.navigate('FavouritesPage')}>
-              <Icon name="add-to-favorites-on" />
-              <SText>Star Event</SText>
+                    onPress={() => {
+                      if(this.state.favourited){
+                        this._unfavourite(this.props.navigation.state.params.value.id);
+                      }
+                      else{
+                        this._favourite(this.props.navigation.state.params.value.id);
+                      }
+                      }}>
+              <Icon name={this.state.favourited? "add-to-favorites-on" : "add-to-favorites-off"} />
+              <SText>{this.state.favourited ?'Stared': 'Star Event'}</SText>
             </Button>
          </View>
           </View>
@@ -251,7 +387,8 @@ export default class EventDescriptionScreen extends React.Component {
       onPress={() => this.props.navigation.navigate('Home')}>
         <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
       </ActionButton.Item>
-      <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+      <ActionButton.Item buttonColor='#5FACBE' title="QR C
+      amera"
       onPress={() => this.props.navigation.navigate('QRCameraPage')}>
         <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
       </ActionButton.Item>

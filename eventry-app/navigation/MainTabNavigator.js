@@ -17,6 +17,7 @@ import ChatScreen from '../screens/ChatScreen';
 import OtherUserProfileScreen from '../screens/OtherUserProfileScreen';
 import UserListScreen from '../screens/UserListScreen';
 import HostedEventsScreen from '../screens/HostedEventsScreen';
+import EditUserScreen from '../screens/EditUserScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -47,6 +48,7 @@ const ProfileStack = createStackNavigator({
   QRCameraPage: QRCameraScreen,
   FavouritesPage: FavouritesScreen,
   SignOutPage: SignOutScreen,
+  EditPage: EditUserScreen,
   ChatPage: ChatScreen
 }, {
   initialRouteName: "UserProfilePage",

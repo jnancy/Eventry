@@ -17,6 +17,7 @@ import { ScrollView,
   import { ImagePicker } from 'expo';
   import ActionButton from 'react-native-circular-action-menu';
   import IonIcon from 'react-native-vector-icons/Ionicons';
+  import ParallaxScrollView from 'react-native-parallax-scrollview';
 
   let {width,height} = Dimensions.get("window");
 
@@ -31,6 +32,7 @@ import { ScrollView,
     this.state = {
       screenLoading: false,
       Authkey: '',
+      gotID: false,
       event_name:'',
       event_description:'',
       event_price:'',
@@ -38,6 +40,7 @@ import { ScrollView,
       end_date: '',
       event_lat: '',
       event_lng: '',
+      event_location: '',
       isStartDateTimePickerVisible: false,
       isEndDateTimePickerVisible: false,
       endDateChosen: false,
@@ -82,8 +85,12 @@ import { ScrollView,
   }
 
   async _AddEvent(){ 
+    if(!this.state.gotID){
       let Authkey = await this._getID();
-      this.setState({Authkey: Authkey});
+      this.setState({Authkey: Authkey, gotID: true});
+    }
+      //console.log("hereeee " + (this.state.start_date).format(Date));
+      //console.log("hereeee " + (this.state.end_date).format(Date));
       const self = this;
       fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", 
           {
@@ -100,6 +107,8 @@ import { ScrollView,
                 latitude: self.state.event_lat,
                 longitude: self.state.event_lng,
               }),
+              event_start_time: self.state.start_date,
+              event_end_time: self.state.end_date,
             }),
           })
           .then(response => response.json())
@@ -124,11 +133,12 @@ import { ScrollView,
       //let remainder = 4 - (this.state.devices % 4);
       this.state.image.map((item, index) => {
         images.push(
-          <Image
+          /*<Image
             key={index}
             source={{ uri: item }}
             style={{ width: 100, height: 100 }}
-          />
+          />*/
+          console.log("image" + index)
         );
       });
       return images;
@@ -163,7 +173,8 @@ import { ScrollView,
     }
   
     return (
-      <ScrollView style={styles.container}>
+      <View style={styles.container}>
+      <ScrollView>
       <View style = {{ flex: 1 }} >
 
         <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
@@ -203,6 +214,8 @@ import { ScrollView,
             this.setState({event_lat: details["geometry"]["location"]["lat"]});
             this.setState({event_lng: details["geometry"]["location"]["lng"]})
             //console.log(details);
+            this.setState({event_location: data["structured_formatting"]["main_text"]});
+            console.log(data);
           }}
           
           getDefaultValue={() => ''}
@@ -243,7 +256,7 @@ import { ScrollView,
           <Text
             style={styles.DateText}
             TextColor='#A0AAAB'
-          > {this.state.startDateChosen? (this.state.start_date).toString() : "Start Date"} </Text>
+          > {this.state.startDateChosen? (this.state.start_date).toString().substring(0,21) : "Start Date"} </Text>
           </TouchableOpacity>
 
 
@@ -259,7 +272,7 @@ import { ScrollView,
           <Text
             style={styles.DateText}
             TextColor='#A0AAAB'
-          > {this.state.endDateChosen? (this.state.end_date).toString() : "End Date"} </Text>
+          > {this.state.endDateChosen? (this.state.end_date).toString().substring(0,21) : "End Date"} </Text>
           </TouchableOpacity>
 
 
@@ -278,9 +291,10 @@ import { ScrollView,
             TextColor='#A0AAAB'
           > Pick an image</Text>
           </TouchableOpacity>
-          <View>
+         {/* <View>
           {this._renderImages()}}
-          </View>
+          </View>*/
+         }
           
           <TouchableHighlight
             style = {{
@@ -310,26 +324,30 @@ import { ScrollView,
           </TouchableHighlight>
         </View>
       </View>
-      <ActionButton buttonColor="rgba(76,127,178,0.68)">
-            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => {}}>
-              <IonIcon name="md-add" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
-            onPress={() => this.props.navigation.navigate('Home')}>
-              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
-            onPress={() => this.props.navigation.navigate('QRCameraPage')}>
-              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
-              <IonIcon name="md-star" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
-              <IonIcon name="md-person" style={styles.actionButtonIcon} />
-            </ActionButton.Item>
-          </ActionButton>
       </ScrollView>
+      <ActionButton buttonColor="rgba(76,127,178,0.68)">
+        <ActionButton.Item buttonColor='#B1D8ED' title="New Event" 
+        onPress={() =>  this.props.navigation.navigate('LinksPage')}>
+          <IonIcon name="md-add" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
+        onPress={() => this.props.navigation.navigate('Home')}>
+          <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+        onPress={() => this.props.navigation.navigate('QRCameraPage')}>
+          <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item buttonColor='#2181A1' title="Starred Events" 
+        onPress={() => this.props.navigation.navigate('FavouritesPage')}>
+          <IonIcon name="md-star" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+        <ActionButton.Item buttonColor='#035D75' title="My Profile" 
+        onPress={() => {}}>
+          <IonIcon name="md-person" style={styles.actionButtonIcon} />
+        </ActionButton.Item>
+      </ActionButton>
+      </View>
     );
   }
 }

@@ -67,6 +67,7 @@ export default class FavouritesScreen extends React.Component {
       let Authkey = await this._getID();
       this.setState({Authkey: Authkey, gotID: true});
     }
+    this.setState({unfav: new Map()})
     console.log("This is saved!!:" + this.state.Authkey);
     fetch(favURL, {
         method: 'GET',
