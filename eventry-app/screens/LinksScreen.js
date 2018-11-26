@@ -9,19 +9,19 @@ import { ScrollView,
   View, 
   Alert,
   ActivityIndicator,
+  Image,
   StatusBar } from "react-native";
-
   import DateTimePicker from 'react-native-modal-datetime-picker';
-
   import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-
   import { AsyncStorage } from "react-native"
+  import { ImagePicker } from 'expo';
+  import ActionButton from 'react-native-circular-action-menu';
+  import IonIcon from 'react-native-vector-icons/Ionicons';
 
   let {width,height} = Dimensions.get("window");
 
   export default class LinksScreen extends React.Component {
   static navigationOptions = {
-    //title: "Add a New Event",
     header: null,
   };
 
@@ -30,7 +30,7 @@ import { ScrollView,
 
     this.state = {
       screenLoading: false,
-      event_host: '',
+      Authkey: '',
       event_name:'',
       event_description:'',
       event_price:'',
@@ -41,7 +41,8 @@ import { ScrollView,
       isStartDateTimePickerVisible: false,
       isEndDateTimePickerVisible: false,
       endDateChosen: false,
-      startDateChosen: false
+      startDateChosen: false,
+      image: [],
     };
   }
 
@@ -66,25 +67,95 @@ import { ScrollView,
     this.setState({end_date});
     this._hideEndDateTimePicker();
   };
-/*
-  _getID = async () => {
-    try {
-      console.log("reached here");
-      const value = await AsyncStorage.getItem('userID');
-      if (value !== null) {
-        //this.setState({Userkey: value});
-        console.log(value);
-      }
-     } catch (error) {
-      console.log(error);
-     }
+
+  _getID = async () =>{
+    var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
+    if (value != null){
+      console.log(value);
+      return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+    }
   }
-  */
+
+  async _AddEvent(){ 
+      let Authkey = await this._getID();
+      this.setState({Authkey: Authkey});
+      const self = this;
+      fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", 
+          {
+            method: "POST",
+            headers: {
+            'Authorization': 'Token ' + this.state.Authkey,
+            'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              event_name: self.state.event_name,
+              event_description: self.state.event_description,
+              event_price : self.state.event_price,
+              event_point_location: JSON.stringify({
+                latitude: self.state.event_lat,
+                longitude: self.state.event_lng,
+              }),
+            }),
+          })
+          .then(response => response.json())
+          .then((responseData) => {
+            Alert.alert(
+            "POST Response",
+            JSON.stringify(responseData),
+              [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+              { cancelable: false }
+            );
+          })
+          .catch((error) => {
+          console.error(error);
+          });
+          this.setState({
+          screenLoading: false,
+          });
+    }
+    
+    _renderImages() {
+      let images = [];
+      //let remainder = 4 - (this.state.devices % 4);
+      this.state.image.map((item, index) => {
+        images.push(
+          <Image
+            key={index}
+            source={{ uri: item }}
+            style={{ width: 100, height: 100 }}
+          />
+        );
+      });
+      return images;
+    }
+
+    
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: false,
+      aspect: [4, 3],
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ 
+        image: this.state.image.concat([result.uri])
+    });
+  };
+}
 
   render() {
+    let { image } = this.state;
     if (this.state.screenLoading) {
       return (
         <View style = { styles.container } >
+        {this._getID()}
           <ActivityIndicator />
           <StatusBar barStyle = "default" />
         </View>
@@ -96,10 +167,6 @@ import { ScrollView,
       <View style = {{ flex: 1 }} >
 
         <View style = {{flexDirection: "column", alignItems: "center", marginTop: height/20}} >
-          {
-            /*this._getID()}
-         <Text>{this.state.Userkey}</Text>
-          */}
           <TextInput
             style={styles.TextInput}
             onChangeText={(event_name) => this.setState({event_name})}
@@ -160,9 +227,6 @@ import { ScrollView,
               color: '#1faadb'
             }
           }}
-
-          //currentLocation={true}
-          //currentLocationLabel="Current location"
           nearbyPlacesAPI='GooglePlacesSearch'
           GoogleReverseGeocodingQuery={{
             // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
@@ -208,6 +272,16 @@ import { ScrollView,
           />
           <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date)?"Invalid end date: Has to be after start date" : ""}</Text>
 
+          <TouchableOpacity style={{height: 40}} onPress={this._pickImage}>
+          <Text
+            style={styles.DateText}
+            TextColor='#A0AAAB'
+          > Pick an image</Text>
+          </TouchableOpacity>
+          <View>
+          {this._renderImages()}}
+          </View>
+          
           <TouchableHighlight
             style = {{
               backgroundColor: "#C6E9ED",
@@ -226,46 +300,35 @@ import { ScrollView,
                     { cancelable: false }
                   );
                 }
-                else{
-                const self = this;
-                fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", {
-                  method: "POST",
-                  body: JSON.stringify({
-                    event_name: self.state.event_name,
-                    event_description: self.state.event_description,
-                    event_price : self.state.event_price,
-                    /*event_point_location: JSON.stringify({
-                      latitude: self.state.event_lat,
-                      longitude: self.state.event_lng,
-                    }), */
-                  }),
-                  headers: new Headers({
-                    "Content-Type": "application/json"
-                  }),
-                })
-                .then(response => response.json())
-                .then((responseData) => {
-                  Alert.alert(
-                    "POST Response",
-                    JSON.stringify(responseData),
-                    [{text: 'OK', onPress: () => console.log('OK Pressed')}],
-                    { cancelable: false }
-                  );
-                 })
-                .catch((error) => {
-                  console.error(error);
-                });
-                //ADD STUFF
-                this.setState({
-                screenLoading: false,
-                  });
-              }}
+                else{ 
+                this._AddEvent();
+              }
+            }
             }
             underlayColor = "#A9D9DE" >
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> Add event </Text>
           </TouchableHighlight>
         </View>
       </View>
+      <ActionButton buttonColor="rgba(76,127,178,0.68)">
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => {}}>
+              <IonIcon name="md-add" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
+            onPress={() => this.props.navigation.navigate('Home')}>
+              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
+            onPress={() => this.props.navigation.navigate('QRCameraPage')}>
+              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => {}}>
+              <IonIcon name="md-star" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+            <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
+              <IonIcon name="md-person" style={styles.actionButtonIcon} />
+            </ActionButton.Item>
+          </ActionButton>
       </ScrollView>
     );
   }

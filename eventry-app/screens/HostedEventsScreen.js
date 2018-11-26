@@ -19,35 +19,30 @@ import {
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
-
 import { AsyncStorage } from "react-native"
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
 "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
-let favURL = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/favourited/';
-
-export default class FavouritesScreen extends React.Component {
+export default class HostedEventsScreen extends React.Component {
     constructor(props){
       super(props);
       this.state ={ 
         isLoading: true, 
         refreshing: false,
-        Authkey: '',
-        EventJson: '',
         gotID: false,
-        unfav: new Map()
+        Authkey: ''
       };
-
-      this.renderRow = this.renderRow.bind(this);
     }
 
   static navigationOptions = {
     header: null,
   };
-  
+
   _getID = async () =>{
     var value = await AsyncStorage.getItem('userID');
     console.log("here" + value);
@@ -67,16 +62,16 @@ export default class FavouritesScreen extends React.Component {
       let Authkey = await this._getID();
       this.setState({Authkey: Authkey, gotID: true});
     }
-    console.log("This is saved!!:" + this.state.Authkey);
-    fetch(favURL, {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Token ' + this.state.Authkey,
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        credentials: 'include'
-      })
+    let hosting = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/hosting/';
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token ' + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -88,7 +83,6 @@ export default class FavouritesScreen extends React.Component {
         });
 
       }).then(() => {
-        //console.log(this.state.EventJson);
         this.setState({refreshing: false});
       });
     }
@@ -100,75 +94,53 @@ export default class FavouritesScreen extends React.Component {
   _onSearchPressed(item){
     const event = item;
     console.log(item);
-    // this.props.navigation.navigate('QRCodePage',
-    //   {value: event});
+    this.props.navigation.navigate('QRCodePage',
+      {value: event});
   };
 
-  _unfavourite(item){
-    let unfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + item.id + "/unfavourite/"
-    console.log(unfavURL);
-    fetch(unfavURL, {
-      method: 'POST',
-      headers: {
-        'Authorization': "Token " + this.state.Authkey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        },
-        credentials: 'include'
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-        this.setState({isLoading: false});
-        this._onRefresh();
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
-  }
+  _onEventPressed(item){
+    const event = item;
+    console.log(item);
+    this.props.navigation.navigate('EventDescriptionPage',
+      {value: event});
+  };
+
+  _onDeletePressed(item){
+    console.log("Need to add to this function");
+  };
 
   renderRow(item){
-    //{this.setState({unfav: false})}
+    //console.log(item);
     return (
       <TouchableOpacity
-        onPress={() => this._onSearchPressed(item) }>
+        onPress={() => this._onEventPressed(item) }>
       <Row>
         <SImage
           styleName="medium rounded-corners"
           source={{ uri: pics[Math.floor(Math.random()*10)]  }}
         />
-        <View styleName="vertical stretch space-between">
-          <Subtitle>{item.event_name}</Subtitle>
-          <View styleName="horizontal space-between">
-            <Caption>In 3 days</Caption>
-            <Caption>{item.event_location}</Caption>
-          </View>
+        <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
+        <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
+            <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
+              <Subtitle>{item.event_name}</Subtitle>
+              <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
+                <Caption>In 3 days</Caption>
+                <Caption>LOCATION</Caption>
+              </View>
+            </View>
         </View>
-        <Button styleName="clear"
-                style={{alignSelf:"flex-end"}}
-                onPress={() => { 
-                      this._unfavourite(item);
-                      this.setState((state) => {
-                      const unfav = new Map(state.unfav);
-                      unfav.set(item.id, !unfav.get(item.id));
-                      return {unfav};
-                    });
-                      }}>
-          <Icon name={this.state.unfav.get(item.id)? "add-to-favorites-off":"add-to-favorites-on"}/>
+        <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
+        <Button styleName="stacked clear" style={{flex: 1}}   onPress={() => this._onDeletePressed(item) }>
+          <IonIcon type="Ionicons" name="md-trash" color='#B22222' size={30}/>
         </Button>
+        </View>
+        </View>
       </Row>
       </TouchableOpacity>
     )
   }
 
   render() {
-    if(this.state.isLoading){
-      return(
-        <View style={{flex: 1, padding: 20}}>
-          <ActivityIndicator/>
-        </View>
-      )
-    }
     return (
       <View style={styles.container}>
           <Header style={{backgroundColor: 'white'}}>
@@ -177,21 +149,21 @@ export default class FavouritesScreen extends React.Component {
           </Left>
           <Body>
           <Title>EVENTRY</Title>
-          <Subtitle>My Starred Events</Subtitle>
+          <Subtitle>My Hosted Events</Subtitle>
           </Body>
           <Right></Right>
           </Header>
-          <FlatList 
+          <FlatList
             refreshControl={
               <RefreshControl
-              refreshing={this.state.refreshing}
-              onRefresh={this._onRefresh.bind(this)}/>}
+                refreshing={this.state.refreshing}
+                onRefresh={this._onRefresh.bind(this)}/>}
               data={this.state.EventJson}
               renderItem={({item}) => this.renderRow(item)}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item, index) => index}
             />
             <ActionButton buttonColor="rgba(76,127,178,0.68)">
-            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => {}}>
+            <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
               <IonIcon name="md-add" style={styles.actionButtonIcon} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
@@ -213,7 +185,6 @@ export default class FavouritesScreen extends React.Component {
     );
   }
 }
-
 
 const styles = StyleSheet.create({
       container: {

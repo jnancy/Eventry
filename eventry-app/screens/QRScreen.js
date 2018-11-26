@@ -19,7 +19,10 @@ import {
 
 import ActionButton from 'react-native-circular-action-menu';
 import IonIcon from 'react-native-vector-icons/Ionicons';
+import { AsyncStorage } from "react-native"
 
+const width = Dimensions.get('window').width;
+const height = Dimensions.get('window').height;
 
 const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-3.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-5.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-9.png', 'https://shoutem.github.io/img/ui-toolkit/examples/image-4.png',
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
@@ -29,16 +32,42 @@ const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', '
 export default class QRPage extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ isLoading: true, refreshing: false};
+      this.state ={ 
+        isLoading: true, 
+        refreshing: false,
+        Authkey: ''
+      };
     }
 
   static navigationOptions = {
     header: null,
   };
 
-  _onRefresh() {
+  _getID = async () =>{
+    var value = await AsyncStorage.getItem('userID');
+    console.log("here" + value);
+    if (value != null){
+      return value;
+    }
+    else{
+      //default key
+      return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+    }
+  }
+
+  async _onRefresh() {
     this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    let Authkey = await this._getID();
+    this.setState({Authkey: Authkey});
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events/registered/', {
+      method: 'GET',
+      headers: {
+        'Authorization': 'Token ' + this.state.Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
 
@@ -55,48 +84,52 @@ export default class QRPage extends React.Component {
     }
 
   componentDidMount(){
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
-      });
+    this._onRefresh();
   }
 
   _onSearchPressed(item){
     const event = item;
     console.log(item);
     this.props.navigation.navigate('QRCodePage',
-      {value: event});
+      {value: event,
+      Authkey: this.state.Authkey});
   };
+
+
+    _onEventPressed(item){
+      const event = item;
+      console.log(item);
+      this.props.navigation.navigate('EventDescriptionPage',
+        {value: event});
+    };
 
   renderRow(item){
     //console.log(item);
     return (
       <TouchableOpacity
-        onPress={() => this._onSearchPressed(item) }>
-      <Row>
-        <SImage
-          styleName="medium rounded-corners"
-          source={{ uri: pics[Math.floor(Math.random()*10)]  }}
-        />
-        <View styleName="vertical stretch space-between">
-          <Subtitle>{item.event_name}</Subtitle>
-          <View styleName="horizontal space-between">
-            <Caption>In 3 days</Caption>
-            <Caption>{item.event_location}</Caption>
+        onPress={() => this._onEventPressed(item) }>
+        <Row>
+          <SImage
+            styleName="medium rounded-corners"
+            source={{ uri: pics[Math.floor(Math.random()*10)]  }}
+          />
+          <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
+          <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
+              <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>
+                <Subtitle>{item.event_name}</Subtitle>
+                <View style={{flexDirection:'column', alignItems:'flex-start', justifyContent:'space-around'}}>
+                  <Caption>In 3 days</Caption>
+                  <Caption>LOCATION</Caption>
+                </View>
+              </View>
           </View>
-        </View>
-      </Row>
+          <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
+          <Button styleName="stacked clear" style={{flex: 1}} onPress={() => this._onSearchPressed(item) }>
+            <IonIcon type="Ionicons" name="md-qr-scanner" color='black' size={30}/>
+          </Button>
+          </View>
+          </View>
+        </Row>
       </TouchableOpacity>
     )
   }

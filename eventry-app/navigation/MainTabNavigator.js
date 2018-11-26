@@ -12,12 +12,17 @@ import QRCameraScreen from '../screens/QRCameraScreen';
 import UserProfileScreen from '../screens/UserProfileScreen';
 import FavouritesScreen from '../screens/FavouritesScreen';
 import EventDescriptionScreen from '../screens/EventDescriptionScreen';
-import SignOutScreen from '../screens/SignOutScreen'
-import ChatScreen from '../screens/ChatScreen'
+import SignOutScreen from '../screens/SignOutScreen';
+import ChatScreen from '../screens/ChatScreen';
+import OtherUserProfileScreen from '../screens/OtherUserProfileScreen';
+import UserListScreen from '../screens/UserListScreen';
+import HostedEventsScreen from '../screens/HostedEventsScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   EventDescriptionPage: EventDescriptionScreen,
+  UserScreen: OtherUserProfileScreen,
+  UserList: UserListScreen,
 });
 
 const QRStack = createStackNavigator({
@@ -25,11 +30,11 @@ const QRStack = createStackNavigator({
   QRCodePage: QRCodeScreen,
   LinksPage: LinksScreen,
   QRCameraPage: QRCameraScreen,
-  //CameraPage:
   //Chat
   HomePage: HomeScreen,
   SignOutPage: SignOutScreen,
-  ChatPage: ChatScreen
+  ChatPage: ChatScreen,
+  EventDescriptionPage: EventDescriptionScreen,
 }, {
   initialRouteName: "QRPage",
 });
@@ -81,10 +86,12 @@ const CustomDrawerComponent = (props) => (
 
 export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
-  QRPage: QRStack,
+  'Registered Events': QRStack,
   Profile: ProfileStack,
   Chat: ChatStack,
   SignOut: SignOutStack,
+  UserList: UserListScreen,
+  HostedList: HostedEventsScreen,
 },
 {
   contentComponent: CustomDrawerComponent,
