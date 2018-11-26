@@ -18,12 +18,14 @@ import OtherUserProfileScreen from '../screens/OtherUserProfileScreen';
 import UserListScreen from '../screens/UserListScreen';
 import HostedEventsScreen from '../screens/HostedEventsScreen';
 import EditUserScreen from '../screens/EditUserScreen';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   EventDescriptionPage: EventDescriptionScreen,
   UserScreen: OtherUserProfileScreen,
   UserList: UserListScreen,
+  ChatPage: ChatScreen,
 });
 
 const QRStack = createStackNavigator({
@@ -90,10 +92,10 @@ export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
   'Registered Events': QRStack,
   Profile: ProfileStack,
-  Chat: ChatStack,
-  SignOut: SignOutStack,
   UserList: UserListScreen,
   HostedList: HostedEventsScreen,
+  Notifications: NotificationScreen,
+  SignOut: SignOutStack,
 },
 {
   contentComponent: CustomDrawerComponent,

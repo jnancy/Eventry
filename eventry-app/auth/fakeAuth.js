@@ -1,16 +1,37 @@
 import { AsyncStorage } from "react-native";
 //import * as firebase from 'firebase';
 
-export const USER_KEY = "auth-demo-key";
 let keys = ['userID'];
 
 export const onSignIn = (userkey) => {
-  console.log("fml");
   AsyncStorage.setItem("userID", userkey).then(
     AsyncStorage.getItem('userID', (err, result) => {
       console.log("STORED userID: " + result);
+      getUser(result);
     })
-  )
+  );
+}
+
+const getUser = (token) => {
+  try{
+    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/user/', {
+      method: 'GET',
+      headers: {
+        'Authorization': "Token " + token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        credentials: 'include'
+    }).then(response => response.json()).  // Promise
+    then(res =>{ console.log(res); AsyncStorage.setItem("pk", JSON.stringify(res.pk)).then(
+      AsyncStorage.getItem('pk', (err, result) => {
+        console.log("STORED pk: " + result);
+      })
+    )});
+  }
+  catch(err){
+    console.log("err: " + err);
+  }
 }
 
 export const onSignOut = async () => {
@@ -28,7 +49,7 @@ export const onSignOut = async () => {
 
 export const isSignedIn = () => {
   return new Promise((resolve, reject) => {
-    AsyncStorage.getItem(USER_KEY)
+    AsyncStorage.getItem('userID')
       .then(res => {
         if (res !== null) {
           resolve(true);

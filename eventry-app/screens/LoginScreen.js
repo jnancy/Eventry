@@ -6,11 +6,6 @@ import LoginButton from '../components/LoginButton';
 import FBLoginButton from '../components/FBLoginButton'
 import { onSignIn, storeUserID } from '../auth/fakeAuth';
 
-/*import {
-  ANDROID_CLIENT_ID,
-  IOS_CLIENT_ID
-} from 'react-native-dotenv';*/
-
 const ANDROID_CLIENT_ID = '197432669439-5p52pkenhoc55j57h1p59sr664io7bd9.apps.googleusercontent.com';
 const IOS_CLIENT_ID = '197432669439-n45mkfg71nala1pu0vv0se9vrls5vst8.apps.googleusercontent.com';
 
@@ -73,6 +68,14 @@ export default class LoginScreen extends React.Component {
       console.log("auth successful");
       this.props.navigation.navigate("SignedIn");
     }
+    else{
+      Alert.alert(
+      "Login Failed",
+      JSON.stringify(json),
+        [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+        { cancelable: false }
+      );
+    }
 
   }
 
@@ -104,7 +107,7 @@ export default class LoginScreen extends React.Component {
               }
 
               fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google/', data).then(response => response.json()).  // Promise
-              then(res => {this.signIn(res.key)}).then(this.setState({successfulAuth: true}));
+              then(res => {this.checkResp(res)}).then(this.setState({successfulAuth: true}));
 
             } else {
               return { cancelled: true };
@@ -245,21 +248,6 @@ export default class LoginScreen extends React.Component {
             underlayColor = "#529ae4" >
             <LoginButton icon = {"logo-google" } loginText = {'GOOGLE'}/>
           </TouchableHighlight >
-          <TouchableHighlight style = {
-              {
-                backgroundColor: "#7080a4",
-                width: width * 0.33,
-                padding: 5,
-                margin: width * 0.02,
-                borderRadius: 17,
-              }
-            }
-            onPress = {
-              () => {  console.log("bloop");}
-            }
-            underlayColor = "#34508C" >
-           <LoginButton icon = {"logo-facebook"} loginText={'FACEBOOK'}/>
-        </TouchableHighlight >
         </View>
       </View >
       </ImageBackground>
