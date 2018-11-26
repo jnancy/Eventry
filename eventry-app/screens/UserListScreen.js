@@ -174,7 +174,7 @@ export default class UserListScreen extends React.Component {
               <IonIcon name="md-star" size={20} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
-              <IonIcon name="md-person"size={20} />
+              <IonIcon name="md-person" size={20} />
             </ActionButton.Item>
           </ActionButton>
       </View>
