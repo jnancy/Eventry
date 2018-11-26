@@ -91,10 +91,9 @@ export default AppDrawerNavigator = createDrawerNavigator({
   Home: HomeStack,
   'Registered Events': QRStack,
   Profile: ProfileStack,
-  Chat: ChatStack,
-  SignOut: SignOutStack,
   UserList: UserListScreen,
   HostedList: HostedEventsScreen,
+  SignOut: SignOutStack,
 },
 {
   contentComponent: CustomDrawerComponent,
