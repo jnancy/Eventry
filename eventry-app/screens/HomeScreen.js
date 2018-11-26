@@ -4,6 +4,8 @@ import {
   StyleSheet,
   Dimensions,
   View,
+  Text,
+  Image,
   RefreshControl,
   ActivityIndicator,
   FlatList,
@@ -27,6 +29,35 @@ const pics = ['https://shoutem.github.io/img/ui-toolkit/examples/image-7.png', '
 "https://shoutem.github.io/static/getting-started/restaurant-6.jpg", "https://shoutem.github.io/static/getting-started/restaurant-5.jpg" ,  "https://shoutem.github.io/static/getting-started/restaurant-4.jpg" , "https://shoutem.github.io/static/getting-started/restaurant-3.jpg",  "https://shoutem.github.io/static/getting-started/restaurant-2.jpg",
 "https://shoutem.github.io/static/getting-started/restaurant-1.jpg" ]
 
+import { Notifications } from 'expo';
+
+
+async function registerForPushNotificationsAsync() {
+  const { status: existingStatus } = await Permissions.getAsync(
+    Permissions.NOTIFICATIONS
+  );
+  let finalStatus = existingStatus;
+
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== 'granted') {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== 'granted') {
+    return;
+  }
+
+  // Get the token that uniquely identifies this device
+  let token = await Notifications.getExpoPushTokenAsync();
+  console.log("here");
+  console.log(token);
+
+}
 
 export default class HomeScreen extends React.Component {
   constructor(props){
@@ -153,8 +184,8 @@ export default class HomeScreen extends React.Component {
   }
 
   _onEventPressed(item){
+   //registerForPushNotificationsAsync();
     const event = item;
-    console.log(item);
     this.props.navigation.navigate('EventDescriptionPage',
       {
         value: event,
@@ -235,28 +266,79 @@ export default class HomeScreen extends React.Component {
               <View>
               <TouchableOpacity onPress={() => this._onEventPressed(item) }>
                 <Tile>
-                  <ImageBackground
-                    styleName="large-banner"
-                    source={{ uri: pics[Math.floor(Math.random()*10)] }}
-                  >
-                  <Overlay styleName="rounded-small">
-                    <Icon name="add-to-favorites-on" />
-                  </Overlay>
-                  </ImageBackground>
-                  <SView styleName="content">
+                    {(item.event_media.length == 0 || item.event_media == null || item.event_media == undefined)?
+                      <ImageBackground
+                        styleName="large-banner"
+                        source={{ uri: pics[Math.floor(Math.random()*10)] }}>
+                        <Overlay styleName="rounded-small">
+                          <Icon name="add-to-favorites-on" />
+                        </Overlay>
+                        </ImageBackground>
+                        :
+                        <ImageBackground
+                          styleName="large-banner"
+                          source={{ uri: item.event_media[0].image }}>
+                          <Overlay styleName="rounded-small">
+                            <Icon name="add-to-favorites-on" />
+                          </Overlay>
+                          </ImageBackground>
+                        }
+                  <View>
+                    <View style={{ backgroundColor: 'white', height: height*0.25, width: width,
+                                  borderTopWidth: 5, borderTopColor: '#D3D3D3', borderBottomRightRadius: 10, borderBottomLeftRadius: 10}}>
 
-                    <SView styleName="horizontal space-between">
-                      <Title>{item.event_name}</Title>
-                      <Overlay styleName="solid-bright">
-                      <Subtitle styleName="sm-gutter-horizontal">${item.event_price}</Subtitle>
-                      </Overlay>
-                    </SView>
-                    <Subtitle>{item.event_description}</Subtitle>
-                      <SView styleName="horizontal space-between">
-                        <Subtitle>Location: {item.event_location}</Subtitle>
-                        <Button styleName="" onPress={() => this._register(item)}><Icon name="add-to-cart" /><SText>REGISTER</SText></Button>
-                      </SView>
-                    </SView>
+                      <View style= {{ backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between',
+                                      marginTop: 15,  borderBottomWidth: 2, borderBottomColor: '#F8F8F8'}}>
+                        <View style={{backgroundColor: 'white', flexDirection: 'column', flex: 5, marginLeft: 10}}>
+                            <Heading style={{marginLeft: 5, marginRight: 5}}>{item.event_name.toUpperCase()}</Heading>
+                          <Text style={{ padding: 5}}>{item.event_description} {item.event_description} {item.event_description}</Text>
+                        </View>
+                        {(item.event_max_capacity <=  item.number_of_registered)?
+                        <View style={{ backgroundColor: '#ff3232', borderRadius: 20, marginTop: 15, marginRight: 10, borderWidth: 2,
+                                       borderColor: '#808080', flex: 1, height: 25, padding: 5}}>
+                          <SText style={{color: '#F8F8F8' , fontSize: 12, fontWeight: 'bold', alignSelf: 'center'}}>EVENT FULL</SText>
+                        </View> :
+                        <View style={{ backgroundColor: '#3CB371', borderRadius: 20, marginTop: 15, marginRight: 10, borderWidth: 2,
+                                       borderColor: '#808080', flex: 1, height: 25, padding: 5}}>
+                          <SText style={{color: '#F8F8F8' , fontSize: 12, fontWeight: 'bold', alignSelf: 'center'}}>AVAILABLE</SText>
+                        </View>
+                      }
+                      </View>
+
+                      <View style= {{ backgroundColor: 'transparent', flexDirection: 'row', flex: 2, padding: 5, justifyContent: 'space-around', alignItems:'center',
+                                      borderBottomWidth: 2, borderBottomColor: '#F8F8F8'}}>
+                              <View style={{flexDirection: 'row', backgroundColor: 'transparent',justifyContent: 'space-between',
+                                            padding: 15}}>
+                                <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                                  <IonIcon name="md-clock" size={30} />
+                                  <SText style={{padding: 10, color: '#696969'}}>{new Date(item.event_start_time).toString().substring(0,21)}</SText>
+                                </View>
+                                <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end'}}>
+                                  <IonIcon name="md-cash" size={30} />
+                                  <SText style={{padding: 10, color: 'gray', fontWeight:'bold'}}>${item.event_price}</SText>
+                                </View>
+                              </View>
+                      </View>
+
+                      <View style= {{ backgroundColor: 'transparent', flexDirection: 'row', flex: 2, padding: 5, justifyContent: 'space-around', alignItems:'center',
+                                      borderBottomRightRadius: 10, borderBottomLeftRadius: 10,}}>
+                                      <View style={{flexDirection: 'row', backgroundColor: 'transparent',justifyContent: 'space-between',
+                                                    padding: 15}}>
+                                        <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                                          <IonIcon name="md-pin" size={30} />
+                                          <SText style={{padding: 10, color: '#696969'}}>{item.event_address}</SText>
+                                        </View>
+                                        <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end'}}>
+                                          <IonIcon name="md-plane" size={30} color="red"/>
+                                            <View style={{flexDirection: 'column'}}>
+                                            <SText style={{marginLeft: 10}}>Distance Away</SText>
+                                            <SText style={{marginLeft: 10, color: 'gray', fontWeight:'bold'}}>? km</SText>
+                                            </View>
+                                          </View>
+                                      </View>
+                      </View>
+                    </View>
+                  </View>
                   </Tile>
                   </TouchableOpacity>
               <Divider styleName="section-header" />
