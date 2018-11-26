@@ -17,6 +17,7 @@ import {
   FlatList
 } from 'react-native';
 import QRCode from 'react-native-qrcode';
+import { AsyncStorage } from "react-native"
 import ParallaxScrollView from 'react-native-parallax-scrollview';
 
 import ActionButton from 'react-native-circular-action-menu';
@@ -30,24 +31,109 @@ const default_avatars = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADh
 export default class UserProfileScreen extends React.Component {
     constructor(props){
       super(props);
+      this.state = {
+        Authkey: '',
+        userprofile: '',
+        username: ''
+      }
     }
 
     static navigationOptions = {
       header: null,
     };
 
+    _getID = async () =>{
+      var value = await AsyncStorage.getItem('userID');
+      console.log("here" + value);
+      if (value != null){
+        console.log(value);
+        return value;
+      }
+      else{
+        //default key
+        return "6dda5d77c06c4065e60c236b57dc8d7299dfa56f";
+      }
+    }
+
+    async componentDidMount(){
+
+      let Authkey = await this._getID();
+      this.setState({Authkey: Authkey});
+
+      let url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/user/'
+      fetch(url, 
+      {method: 'GET',
+      headers: {
+        'Authorization': "Token " + Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log("here " + responseJson);
+          this.setState({
+            isLoading: false,
+            UserJson: responseJson,
+            username: responseJson.username,
+          })
+          console.log("###########RESPONSE############");
+          console.log(responseJson);
+          // for(var i = 0; i < responseJson.length; i++){
+          //   if()
+          // }
+          console.log(responseJson.username);
+        }).then(() => {
+        
+        });
+
+      url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/users/'
+      fetch(url, 
+      {method: 'GET',
+      headers: {
+        'Authorization': "Token " + Authkey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        },
+        credentials: 'include'
+      })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          console.log("here " + responseJson);
+          this.setState({
+            isLoading: false,
+            UsersJson: responseJson,
+          })
+          console.log("###########RESPONSE############");
+          console.log(responseJson);
+          //console.log(responseJson.username);
+          for(var i =0; i<responseJson.length; i++){
+            if(responseJson[i].username == this.state.username)
+              break;
+          }
+          this.setState({userprofile: responseJson[i]});
+          console.log("#####################PROFILE############");
+          console.log(this.state.userprofile);
+
+        }).then(() => {
+        
+        });
+    }
   render() {
     var rcolor = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')';
     var pic = default_avatars[Math.floor(Math.random()*6)];
     return (
+     
       <View style={styles.container}>
+       {async () => await this.componentDidMount()}
       <ParallaxScrollView
         windowHeight={height * 0.4}
         backgroundSource={{uri: "https://newevolutiondesigns.com/images/freebies/google-material-design-wallpaper-14.jpg"}}
         navBarTitle='  '
         navBarTitleColor='black'
         navBarColor='white'
-        userName="username"
+        userName={this.state.username}
         userTitle='Vancouver, BC'
         userImage={pic}
         rightIcon={{name: 'camera', color: 'white', size: 20, type: 'font-awesome'}}
@@ -71,7 +157,8 @@ export default class UserProfileScreen extends React.Component {
               <Caption>USER BIO</Caption>
             </Divider>
             <Divider style={{height: 1}}/>
-            <SText style={{marginLeft: 10, marginRight: 10}}>Bio bio bio bio bio userbio bio bio bion woohoo bio bio bio bleh bleh user bio is very nice great awesome fantastic incredible amazing fascinating revolutionary interesting good great nice clever insightful well-written.</SText>
+           
+            <SText style={{marginLeft: 10, marginRight: 10}}>{this.state.userprofile.bio + " I love using this app, I think it deserved to be one of the top five projects"}</SText>
             <Divider style={{height: 1}}/>
             <Divider styleName="line"
                      style={{backgroundColor: 'white', marginRight: 10, marginLeft: 10}}>
@@ -80,12 +167,12 @@ export default class UserProfileScreen extends React.Component {
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'white'}}>
               <SButton styleName="stacked clear"
                         style={{marginTop: 15, marginRight:10 }}>
-                <SText style={{fontSize: 60, color: "#5FACBE"}}>110</SText>
+                <SText style={{fontSize: 60, color: "#5FACBE"}}>{String(this.state.userprofile.number_of_attending_events)}</SText>
                 <SText>Attended Events</SText>
               </SButton>
               <SButton styleName="stacked clear"
                         style={{marginTop: 15, marginLeft: 10}}>
-              <SText style={{fontSize: 60, color: "#5FACBE"}}>5</SText>
+              <SText style={{fontSize: 60, color: "#5FACBE"}}>{this.state.userprofile.number_of_hosting_events}</SText>
               <SText>Hosted Events</SText>
               </SButton>
               </View>
