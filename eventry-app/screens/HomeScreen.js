@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 
 import { AsyncStorage } from "react-native"
-
+import { Constants, Location, Permissions } from 'expo';
 import { ImageBackground, Tile, Title, Subtitle, Divider, Overlay, Caption, Heading, Button, Icon, TouchableOpacity} from '@shoutem/ui'
 import {View as SView, Text as SText} from '@shoutem/ui'
 import { Header, Left, Right, Container, Body} from 'native-base'
@@ -36,12 +36,35 @@ export default class HomeScreen extends React.Component {
       refreshing: false,
       gotID: false,
       Authkey: '',
+      location: null,
+      errorMessage: null,
     };
   }
 
     static navigationOptions = {
       header: null,
     };
+
+  componentWillMount() {
+    if (Platform.OS === 'android' && !Constants.isDevice) {
+      this.setState({
+        errorMessage: 'Try it on your device!',
+        });
+    } else {
+      this._getLocationAsync();
+    }
+  }
+
+  _getLocationAsync = async () => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    if (status !== 'granted') {
+      this.setState({
+        errorMessage: 'Permission to access location was denied',
+      });
+    }
+    let location = await Location.getCurrentPositionAsync({});
+    this.setState({ location });
+  };
 
   async _onRefresh() {
 
@@ -105,7 +128,10 @@ export default class HomeScreen extends React.Component {
     const event = item;
     console.log(item);
     this.props.navigation.navigate('EventDescriptionPage',
-      {value: event});
+      { 
+        value: event,
+        Authkey: this.state.Authkey
+      });
   };
 
   _register(item){
@@ -197,7 +223,7 @@ export default class HomeScreen extends React.Component {
                     <Subtitle>{item.event_description}</Subtitle>
                       <SView styleName="horizontal space-between">
                         <Subtitle>Location: {item.event_location}</Subtitle>
-                        <Button styleName="" onPress={() => this._register(item)}><Icon name="cart" /><SText>REGISTER FOR EVENT</SText></Button>
+                        <Button styleName="" onPress={() => this._register(item)}><Icon name="add-to-cart" /><SText>REGISTER</SText></Button>
                       </SView>
                     </SView>
                   </Tile>
