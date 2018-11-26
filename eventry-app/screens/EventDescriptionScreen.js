@@ -179,9 +179,9 @@ export default class EventDescriptionScreen extends React.Component {
 
     componentDidMount(){
       console.log("In EventDescriptionScreen");
-      let unfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + this.props.navigation.state.params.value.id + "/is_favourite/"
-      console.log(unfavURL);
-      fetch(unfavURL, {
+      let ISfavURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + this.props.navigation.state.params.value.id + "/is_favourite/"
+      console.log(ISfavURL);
+      fetch(ISfavURL, {
         method: 'GET',
         headers: {
           'Authorization': "Token " + this.props.navigation.state.params.Authkey,
@@ -194,6 +194,25 @@ export default class EventDescriptionScreen extends React.Component {
         .then((responseJson) => {
           this.setState({favourited: responseJson.is_favourite});
           console.log(responseJson.is_favourite);
+        })
+        .catch((error) =>{
+          console.error(error);
+        });
+        let ISregisterURL =  'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/' + this.props.navigation.state.params.value.id + "/is_registered/"
+      console.log(ISregisterURL);
+      fetch(ISregisterURL, {
+        method: 'GET',
+        headers: {
+          'Authorization': "Token " + this.props.navigation.state.params.Authkey,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          },
+          credentials: 'include'
+        })
+        .then((response) => response.json())
+        .then((responseJson) => {
+          this.setState({favourited: responseJson.is_registered});
+          console.log(responseJson.is_registered);
         })
         .catch((error) =>{
           console.error(error);

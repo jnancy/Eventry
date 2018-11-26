@@ -118,7 +118,8 @@ export default class HomeScreen extends React.Component {
     console.log(this.state.location.coords.latitude);
     console.log(this.state.location.coords.longitude);
     var url;
-    if(location == null){
+    //if(location == null){
+      if(true){
       url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired';
       if(this.state.searchWord != ''){
         url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired&search=' + encodeURIComponent(this.state.searchWord);
