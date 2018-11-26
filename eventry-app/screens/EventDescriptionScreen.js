@@ -314,17 +314,17 @@ export default class EventDescriptionScreen extends React.Component {
                  <SText>{this.state.registered?'UNREGISTER':'REGISTER'}</SText>
                </SButton>
                <SButton styleName="confirmation secondary"
-               onPress= {() => 
+               onPress= {() =>
                {
                 console.log("PRESSED");
-                const event = this.props.navigation.state.params.value; 
-               const Authkey = this.props.navigation.state.params.Authkey; 
-               console.log("Authkey: " + Authkey); 
-               console.log("Event: " + event);  
+                const event = this.props.navigation.state.params.value;
+               const Authkey = this.props.navigation.state.params.Authkey;
+               console.log("Authkey: " + Authkey);
+               console.log("Event: " + event);
                console.log("PRINT");
                this.props.navigation.navigate(
-                  'UserList', 
-                  {value: event, 
+                  'UserList',
+                  {value: event,
                   Authkey : Authkey })}}
                >
                  <SText>SEE ATTENDEES</SText>
@@ -342,6 +342,7 @@ export default class EventDescriptionScreen extends React.Component {
                <Subtitle >{this.props.navigation.state.params.value.event_address}</Subtitle>
                <Subtitle >{new Date(this.props.navigation.state.params.value.event_start_time).toString().substring(0,21)} - {new Date(this.props.navigation.state.params.value.event_end_time).toString().substring(0,21)}</Subtitle>
                </View>
+               <Divider />
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly', backgroundColor: 'red', alignItems: 'center'}}>
                  <Button styleName="stacked clear">
                    <SText style={{fontSize: 30, color: "#5FACBE"}}>110</SText>
@@ -404,10 +405,6 @@ export default class EventDescriptionScreen extends React.Component {
          <View style={{height: height*0.25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
 
            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
-           <Button styleName="stacked clear">
-             <Icon name="email" />
-             <SText>Host Profile</SText>
-           </Button>
            <Button styleName="stacked clear"
              onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
              <Icon name="users" />
@@ -459,14 +456,14 @@ export default class EventDescriptionScreen extends React.Component {
                <SButton styleName="confirmation secondary"
                onPress= {() => {
                 console.log("PRESSED");
-                const event = this.props.navigation.state.params.value; 
-               const Authkey = this.props.navigation.state.params.Authkey; 
-               console.log("Authkey: " + Authkey); 
-               console.log("Event: " + event);  
+                const event = this.props.navigation.state.params.value;
+               const Authkey = this.props.navigation.state.params.Authkey;
+               console.log("Authkey: " + Authkey);
+               console.log("Event: " + event);
                console.log("PRINT");
                this.props.navigation.navigate(
-                  'UserList', 
-                  {value: event, 
+                  'UserList',
+                  {value: event,
                   Authkey : Authkey })}}
                  >
                  <SText>SEE ATTENDEES</SText>
@@ -545,10 +542,6 @@ export default class EventDescriptionScreen extends React.Component {
          <View style={{height: height*0.25, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white'}}>
 
            <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
-           <Button styleName="stacked clear">
-             <Icon name="email" />
-             <SText>Host Profile</SText>
-           </Button>
            <Button styleName="stacked clear"
              onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
              <Icon name="users" />
