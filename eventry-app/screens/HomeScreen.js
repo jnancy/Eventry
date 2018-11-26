@@ -113,12 +113,13 @@ export default class HomeScreen extends React.Component {
 
     /* Getting the location */
     let location = await this._getLocationAsync();
-    
+
     //console.log(location);
     console.log(this.state.location.coords.latitude);
     console.log(this.state.location.coords.longitude);
     var url;
-    if(location == null){
+    //if(location == null){
+    if(true){
       url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired';
       if(this.state.searchWord != ''){
         url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/events/?not_expired&search=' + encodeURIComponent(this.state.searchWord);
@@ -248,7 +249,7 @@ export default class HomeScreen extends React.Component {
             round
             //clearIcon={{ color: 'gray' }}
             searchIcon={true}
-            onChangeText={(searchWord) => 
+            onChangeText={(searchWord) =>
                 {this.setState({searchWord});
                   this._onRefresh();}}
             //onClear={() => this.setState({searchWord: ''})}
@@ -284,14 +285,14 @@ export default class HomeScreen extends React.Component {
                           </ImageBackground>
                         }
                   <View>
-                    <View style={{ backgroundColor: 'white', height: height*0.25, width: width,
+                    <View style={{ backgroundColor: 'white', height: height*0.3, width: width,
                                   borderTopWidth: 5, borderTopColor: '#D3D3D3', borderBottomRightRadius: 10, borderBottomLeftRadius: 10}}>
 
                       <View style= {{ backgroundColor: 'white', flexDirection: 'row', justifyContent: 'space-between',
                                       marginTop: 15,  borderBottomWidth: 2, borderBottomColor: '#F8F8F8'}}>
-                        <View style={{backgroundColor: 'white', flexDirection: 'column', flex: 5, marginLeft: 10}}>
-                            <Heading style={{marginLeft: 5, marginRight: 5}}>{item.event_name.toUpperCase()}</Heading>
-                          <Text style={{ padding: 5}}>{item.event_description} {item.event_description} {item.event_description}</Text>
+                        <View style={{backgroundColor: 'white', flexDirection: 'column', flex: 5, marginLeft: 10, backgroundColor: 'red'}}>
+                            <Heading style={{marginLeft: 5, marginRight: 5, fontSize: 20}}>{item.event_name.toUpperCase()}</Heading>
+                          <Text style={{ padding: 5}}>{item.event_description}</Text>
                         </View>
                         {(item.event_max_capacity <=  item.number_of_registered)?
                         <View style={{ backgroundColor: '#ff3232', borderRadius: 20, marginTop: 15, marginRight: 10, borderWidth: 2,
@@ -310,11 +311,11 @@ export default class HomeScreen extends React.Component {
                               <View style={{flexDirection: 'row', backgroundColor: 'transparent',justifyContent: 'space-between',
                                             padding: 15}}>
                                 <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                  <IonIcon name="md-clock" size={30} />
+                                  <IonIcon name="md-clock" size={20} />
                                   <SText style={{padding: 10, color: '#696969'}}>{new Date(item.event_start_time).toString().substring(0,21)}</SText>
                                 </View>
                                 <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end'}}>
-                                  <IonIcon name="md-cash" size={30} />
+                                  <IonIcon name="md-cash" size={20} />
                                   <SText style={{padding: 10, color: 'gray', fontWeight:'bold'}}>${item.event_price}</SText>
                                 </View>
                               </View>
@@ -325,11 +326,11 @@ export default class HomeScreen extends React.Component {
                                       <View style={{flexDirection: 'row', backgroundColor: 'transparent',justifyContent: 'space-between',
                                                     padding: 15}}>
                                         <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                                          <IonIcon name="md-pin" size={30} />
+                                          <IonIcon name="md-pin" size={20} />
                                           <SText style={{padding: 10, color: '#696969'}}>{item.event_address}</SText>
                                         </View>
                                         <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end'}}>
-                                          <IonIcon name="md-plane" size={30} color="red"/>
+                                          <IonIcon name="md-plane" size={20} color="red"/>
                                             <View style={{flexDirection: 'column'}}>
                                             <SText style={{marginLeft: 10}}>Distance Away</SText>
                                             <SText style={{marginLeft: 10, color: 'gray', fontWeight:'bold'}}>? km</SText>
