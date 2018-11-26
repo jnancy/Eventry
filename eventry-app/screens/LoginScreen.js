@@ -107,7 +107,7 @@ export default class LoginScreen extends React.Component {
               }
 
               fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/rest-auth/google/', data).then(response => response.json()).  // Promise
-              then(res => {this.signIn(res.key)}).then(this.setState({successfulAuth: true}));
+              then(res => {this.checkResp(res)}).then(this.setState({successfulAuth: true}));
 
             } else {
               return { cancelled: true };
