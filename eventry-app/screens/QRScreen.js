@@ -109,10 +109,17 @@ export default class QRPage extends React.Component {
       <TouchableOpacity
         onPress={() => this._onEventPressed(item) }>
         <Row>
-          <SImage
-            styleName="medium rounded-corners"
-            source={{ uri: pics[Math.floor(Math.random()*10)]  }}
-          />
+        {(item.event_media.length == 0 || item.event_media == null || item.event_media == undefined)?
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: pics[Math.floor(Math.random()*10)]  }}
+        />
+        :
+        <SImage
+          styleName="medium rounded-corners"
+          source={{ uri: item.event_media[0].image}}
+        />
+        }
           <View style={{flexDirection:'row', flex: 1, justifyContent: 'space-around'}}>
           <View style={{alignSelf: 'flex-start', flexDirection: 'row',  flex: 2}}>
               <View style={{flexDirection:'column', justifyContent:'space-around', width: width*0.7}}>

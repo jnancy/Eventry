@@ -95,56 +95,6 @@ import { ScrollView,
       //console.log("hereeee " + (this.state.start_date).format(Date));
       //console.log("hereeee " + (this.state.end_date).format(Date));
       const self = this;
-      //var test = new FormData();
-      // test.append('event_name' , 'somethin');
-      // test.append('event_description', 'im tired');
-      // test.append('event_price', '2');
-      // test.append('event_point_location', JSON.stringify({latitude: self.state.event_lat, longitude: self.state.event_lng}));
-      // test.append('event_start_time', self.state.start_date);
-      // test.append('event_end_time', self.state.end_date);
-      // test.append('event_media', self.state.image);
-      // test.append('event_pic', {uri: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540niloo9876%252Feventry-app/ImagePicker/5d8a3d75-0c3a-4850-8fc5-cbf5bc3613e7.jpg', name: 'file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540niloo9876%252Feventry-app/ImagePicker/5d8a3d75-0c3a-4850-8fc5-cbf5bc3613e7.jpg', type: 'image/jpg'});
-      // console.log(test);
-
-
-
-       var formData = new FormData();
-      // formData.append('event_name' , self.state.event_name);
-      // formData.append('event_description', self.state.event_description);
-      // formData.append('event_price', self.state.event_price);
-      // formData.append('event_point_location', JSON.stringify({latitude: self.state.event_lat, longitude: self.state.event_lng}));
-      // formData.append('event_start_time', self.state.start_date);
-      // formData.append('event_end_time', self.state.end_date);
-      // formData.append('event_media', self.state.image);
-      
-      var length = 1;
-      //console.log(length);
-       for(var i = 0; i< length; i++){
-        formData.append('event_pic', {uri: self.state.image[0].uri, name: self.state.image[0].uri, type: 'image/jpg'});
-      }
-      console.log(formData);
-
-      /*
-       var request = new XMLHttpRequest();
-      request.onreadystatechange = (e) => {
-        if (request.readyState !== 4) {
-          return;
-        }
-
-        if (request.status === 200) {
-          console.log('success', request.responseText);
-        } else {
-          console.warn('error');
-        }
-      }; 
-      request.open("POST", "http://eventry-dev.us-west-2.elasticbeanstalk.com/events/");
-      request.setRequestHeader('Authorization', 'Token ' + this.state.Authkey);
-      request.setRequestHeader('Content-Type', 'multipart/form-data; boundary=---------------------------7692764ac82');
-      request.send(test);
-      console.log(request.response);
-      
-      */
-
       fetch("http://eventry-dev.us-west-2.elasticbeanstalk.com/events/", 
           {
             method: "POST",
@@ -174,7 +124,7 @@ import { ScrollView,
           .then((responseData) => {
             //console.log("parent " + responseData.toString());
               var length = self.state.image.length;
-              //console.log(length);
+              console.log(length);
               for(var i =0; i< length; i++){
                 var formData = new FormData();
                 formData.append('event_media', {uri: self.state.image[i].uri, name: self.state.image[i].uri, type: 'image/jpg'});
@@ -214,25 +164,10 @@ import { ScrollView,
            
     }
     
-    // _renderImages() {
-    //   let images = [];
-    //   //let remainder = 4 - (this.state.devices % 4);
-    //   this.state.image.map((item, index) => {
-    //     images.push(
-    //       /*<Image
-    //         key={index}
-    //         source={{ uri: item }}
-    //         style={{ width: 100, height: 100 }}
-    //       />*/
-    //       console.log("image" + index)
-    //     );
-    //   });
-    //   return images;
-    // }
 
     
   _pickImage = async () => {
-
+    this.setState({pic_clicked: true});
     console.log("picking an image");
     if(Platform.OS === 'ios'){
     const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -245,18 +180,10 @@ import { ScrollView,
       aspect: [4, 3],
     });
 
-    //console.log(result);
-   /* let pic = {
-      uri: result.uri,
-      name: result.uri,
-      type: result.type,
-    }*/
-    //console.log(pic);
     if (!result.cancelled) {
       this.setState({ 
         image: this.state.image.concat([result])
     });
-    //console.log(this.state.image);
   };
 }
 
@@ -307,19 +234,24 @@ import { ScrollView,
           />
           <TextInput
             style={styles.TextInput}
-            onChangeText={(event_price) => this.setState({event_price})}
+            onChangeText={(event_price) => this.setState({event_price, price_chosen: true})}
             value={this.state.event_price}
             placeholder="Price"
             placeholderTextColor="#A0AAAB"
           />
+          <Text style = {{color: 'red'}}>{this.state.price_chosen && (this.state.event_price < 0)?"Price needs to be a non negative value":""}</Text>
 
           <TextInput
             style={styles.TextInput}
-            onChangeText={(event_max_capacity) => this.setState({event_max_capacity})}
+            onChangeText={(event_max_capacity) => this.setState({event_max_capacity, cap_chosen: true})}
             value={this.state.event_max_capacity}
             placeholder="Event Maximum Capacity"
             placeholderTextColor="#A0AAAB"
           />
+           
+           <Text style = {{color: 'red'}}>{this.state.cap_chosen && (this.state.event_max_capacity <= 0)?"Max Capacity need to be a positive value":""}</Text>
+
+        
 
         <GooglePlacesAutocomplete
           placeholder='Location'
@@ -403,7 +335,7 @@ import { ScrollView,
           onCancel={this._hideEndDateTimePicker}
           minimumDate = {this.state.startDateChosen? this.state.start_date : new Date()}
           />
-          <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date)?"Invalid end date: Has to be after start date" : ""}</Text>
+          <Text style = {{color: 'red'}}>{(this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date)?"Invalid end date: Has to be after start date": ""}</Text>
 
           <TouchableOpacity style={{height: 40}} onPress={this._pickImage}>
           <Text
@@ -411,7 +343,8 @@ import { ScrollView,
             TextColor='#A0AAAB'
           > Pick an image</Text>
           </TouchableOpacity>
-                  
+
+          <Text style = {{color: 'red'}}>{this.state.image === undefined || this.state.image.length == 0 && this.state.pic_clicked?"Image is required": ""}</Text>     
           <TouchableHighlight
             style = {{
               backgroundColor: "#C6E9ED",
@@ -421,11 +354,19 @@ import { ScrollView,
               borderRadius: 15,
             }}
             onPress = {() => {
-                let err = this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date
-                if(err){
+                let err = (this.state.startDateChosen && this.state.endDateChosen && this.state.start_date >= this.state.end_date) || (this.state.cap_chosen && (this.state.event_max_capacity <= 0)) || (this.state.price_chosen && (this.state.event_price < 0)) || (this.state.image === undefined || this.state.image.length == 0);
+                if((this.state.image === undefined || this.state.image.length == 0)){
                   Alert.alert(
                     "ERROR",
-                    "Please fix the error(s) and try again" + (this.state.event_lat).toString() + " " + (this.state.event_lng).toString() ,
+                    "Please upload at least one or more Image(s)" ,
+                    [{text: 'OK', onPress: () => console.log('OK Pressed')}],
+                    { cancelable: false }
+                  );
+                }
+                else if(err){
+                  Alert.alert(
+                    "ERROR",
+                    "Please fix the error(s) and try again" ,
                     [{text: 'OK', onPress: () => console.log('OK Pressed')}],
                     { cancelable: false }
                   );
@@ -434,7 +375,7 @@ import { ScrollView,
                 this._AddEvent();
               }
             }
-            }
+          }
             underlayColor = "#A9D9DE" >
             <Text style={{textAlign: "center", color: "#425187", fontSize: 15, fontWeight: "bold"}}> Add event </Text>
           </TouchableHighlight>
