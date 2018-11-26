@@ -329,8 +329,8 @@ export default class HomeScreen extends React.Component {
                                         <View style={{flex: 1, flexDirection: 'row', backgroundColor: 'transparent', justifyContent: 'flex-end', alignItems:'center'}}>
                                           <IonIcon name="md-plane" size={20} color="#72B3DD"/>
                                             <View style={{flexDirection: 'column'}}>
-                                            <SText styleName='bold' style={{marginLeft: 10}}>Distance Away</SText>
-                                            <SText style={{marginLeft: 10, color: 'gray', fontWeight:'bold'}}>? km</SText>
+                                            <SText styleName='bold' style={{marginLeft: 10}}>Hosted by</SText>
+                                            <SText style={{marginLeft: 10, color: 'gray', fontWeight:'bold'}}>{item.host}</SText>
                                             </View>
                                           </View>
                                       </View>
