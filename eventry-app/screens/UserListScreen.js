@@ -28,46 +28,51 @@ const default_avatars = ['data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADh
 export default class UserListScreen extends React.Component {
     constructor(props){
       super(props);
-      this.state ={ isLoading: true, refreshing: false};
+      this.state ={ 
+        isLoading: true, 
+        refreshing: false,
+        UserJson: ''};
     }
 
   static navigationOptions = {
     header: null,
   };
 
-  _onRefresh() {
-    this.setState({refreshing: true});
-    fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
-      .then((response) => response.json())
-      .then((responseJson) => {
-
-        this.setState({
-          isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-          console.log('REFRESHIN');
-        });
-
-      }).then(() => {
-        this.setState({refreshing: false});
-      });
+  _onRefresh(id, Authkey) {
+    
     }
 
   componentDidMount(){
-    return fetch('http://eventry-dev.us-west-2.elasticbeanstalk.com/events', {method: 'GET'})
+    const { navigation } = this.props;
+    const event = navigation.getParam('value', '');
+    const Authkey = navigation.getParam('Authkey', '');
+    console.log(event.id);
+    console.log(Authkey);
+    //console.log("id: " + id);
+    //console.log("Auth:" + Authkey);
+   
+    let url = 'http://eventry-dev.us-west-2.elasticbeanstalk.com/users/attending_event/?event_id=' + event.id;
+    fetch(url, 
+    {method: 'GET',
+    headers: {
+      'Authorization': "Token " + Authkey,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      },
+      credentials: 'include'
+    })
       .then((response) => response.json())
       .then((responseJson) => {
-
+        console.log("here " + responseJson);
         this.setState({
           isLoading: false,
-          EventJson: responseJson,
-        }, function(){
-
-        });
-
-      })
-      .catch((error) =>{
-        console.error(error);
+          UserJson: responseJson,
+        })
+        console.log("###########RESPONSE############");
+        console.log(responseJson);
+        console.log(responseJson[0]["username"]);
+      }).then(() => {
+      
       });
   }
 
@@ -88,9 +93,9 @@ export default class UserListScreen extends React.Component {
           />
           <View style={{flexDirection: 'column'}}>
             <SText styleName="bold"
-                    style={{fontSize: 20, color: "gray", marginLeft: 15, marginRight:15}}>USERNAME</SText>
+                    style={{fontSize: 20, color: "gray", marginLeft: 15, marginRight:15}}>{item.username}</SText>
             <View styleName="horizontal space-between">
-            <Caption style={{marginLeft: 15, marginRight:15}}>First Last</Caption>
+            <Caption style={{marginLeft: 15, marginRight:15}}>{item.first_name + " " +  item.last_name}</Caption>
             <Caption>{item.event_location}</Caption>
             </View>
           </View>
@@ -101,10 +106,12 @@ export default class UserListScreen extends React.Component {
           <Text style={{fontSize:8, color: 'green'}}>Event</Text>
           </View>
             <View style={{flexDirection: 'column',flex: 1,justifyContent: 'center', alignItems:'center' }}>
-          <Button styleName="stacked clear">
+          {
+          /*<Button styleName="stacked clear">
             <IonIcon type="Ionicons" name="md-chatbubbles" size={30}/>
             <SText style={{fontSize: 10}}>Message</SText>
-          </Button>
+          </Button>*/
+          }
           </View>
           </View>
 
@@ -115,6 +122,12 @@ export default class UserListScreen extends React.Component {
   }
 
   render() {
+    const { navigation } = this.props;
+    const event = navigation.getParam('value', '');
+    const Authkey = navigation.getParam('Authkey', '');
+    console.log(event);
+    console.log(Authkey);
+
     if(this.state.isLoading){
       return(
         <View style={{flex: 1, padding: 20}}>
@@ -150,11 +163,7 @@ export default class UserListScreen extends React.Component {
             </Tile>
           </ImageBackground>
           <FlatList
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.refreshing}
-                onRefresh={this._onRefresh.bind(this)}/>}
-              data={this.state.EventJson}
+              data={this.state.UserJson}
               renderItem={({item}) => this.renderRow(item)}
               keyExtractor={(item, index) => index}
             />
