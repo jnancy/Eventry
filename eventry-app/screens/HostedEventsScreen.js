@@ -136,11 +136,6 @@ export default class HostedEventsScreen extends React.Component {
               </View>
             </View>
         </View>
-        <View style={{alignSelf:'flex-end', flexDirection: 'row', flex: 1}}>
-        <Button styleName="stacked clear" style={{flex: 1}}   onPress={() => this._onDeletePressed(item) }>
-          <IonIcon type="Ionicons" name="md-trash" color='#B22222' size={30}/>
-        </Button>
-        </View>
         </View>
       </Row>
       </TouchableOpacity>
