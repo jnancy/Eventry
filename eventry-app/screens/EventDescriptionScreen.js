@@ -360,7 +360,7 @@ export default class EventDescriptionScreen extends React.Component {
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-evenly'}}>
             <Button styleName="stacked clear">
               <Icon name="email" />
-              <SText>Message Host</SText>
+              <SText>Host Profile</SText>
             </Button>
             <Button styleName="stacked clear"
               onPress={() => AsyncStorage.getItem("pk").then(res => this.props.navigation.navigate('ChatPage',{pk: res, value: this.props.navigation.state.params.value}))}>
@@ -377,7 +377,7 @@ export default class EventDescriptionScreen extends React.Component {
                       }
                       }}>
               <Icon name={this.state.favourited? "add-to-favorites-on" : "add-to-favorites-off"} />
-              <SText>{this.state.favourited ?'Stared': 'Star Event'}</SText>
+              <SText>{this.state.favourited ?'Starred': 'Star Event'}</SText>
             </Button>
          </View>
           </View>

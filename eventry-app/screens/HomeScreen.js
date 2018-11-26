@@ -128,7 +128,7 @@ export default class HomeScreen extends React.Component {
     const event = item;
     console.log(item);
     this.props.navigation.navigate('EventDescriptionPage',
-      { 
+      {
         value: event,
         Authkey: this.state.Authkey
       });
@@ -170,6 +170,7 @@ export default class HomeScreen extends React.Component {
         </View>
       )
     }
+
     return (
       <View style={styles.container}>
           <Header style={{backgroundColor: 'white'}}>
@@ -235,21 +236,21 @@ export default class HomeScreen extends React.Component {
             />
             <ActionButton buttonColor="rgba(76,127,178,0.68)">
             <ActionButton.Item buttonColor='#B1D8ED' title="New Event" onPress={() => this.props.navigation.navigate('LinksPage')}>
-              <IonIcon name="md-add" style={styles.actionButtonIcon} />
+              <IonIcon name="md-add" size={20} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#95C8DB' title="New Chat"
             onPress={() => this.props.navigation.navigate('Home')}>
-              <IonIcon name="ios-chatbubbles-outline" style={styles.actionButtonIcon} />
+              <IonIcon name="ios-chatbubbles-outline" size={20} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#5FACBE' title="QR Camera"
             onPress={() => this.props.navigation.navigate('QRCameraPage')}>
-              <IonIcon name="ios-camera-outline" style={styles.actionButtonIcon} />
+              <IonIcon name="ios-camera-outline" size={20} />
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#2181A1' title="Starred Events" onPress={() => this.props.navigation.navigate('FavouritesPage')}>
-              <IonIcon name="md-star" style={styles.actionButtonIcon} />
+              <IonIcon name="md-star" size={20}/>
             </ActionButton.Item>
             <ActionButton.Item buttonColor='#035D75' title="My Profile" onPress={() => {}}>
-              <IonIcon name="md-person" style={styles.actionButtonIcon} />
+              <IonIcon name="md-person" size={20}/>
             </ActionButton.Item>
           </ActionButton>
       </View>

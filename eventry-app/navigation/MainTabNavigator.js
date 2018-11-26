@@ -18,6 +18,7 @@ import OtherUserProfileScreen from '../screens/OtherUserProfileScreen';
 import UserListScreen from '../screens/UserListScreen';
 import HostedEventsScreen from '../screens/HostedEventsScreen';
 import EditUserScreen from '../screens/EditUserScreen';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
@@ -93,6 +94,7 @@ export default AppDrawerNavigator = createDrawerNavigator({
   Profile: ProfileStack,
   UserList: UserListScreen,
   HostedList: HostedEventsScreen,
+  Notifications: NotificationScreen,
   SignOut: SignOutStack,
 },
 {
