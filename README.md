@@ -2,7 +2,7 @@
 
 Prompt: Build a sufficiently complex client-server software system.
 
-Ever
+(insert background + elevator pitch)
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ac2466330e8e42d2be7976ac9cfda042)](https://www.codacy.com/app/nancyjiang10/eventry_2?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=jnancy/eventry&amp;utm_campaign=Badge_Grade)
 
@@ -39,13 +39,13 @@ The user can check in at an event if they actually end up attending it and are a
 ### Add to Attending Events
 For free events, the user can attend by simply clicking the attend button or checkbox, as long as the event hasn’t reached maximum capacity. This will send a request to the server which will verify that the maximum capacity hasn’t been reached and update the event table. If the event requires payment, external verification may be needed, and payment integration (e.g. with Stripe) will be a stretch goal for this project. If the event requires a ticket (e.g. it has limited spots or requires payment), the user can generate a unique QR code for their ticket once they confirm that they will be attending the event.
 
-### Generate QR Code
-The user will receive a unique QR code, generated using an external API, and the information embedded in the QR code will be sent to the server and added to the valid tickets entry in the events table under the particular event.
+### Generate/Verify QR Code
+The user will receive a unique QR code, generated using an external API, and the information embedded in the QR code will be sent to the server and added to the valid tickets entry in the events table under the particular event. The host can scan a user’s QR code and process it using an external library. This will send a request to the server to check that the user’s ticket is valid, and if so, to mark the ticket as used and return a success message to the host.
 
 ### Add to Favourites
-	The user can add an event to their favorites list by simply clicking on the heart icon. This will
-	send a request to the server which will update the user table (add the event ID to the favourites
-	list of the particular user).
+The user can add an event to their favorites list by simply clicking on the heart icon. This will
+send a request to the server which will update the user table (add the event ID to the favourites
+list of the particular user).
 
 
 ### Enable Notifications for Event
@@ -59,16 +59,17 @@ All users attending a particular event will be displayed as a list including con
 Both the host of an event and users who have checked-in to an event can message other users who are checked-in to the event.
 
 
-View Another User Profile
-Users (including hosts of an event) can view the profile of another user that is attending an event they are interested in. This will send a request to the server with the attendee’s user ID to retrieve the user’s information.
-
-Verify QR Code
-The host can scan a user’s QR code and process it using an external library. This will send a request to the server to check that the user’s ticket is valid, and if so, to mark the ticket as used and return a success message to the host.
-
-
 ## Main Dependencies
 - Pusher for chat engine
-- 
+
+
+## Set-up Guide
+
+Prerequisites: Node, Expo, Android/iOS device or emulator
+
+`npm install`
+
+`npm start` or `expo start`
 
 ## Demos
 
@@ -95,3 +96,16 @@ iOS vs Android
 #### QR Code Scanning
 
 (insert demo gifs here)
+
+## Diagrams
+
+### High Level Architecture
+
+![Architecture](pics/Architecture.png)
+
+### Architecture Graphic
+![Architecture](pics/ArchitectureGraphic.png)
+
+### Class Diagram
+
+![Diagram](pics/Class-Diagram.jpg)
